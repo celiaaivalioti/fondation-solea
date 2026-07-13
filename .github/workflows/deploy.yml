@@ -67,13 +67,15 @@ jobs:
               git init -q -b main
               git remote add origin https://github.com/celiaaivalioti/fondation-solea.git
             fi
-            # --quiet: progress output on stderr can SIGPIPE the SSH session
-            git fetch --quiet origin main
-            git reset --quiet --hard origin/main
+            # < /dev/null everywhere: the SSH action streams this script over
+            # stdin, and any command that consumes stdin swallows the rest of
+            # the script and SIGPIPEs the session.
+            git fetch --quiet origin main < /dev/null
+            git reset --quiet --hard origin/main < /dev/null
             echo "Checked out $(git rev-parse --short HEAD)"
-            npm ci --no-audit --no-fund --loglevel=error
-            npm run build
+            npm ci --no-audit --no-fund --loglevel=error < /dev/null
+            npm run build < /dev/null
             # Infomaniak supervises the Node process and restarts it if it
             # exits, so killing it is how we pick up the new build.
-            pkill -f "next start" || true
+            pkill -f "next start" < /dev/null || true
             echo "Deploy finished. The Node process was asked to restart with the new build."
