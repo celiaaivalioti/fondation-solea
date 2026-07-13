@@ -37,7 +37,7 @@ export type SiteSettings = {
   showDonationCta: boolean;
   donationLabel: string;
   legalLinks: NavigationItem[];
-  socialLinks: Array<NavigationItem & { platform: "linkedin" | "facebook" | "instagram" }>;
+  socialLinks: Array<NavigationItem & { platform: string }>;
 };
 
 export type TextSection = {

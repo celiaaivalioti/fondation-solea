@@ -168,7 +168,18 @@ const siteSettings = {
               name: "platform",
               title: "Platform",
               type: "string",
-              options: { list: ["linkedin", "facebook", "instagram"] }
+              description: "Sets which icon is shown in the footer.",
+              options: {
+                list: [
+                  { title: "LinkedIn", value: "linkedin" },
+                  { title: "Facebook", value: "facebook" },
+                  { title: "Instagram", value: "instagram" },
+                  { title: "YouTube", value: "youtube" },
+                  { title: "X (Twitter)", value: "x" },
+                  { title: "TikTok", value: "tiktok" },
+                  { title: "WhatsApp", value: "whatsapp" }
+                ]
+              }
             }
           ],
           preview: {
