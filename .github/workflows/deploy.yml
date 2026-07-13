@@ -65,5 +65,9 @@ jobs:
           SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
         run: |
           SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=15"
+          echo "== connectivity check =="
+          sshpass -e ssh -v $SSH_OPTS -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "echo connected ok" 2>&1 | grep -iE "authentic|denied|debug1: (Connecting|Connection established|Offering|Next authentication)|connected ok" || true
+          echo "== upload deploy script =="
           sshpass -e scp $SSH_OPTS -P "$SSH_PORT" scripts/deploy-remote.sh "$SSH_USER@$SSH_HOST:/tmp/deploy-remote.sh"
+          echo "== run deploy script =="
           sshpass -e ssh $SSH_OPTS -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "bash /tmp/deploy-remote.sh"
