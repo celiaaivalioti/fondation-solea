@@ -1,3 +1,11 @@
+// Without an explicit preview, Sanity lists show objects as a raw data dump
+// like "items: [{href: ..., label: ...}]".
+const singletonPreview = (title: string) => ({
+  preview: {
+    prepare: () => ({ title })
+  }
+});
+
 const linkField = {
   name: "link",
   title: "Link",
@@ -5,7 +13,10 @@ const linkField = {
   fields: [
     { name: "label", title: "Label", type: "string" },
     { name: "href", title: "URL or path", type: "string" }
-  ]
+  ],
+  preview: {
+    select: { title: "label", subtitle: "href" }
+  }
 };
 
 const ctaField = {
@@ -23,7 +34,10 @@ const ctaField = {
         list: ["primary", "secondary", "paper", "ghost", "paperGhost"]
       }
     }
-  ]
+  ],
+  preview: {
+    select: { title: "label", subtitle: "href" }
+  }
 };
 
 const imageField = {
@@ -102,7 +116,10 @@ const personField = {
     { name: "quote", title: "Quote", type: "text" },
     { name: "paragraphs", title: "Paragraphs", type: "array", of: [{ type: "text" }] },
     ctaField
-  ]
+  ],
+  preview: {
+    select: { title: "name", subtitle: "role", media: "image" }
+  }
 };
 
 const objects = [linkField, ctaField, heroField, textSectionField, checklistField, personField];
@@ -145,18 +162,29 @@ const siteSettings = {
               type: "string",
               options: { list: ["linkedin", "facebook", "instagram"] }
             }
-          ]
+          ],
+          preview: {
+            select: { title: "label", subtitle: "href" }
+          }
         }
       ]
     }
-  ]
+  ],
+  ...singletonPreview("Site settings, contact details and footer")
 };
 
 const navigation = {
   name: "navigation",
   title: "Navigation",
   type: "document",
-  fields: [{ name: "items", title: "Items", type: "array", of: [{ type: "link" }] }]
+  fields: [{ name: "items", title: "Items", type: "array", of: [{ type: "link" }] }],
+  preview: {
+    select: { items: "items" },
+    prepare: (value: { items?: unknown[] }) => ({
+      title: "Navigation",
+      subtitle: `${value.items?.length ?? 0} menu entries`
+    })
+  }
 };
 
 const homePage = {
@@ -167,7 +195,8 @@ const homePage = {
     { name: "metadataTitle", title: "Metadata title", type: "string" },
     heroField,
     { ...textSectionField, name: "manifesto", title: "Manifesto section" }
-  ]
+  ],
+  ...singletonPreview("Accueil")
 };
 
 const aboutPage = {
@@ -201,7 +230,10 @@ const aboutPage = {
           fields: [
             { name: "quote", title: "Quote", type: "text" },
             { name: "attribution", title: "Attribution", type: "string" }
-          ]
+          ],
+          preview: {
+            select: { title: "attribution", subtitle: "quote" }
+          }
         }
       ]
     },
@@ -227,7 +259,10 @@ const aboutPage = {
                   type: "string",
                   options: { list: ["heartHandshake", "ear", "feather", "compass", "handshake", "mountain"] }
                 }
-              ]
+              ],
+              preview: {
+                select: { title: "label", subtitle: "icon" }
+              }
             }
           ]
         }
@@ -255,7 +290,8 @@ const aboutPage = {
         { name: "people", title: "People", type: "array", of: [{ type: "person" }] }
       ]
     }
-  ]
+  ],
+  ...singletonPreview("Qui sommes-nous")
 };
 
 const retreatPage = {
@@ -337,14 +373,18 @@ const retreatPage = {
                 imageField,
                 { name: "alt", title: "Alternative text", type: "string" },
                 { name: "frameClass", title: "Existing layout class", type: "string" }
-              ]
+              ],
+              preview: {
+                select: { title: "alt", media: "image" }
+              }
             }
           ]
         },
         ctaField
       ]
     }
-  ]
+  ],
+  ...singletonPreview("L'expérience de 5 jours")
 };
 
 const seminarsPage = {
@@ -380,7 +420,8 @@ const seminarsPage = {
         }
       ]
     }
-  ]
+  ],
+  ...singletonPreview("Séminaires et ressources")
 };
 
 const supportPage = {
@@ -408,7 +449,8 @@ const supportPage = {
       type: "object",
       fields: [{ name: "quote", title: "Quote", type: "text" }]
     }
-  ]
+  ],
+  ...singletonPreview("Nous soutenir")
 };
 
 const formPageFields = [
@@ -424,14 +466,16 @@ const registrationPage = {
   name: "registrationPage",
   title: "Inscription",
   type: "document",
-  fields: formPageFields
+  fields: formPageFields,
+  ...singletonPreview("Inscription")
 };
 
 const contactPage = {
   name: "contactPage",
   title: "Contact",
   type: "document",
-  fields: formPageFields
+  fields: formPageFields,
+  ...singletonPreview("Contact")
 };
 
 export const schemaTypes = [
