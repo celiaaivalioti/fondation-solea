@@ -95,32 +95,33 @@ This project is connected to GitHub:
 https://github.com/celiaaivalioti/fondation-solea
 ```
 
-The workflow in `.github/workflows/deploy.yml` runs on pushes to `main` (and manually from GitHub > Actions > Deploy to Infomaniak > Run workflow). It has two stages:
+The workflow in `.github/workflows/deploy.yml` runs on pushes to `main` (and manually from GitHub > Actions > Deploy to Infomaniak > Run workflow). It lints and builds the app on GitHub's runners with `output: "standalone"`, then rsyncs the ready-to-run bundle (`server.js`, minimal `node_modules`, `.next`, `public`) to the Infomaniak Node hosting over SSH.
 
-1. **Lint and build** — the app is linted and built on GitHub's runners.
-2. **Deploy Node preview** — only if the checks pass, the Infomaniak Node preview app is updated over SSH and the Node process is restarted so it serves the new build.
+**Nothing is built on the server.** Infomaniak's SSH sessions are memory-capped (about 1 GB) and silently kill `npm ci` / `next build`, so the server only ever receives finished files.
 
-Required GitHub repository secrets for the Node preview deployment:
+Required GitHub repository secrets:
 
 ```bash
-INFOMANIAK_SSH_HOST
+INFOMANIAK_SSH_HOST        # e.g. 57-114193.ssh.hosting-ik.com (Node hosting, not the web hosting)
 INFOMANIAK_SSH_USERNAME
 INFOMANIAK_SSH_PASSWORD
 INFOMANIAK_SSH_PORT
+NEXT_PUBLIC_SANITY_PROJECT_ID
+NEXT_PUBLIC_SANITY_DATASET
+NEXT_PUBLIC_SANITY_API_VERSION
 ```
 
-On the server, the deploy stage runs:
+The Sanity variables are baked into the bundle at build time, so the hosting itself needs no environment variables.
 
-```bash
-cd /srv/customer/sites/preview.fondation-solea.ch
-git fetch origin main
-git reset --hard origin/main
-npm ci
-npm run build
-pkill -f "next start" || true
+Expected Infomaniak Node site settings (Manager > Node.js hosting):
+
+```text
+Install command: (empty — the bundle arrives complete)
+Build command:   (empty)
+Start command:   npm run start
 ```
 
-The final `pkill` stops the running Node process so Infomaniak's supervisor starts it again with the new build. If the site ever keeps serving the old version after a deploy, restart the Node app from the Infomaniak dashboard and mention it — the restart step may need adjusting.
+`npm run start` on the server runs `start-standalone.js`, a small wrapper that starts the Next.js server and watches `.next/BUILD_ID`. When a deploy uploads a new build, the wrapper exits and Infomaniak's supervisor restarts the app with the new code — no manual restart needed. If the site ever keeps serving an old version long after a green deploy, restart the Node app once from the Manager.
 
 ## Sanity content model
 

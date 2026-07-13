@@ -45,9 +45,10 @@ jobs:
         run: |
           cp -r .next/static .next/standalone/.next/static
           cp -r public .next/standalone/public
+          cp scripts/start-standalone.js .next/standalone/start-standalone.js
           # Give the bundle a start script so the Infomaniak start command
-          # can stay "npm run start" (it simply runs node server.js).
-          node -e "const fs=require('fs');const p='.next/standalone/package.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));j.scripts={...(j.scripts||{}),start:'node server.js'};fs.writeFileSync(p,JSON.stringify(j,null,2));"
+          # can stay "npm run start". The wrapper self-restarts on new builds.
+          node -e "const fs=require('fs');const p='.next/standalone/package.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));j.scripts={...(j.scripts||{}),start:'node start-standalone.js'};fs.writeFileSync(p,JSON.stringify(j,null,2));"
 
       - name: Install sshpass
         run: sudo apt-get install -y -qq sshpass || (sudo apt-get update -qq && sudo apt-get install -y -qq sshpass)
