@@ -1,0 +1,29 @@
+name: Server diagnose
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Inspect server layout over SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.INFOMANIAK_SSH_HOST }}
+          username: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
+          password: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
+          port: ${{ secrets.INFOMANIAK_SSH_PORT }}
+          script: |
+            echo "HOME=$HOME"
+            echo "--- home directory ---"
+            ls -la "$HOME" || true
+            echo "--- sites directories ---"
+            ls -la "$HOME/sites" 2>/dev/null || true
+            ls -la /srv/customer/sites 2>/dev/null || true
+            ls -la /home/clients 2>/dev/null || true
+            echo "--- tooling ---"
+            command -v git node npm pkill || true
+            node -v 2>/dev/null || echo "no node"
+            npm -v 2>/dev/null || echo "no npm"
