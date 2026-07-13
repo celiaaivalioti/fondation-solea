@@ -9,6 +9,7 @@
     "sanity:dev": "sanity dev",
     "sanity:deploy": "sanity deploy",
     "start": "next start -p ${PORT:-3000}",
+    "deploy": "bash scripts/deploy.sh",
     "serve:static": "npx serve out",
     "lint": "eslint ."
   },

@@ -58,9 +58,19 @@ Open:
 http://localhost:3000
 ```
 
-## Build check
+## Deploying code changes
 
-Before deploying code changes:
+From the `main` branch, with your changes committed:
+
+```bash
+npm run deploy
+```
+
+This pushes to GitHub, then watches the "Deploy to Infomaniak" workflow live in your terminal. The workflow lints and builds the app first, and only deploys to the Infomaniak server if those checks pass. When the command prints a green check, the preview site is updated.
+
+A plain `git push origin main` triggers exactly the same workflow — `npm run deploy` just adds the live progress and the failure log in your terminal.
+
+To check things locally before pushing:
 
 ```bash
 npm run lint
@@ -85,13 +95,10 @@ This project is connected to GitHub:
 https://github.com/celiaaivalioti/fondation-solea
 ```
 
-The workflow in `.github/workflows/deploy-infomaniak.yml` checks that the app builds successfully. It runs on pushes to `main`, and it can also be started manually from:
+The workflow in `.github/workflows/deploy.yml` runs on pushes to `main` (and manually from GitHub > Actions > Deploy to Infomaniak > Run workflow). It has two stages:
 
-```text
-GitHub > Actions > Build check > Run workflow
-```
-
-The workflow in `.github/workflows/deploy-node-preview.yml` updates the Infomaniak Node preview app over SSH after code is pushed to `main`.
+1. **Lint and build** — the app is linted and built on GitHub's runners.
+2. **Deploy Node preview** — only if the checks pass, the Infomaniak Node preview app is updated over SSH and the Node process is restarted so it serves the new build.
 
 Required GitHub repository secrets for the Node preview deployment:
 
@@ -102,7 +109,7 @@ INFOMANIAK_SSH_PASSWORD
 INFOMANIAK_SSH_PORT
 ```
 
-The workflow runs:
+On the server, the deploy stage runs:
 
 ```bash
 cd /srv/customer/sites/preview.fondation-solea.ch
@@ -110,9 +117,10 @@ git fetch origin main
 git reset --hard origin/main
 npm ci
 npm run build
+pkill -f "next start" || true
 ```
 
-If Infomaniak does not automatically reload the managed Node process after a build, restart it from the Node site dashboard.
+The final `pkill` stops the running Node process so Infomaniak's supervisor starts it again with the new build. If the site ever keeps serving the old version after a deploy, restart the Node app from the Infomaniak dashboard and mention it — the restart step may need adjusting.
 
 ## Sanity content model
 
