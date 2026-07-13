@@ -1,0 +1,50 @@
+name: Deploy to Infomaniak
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - sanity-publish
+
+concurrency:
+  group: deploy-infomaniak
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+      NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
+      NEXT_PUBLIC_SANITY_API_VERSION: ${{ secrets.NEXT_PUBLIC_SANITY_API_VERSION }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static site
+        run: npm run build:static
+
+      - name: Upload to Infomaniak
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.INFOMANIAK_FTP_SERVER }}
+          username: ${{ secrets.INFOMANIAK_FTP_USERNAME }}
+          password: ${{ secrets.INFOMANIAK_FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./out/
+          server-dir: ${{ secrets.INFOMANIAK_FTP_SERVER_DIR }}

@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens */
+:root {
+  /* Typography */
+  --font-display: Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", Arial, sans-serif;
+
+  /* Raw palette colour channels */
+  --palette-forest: 144 170 125;
+  --palette-forest-dark: 97 113 86;
+  --palette-sage: 191 201 166;
+  --palette-cream: 245 240 232;
+  --palette-offwhite: 251 248 242;
+  --palette-ivory: 248 244 235;
+  --palette-parchment: 242 237 227;
+  --palette-ink: 42 49 38;
+  --palette-muted: 107 107 99;
+  --palette-border: 229 219 207;
+  --palette-white: 255 255 255;
+  --palette-neutral-shadow: 34 42 42;
+  --palette-green-shadow: 6 56 44;
+
+  /* Semantic colour channels consumed by Tailwind */
+  --color-brand: var(--palette-forest);
+  --color-brand-dark: var(--palette-forest-dark);
+  --color-accent: var(--palette-sage);
+  --color-surface: var(--palette-offwhite);
+  --color-surface-warm: var(--palette-cream);
+  --color-surface-soft: var(--palette-ivory);
+  --color-surface-deep: var(--palette-parchment);
+  --color-foreground: var(--palette-ink);
+  --color-foreground-muted: var(--palette-muted);
+  --color-stroke: var(--palette-border);
+  --color-on-dark: var(--palette-white);
+  --color-overlay-neutral: var(--palette-neutral-shadow);
+  --color-overlay-green: var(--palette-green-shadow);
+
+  /* Semantic button colour channels */
+  --button-primary-bg: var(--color-brand);
+  --button-primary-text: var(--color-surface);
+  --button-primary-border: var(--color-brand);
+  --button-secondary-bg: var(--color-surface);
+  --button-secondary-text: var(--color-foreground);
+  --button-secondary-border: var(--color-accent);
+  --button-paper-bg: var(--color-surface-deep);
+  --button-paper-text: var(--color-foreground);
+  --button-paper-border: var(--color-surface-deep);
+  --button-ghost-bg: var(--color-surface);
+  --button-ghost-text: var(--color-foreground);
+  --button-ghost-border: var(--color-accent);
+  --button-paper-ghost-bg: var(--color-surface);
+  --button-paper-ghost-text: var(--color-surface);
+  --button-paper-ghost-border: var(--color-surface);
+
+  /* Semantic page tokens */
+  --page-background:
+    radial-gradient(circle at 92% -10%, color-mix(in srgb, rgb(var(--color-accent) / 1) 14%, transparent), transparent 32rem),
+    radial-gradient(circle at -5% 12%, color-mix(in srgb, rgb(var(--color-surface-warm) / 1) 60%, transparent), transparent 28rem),
+    linear-gradient(180deg, rgb(var(--color-surface) / 1), rgb(var(--color-surface-warm) / 1));
+  --selection-background: color-mix(in srgb, rgb(var(--color-accent) / 1) 30%, transparent);
+  --focus-ring: rgb(var(--color-brand) / 1);
+  --accent-rule: color-mix(in srgb, rgb(var(--color-brand) / 1) 38%, transparent);
+
+  /* Shape and motion */
+  --radius-image: 1.25rem;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --reveal-duration: 0.9s;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    --font-body: var(--font-sans), "Figtree", Arial, sans-serif;
+
+    margin: 0;
+    background: var(--page-background);
+    color: rgb(var(--color-foreground) / 1);
+    font-family: var(--font-body);
+    font-feature-settings: "ss01", "cv11";
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  ::selection {
+    background: var(--selection-background);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 4px;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+    font-feature-settings: "ss01", "ss02", "kern", "liga";
+    letter-spacing: -0.012em;
+  }
+
+  .leaf-mask {
+    border-radius: var(--radius-image);
+  }
+
+  .hr-accent {
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    background: var(--accent-rule);
+  }
+
+  .reveal {
+    opacity: 0;
+  }
+
+  .reveal.is-visible {
+    animation: rise-in var(--reveal-duration) var(--ease-out-soft) both;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+  }
+}

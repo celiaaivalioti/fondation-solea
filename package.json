@@ -1,0 +1,36 @@
+{
+  "name": "solea",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:static": "next build",
+    "sanity:dev": "sanity dev",
+    "sanity:deploy": "sanity deploy",
+    "start": "npx serve out",
+    "serve:static": "npx serve out",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@sanity/client": "^7.23.0",
+    "@sanity/image-url": "^2.1.1",
+    "lucide-react": "^1.14.0",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "sanity": "^6.4.0",
+    "styled-components": "^6.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "autoprefixer": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "postcss": "latest",
+    "tailwindcss": "^3.4.17",
+    "typescript": "latest"
+  }
+}
