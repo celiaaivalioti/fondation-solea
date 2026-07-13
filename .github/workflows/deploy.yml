@@ -6,14 +6,16 @@ on:
       - main
   workflow_dispatch:
 
-jobs:
-  check:
-    name: Lint and build
-    runs-on: ubuntu-latest
+# Never cancel a deploy mid-flight: a new push queues behind it instead,
+# so the server is never left half-updated.
+concurrency:
+  group: deploy-infomaniak
+  cancel-in-progress: false
 
-    concurrency:
-      group: deploy-check
-      cancel-in-progress: true
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
 
     env:
       NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
@@ -39,35 +41,41 @@ jobs:
       - name: Build app
         run: npm run build
 
-  deploy:
-    name: Deploy Node preview
-    runs-on: ubuntu-latest
-    needs: check
-
-    # Never cancel a deploy mid-flight: a new push queues behind it instead,
-    # so the server is never left half-updated.
-    concurrency:
-      group: deploy-node-preview
-      cancel-in-progress: false
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Assemble standalone bundle
+        run: |
+          cp -r .next/static .next/standalone/.next/static
+          cp -r public .next/standalone/public
+          # Give the bundle a start script so the Infomaniak start command
+          # can stay "npm run start" (it simply runs node server.js).
+          node -e "const fs=require('fs');const p='.next/standalone/package.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));j.scripts={...(j.scripts||{}),start:'node server.js'};fs.writeFileSync(p,JSON.stringify(j,null,2));"
 
       - name: Install sshpass
         run: sudo apt-get install -y -qq sshpass || (sudo apt-get update -qq && sudo apt-get install -y -qq sshpass)
 
-      - name: Deploy over SSH
+      # The server never builds anything: its SSH sessions are capped at
+      # 1 GB of memory, which kills npm ci / next build. We rsync the
+      # ready-to-run standalone bundle instead.
+      - name: Upload to Infomaniak
         env:
           SSHPASS: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
           SSH_HOST: ${{ secrets.INFOMANIAK_SSH_HOST }}
           SSH_USER: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
           SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
         run: |
-          SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=15"
-          echo "== connectivity check =="
-          sshpass -e ssh -v $SSH_OPTS -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "echo connected ok" 2>&1 | grep -iE "authentic|denied|debug1: (Connecting|Connection established|Offering|Next authentication)|connected ok" || true
-          echo "== upload deploy script =="
-          sshpass -e scp $SSH_OPTS -P "$SSH_PORT" scripts/deploy-remote.sh "$SSH_USER@$SSH_HOST:/tmp/deploy-remote.sh"
-          echo "== run deploy script =="
-          sshpass -e ssh $SSH_OPTS -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "bash /tmp/deploy-remote.sh"
+          RSH="sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p $SSH_PORT"
+          DEST="$SSH_USER@$SSH_HOST:/srv/customer/sites/preview.fondation-solea.ch"
+          rsync -az --delete -e "$RSH" .next/standalone/ "$DEST/"
+          echo "Upload done."
+
+      - name: Restart Node app
+        env:
+          SSHPASS: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
+          SSH_HOST: ${{ secrets.INFOMANIAK_SSH_HOST }}
+          SSH_USER: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
+          SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
+        run: |
+          # Best effort: Infomaniak supervises the app process and restarts
+          # it when it exits. If the app runs outside the SSH container this
+          # is a no-op — restart from the Manager in that case.
+          sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+            "pkill -f '[s]erver\.js' > /dev/null 2>&1; pkill -f '[n]ext start' > /dev/null 2>&1; echo restart-signal-sent"
