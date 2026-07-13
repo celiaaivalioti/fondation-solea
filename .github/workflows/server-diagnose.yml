@@ -16,13 +16,19 @@ jobs:
           password: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
           port: ${{ secrets.INFOMANIAK_SSH_PORT }}
           script: |
-            echo "HOME=$HOME  PWD=$(pwd)"
-            echo "--- home ---"
-            ls -la "$HOME" || true
-            echo "--- sites ---"
-            ls -la "$HOME/sites" 2>/dev/null || ls -la /srv/customer/sites 2>/dev/null || true
-            echo "--- tooling ---"
-            command -v git rsync pkill curl || true
-            git --version 2>/dev/null || echo "no git"
-            echo "--- env hints ---"
-            env | grep -iE "^(PORT|NODE_ENV|HOST)=" || echo "no PORT/NODE_ENV in env"
+            cd /srv/customer/sites/preview.fondation-solea.ch || exit 1
+            echo "--- dir contents ---"
+            ls -la | head -30
+            echo "--- git state ---"
+            git rev-parse --is-inside-work-tree 2>&1 || true
+            git remote -v 2>&1 || true
+            git log --oneline -1 2>&1 || true
+            echo "--- outbound https ---"
+            curl -sI --max-time 10 https://github.com 2>&1 | head -2 || echo "curl to github failed"
+            echo "--- disk ---"
+            df -h . 2>&1 | tail -1 || true
+            echo "--- fetch test ---"
+            git fetch --quiet origin main > /tmp/fetch.log 2>&1
+            echo "fetch rc=$?"
+            tail -5 /tmp/fetch.log 2>/dev/null || true
+            echo "--- done ---"
