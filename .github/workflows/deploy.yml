@@ -51,31 +51,19 @@ jobs:
       cancel-in-progress: false
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install sshpass
+        run: sudo apt-get install -y -qq sshpass || (sudo apt-get update -qq && sudo apt-get install -y -qq sshpass)
+
       - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.INFOMANIAK_SSH_HOST }}
-          username: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
-          password: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
-          port: ${{ secrets.INFOMANIAK_SSH_PORT }}
-          script: |
-            set -e
-            cd /srv/customer/sites/preview.fondation-solea.ch
-            # First deploy: the directory may exist without being a git clone.
-            # git reset --hard keeps untracked files (.env.local, node_modules).
-            if [ ! -d .git ]; then
-              git init -q -b main
-              git remote add origin https://github.com/celiaaivalioti/fondation-solea.git
-            fi
-            # < /dev/null everywhere: the SSH action streams this script over
-            # stdin, and any command that consumes stdin swallows the rest of
-            # the script and SIGPIPEs the session.
-            git fetch --quiet origin main < /dev/null
-            git reset --quiet --hard origin/main < /dev/null
-            echo "Checked out $(git rev-parse --short HEAD)"
-            npm ci --no-audit --no-fund --loglevel=error < /dev/null
-            npm run build < /dev/null
-            # Infomaniak supervises the Node process and restarts it if it
-            # exits, so killing it is how we pick up the new build.
-            pkill -f "next start" < /dev/null || true
-            echo "Deploy finished. The Node process was asked to restart with the new build."
+        env:
+          SSHPASS: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
+          SSH_HOST: ${{ secrets.INFOMANIAK_SSH_HOST }}
+          SSH_USER: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
+          SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
+        run: |
+          SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=15"
+          sshpass -e scp $SSH_OPTS -P "$SSH_PORT" scripts/deploy-remote.sh "$SSH_USER@$SSH_HOST:/tmp/deploy-remote.sh"
+          sshpass -e ssh $SSH_OPTS -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "bash /tmp/deploy-remote.sh"
