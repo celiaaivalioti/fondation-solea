@@ -12,6 +12,8 @@ const figtree = Figtree({
   display: "swap"
 });
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const { site } = await getCmsContent();
 

@@ -1,10 +1,14 @@
-# Static deployment with Sanity
+# Deployment with Sanity
 
-This site is built as a static export. It does not require Vercel, serverless functions, or Vercel webhooks.
+This site is a Next.js App Router site connected to Sanity.
+
+The preferred production setup is a Node.js host, so the public website can fetch published Sanity content at request time. This makes CMS updates visible quickly without rebuilding and uploading a static export after every content change.
+
+The previous static export setup is still possible, but it is no longer the recommended production path for this project.
 
 ## Required environment variables
 
-Create `.env.local` for local development and set the same variables in your build environment:
+Create `.env.local` for local development and set the same variables in your hosting environment:
 
 ```bash
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
@@ -12,63 +16,68 @@ NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2026-07-09
 ```
 
-The frontend fetches published content from Sanity during `next build`. If these variables are missing, the bundled default content is used so the site remains buildable.
+The frontend fetches published content from Sanity. If these variables are missing, the bundled default content is used so the site remains runnable.
 
-## Build command
+## Node.js hosting
+
+Use a Node.js hosting environment such as Infomaniak Node.js hosting.
+
+Recommended settings:
+
+```bash
+Install command: npm ci
+Build command: npm run build
+Start command: npm run start
+Node version: 22
+```
+
+The `start` script runs:
+
+```bash
+next start -p ${PORT:-3000}
+```
+
+Infomaniak should provide a `PORT` environment variable for the Node process. If it does not, set one in the hosting panel and make sure the app listens on that same port.
+
+## Updating content
+
+With Node.js hosting, published Sanity changes are read by the live website at request time. The Sanity webhook to GitHub is no longer required for content-only changes.
+
+Use the GitHub/Sanity rebuild workflow only if you choose to return to static export hosting.
+
+## Local development
 
 ```bash
 npm install
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+## Build check
+
+Before deploying code changes:
+
+```bash
+npm run lint
+npm run build
+```
+
+## Static export fallback
+
+If you need to deploy to a server that can only serve static files, restore `output: "export"` in `next.config.ts`, run:
+
+```bash
 npm run build:static
 ```
 
-`build:static` runs `next build` with `output: "export"` from `next.config.ts`.
+and upload the contents of `out/` to the public web root.
 
-To preview the exported site locally:
-
-```bash
-npm run start
-```
-
-## Output folder
-
-The static website is generated in:
-
-```bash
-out/
-```
-
-## Uploading to a standard web server
-
-Upload the full contents of `out/` to the public web root of your hosting provider, for example:
-
-```bash
-rsync -avz out/ user@example.com:/var/www/solea/
-```
-
-Any static host can serve the files: Apache, Nginx, shared hosting, S3-compatible object storage, Netlify static hosting, Infomaniak static hosting, or another standard web server.
-
-For Apache or Nginx, make sure clean URLs map to the exported `index.html` files inside each route folder. With `trailingSlash: true`, routes are exported as folders such as:
-
-```text
-out/
-  index.html
-  contact/
-    index.html
-  inscription/
-    index.html
-```
-
-## Rebuilding after Sanity content changes
-
-Because the final site is static, published Sanity changes appear after a rebuild:
-
-1. Publish content in Sanity.
-2. Run `npm run build:static` with the Sanity environment variables set.
-3. Upload the refreshed `out/` folder to the web server.
-
-You can automate those three steps with any CI system or cron job. No Vercel webhook is required.
-
-## Current automated deployment
+## GitHub repository
 
 This project is connected to GitHub:
 
@@ -76,27 +85,11 @@ This project is connected to GitHub:
 https://github.com/celiaaivalioti/fondation-solea
 ```
 
-The workflow in `.github/workflows/deploy-infomaniak.yml` builds the static site and uploads `out/` to Infomaniak.
-
-It runs automatically when code is pushed to `main`, and it can also be started manually from:
+The workflow in `.github/workflows/deploy-infomaniak.yml` checks that the app builds successfully. It runs on pushes to `main`, and it can also be started manually from:
 
 ```text
-GitHub > Actions > Deploy to Infomaniak > Run workflow
+GitHub > Actions > Build check > Run workflow
 ```
-
-Required GitHub repository secrets:
-
-```bash
-NEXT_PUBLIC_SANITY_PROJECT_ID
-NEXT_PUBLIC_SANITY_DATASET
-NEXT_PUBLIC_SANITY_API_VERSION
-INFOMANIAK_FTP_SERVER
-INFOMANIAK_FTP_USERNAME
-INFOMANIAK_FTP_PASSWORD
-INFOMANIAK_FTP_SERVER_DIR
-```
-
-To make Sanity publishing trigger this workflow automatically, create a Sanity webhook that calls GitHub's `repository_dispatch` endpoint with the event type `sanity-publish`.
 
 ## Sanity content model
 

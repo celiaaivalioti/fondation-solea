@@ -8,7 +8,7 @@
     "build:static": "next build",
     "sanity:dev": "sanity dev",
     "sanity:deploy": "sanity deploy",
-    "start": "npx serve out",
+    "start": "next start -p ${PORT:-3000}",
     "serve:static": "npx serve out",
     "lint": "eslint ."
   },
