@@ -68,6 +68,36 @@ Because the final site is static, published Sanity changes appear after a rebuil
 
 You can automate those three steps with any CI system or cron job. No Vercel webhook is required.
 
+## Current automated deployment
+
+This project is connected to GitHub:
+
+```text
+https://github.com/celiaaivalioti/fondation-solea
+```
+
+The workflow in `.github/workflows/deploy-infomaniak.yml` builds the static site and uploads `out/` to Infomaniak.
+
+It runs automatically when code is pushed to `main`, and it can also be started manually from:
+
+```text
+GitHub > Actions > Deploy to Infomaniak > Run workflow
+```
+
+Required GitHub repository secrets:
+
+```bash
+NEXT_PUBLIC_SANITY_PROJECT_ID
+NEXT_PUBLIC_SANITY_DATASET
+NEXT_PUBLIC_SANITY_API_VERSION
+INFOMANIAK_FTP_SERVER
+INFOMANIAK_FTP_USERNAME
+INFOMANIAK_FTP_PASSWORD
+INFOMANIAK_FTP_SERVER_DIR
+```
+
+To make Sanity publishing trigger this workflow automatically, create a Sanity webhook that calls GitHub's `repository_dispatch` endpoint with the event type `sanity-publish`.
+
 ## Sanity content model
 
 The Sanity schema blueprint lives in:
