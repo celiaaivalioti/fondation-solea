@@ -57,7 +57,7 @@ export type HomeContent = {
 
 export type ValueItem = {
   label: string;
-  icon: "heartHandshake" | "ear" | "feather" | "compass" | "handshake" | "mountain";
+  icon: string;
 };
 
 export type PrincipleItem = {
@@ -119,7 +119,7 @@ export type Therapy = {
 
 export type ApproachPillar = {
   title: string;
-  icon: "leaf" | "brain" | "heart" | "sparkles";
+  icon: string;
   text: string;
 };
 

@@ -1,18 +1,10 @@
 import Image from "next/image";
-import {
-  Compass,
-  Ear,
-  Feather,
-  Handshake,
-  HeartHandshake,
-  Mountain
-} from "lucide-react";
 import CTAButton from "@/components/CTAButton";
 import Hero from "@/components/Hero";
 import ScrollReveal from "@/components/ScrollReveal";
 import Section from "@/components/Section";
 import { getCmsContent } from "@/lib/cms";
-import type { ValueItem } from "@/lib/cms-types";
+import { getSectionIcon } from "@/lib/icons";
 
 export async function generateMetadata() {
   const { about } = await getCmsContent();
@@ -21,15 +13,6 @@ export async function generateMetadata() {
     title: about.metadataTitle
   };
 }
-
-const valueIcons: Record<ValueItem["icon"], typeof HeartHandshake> = {
-  heartHandshake: HeartHandshake,
-  ear: Ear,
-  feather: Feather,
-  compass: Compass,
-  handshake: Handshake,
-  mountain: Mountain
-};
 
 export default async function AboutPage() {
   const { about } = await getCmsContent();
@@ -118,7 +101,7 @@ export default async function AboutPage() {
 
           <ScrollReveal className="mt-14 grid gap-x-20 lg:grid-cols-2">
             {about.values.items.map(({ label, icon }) => {
-              const Icon = valueIcons[icon];
+              const Icon = getSectionIcon(icon);
 
               return (
               <div

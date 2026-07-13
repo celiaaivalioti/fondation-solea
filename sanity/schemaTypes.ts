@@ -1,3 +1,37 @@
+// Icon choices for value/approach items. Keep in sync with lib/icons.ts,
+// which maps these values to the actual icons on the website.
+const iconOptions = {
+  list: [
+    { title: "Heart & handshake", value: "heartHandshake" },
+    { title: "Ear (listening)", value: "ear" },
+    { title: "Feather", value: "feather" },
+    { title: "Compass", value: "compass" },
+    { title: "Handshake", value: "handshake" },
+    { title: "Mountain", value: "mountain" },
+    { title: "Leaf", value: "leaf" },
+    { title: "Brain", value: "brain" },
+    { title: "Heart", value: "heart" },
+    { title: "Sparkles", value: "sparkles" },
+    { title: "Sun", value: "sun" },
+    { title: "Sunrise", value: "sunrise" },
+    { title: "Moon", value: "moon" },
+    { title: "Flower", value: "flower" },
+    { title: "Sprout", value: "sprout" },
+    { title: "Tree", value: "tree" },
+    { title: "Waves", value: "waves" },
+    { title: "Wind", value: "wind" },
+    { title: "Bird", value: "bird" },
+    { title: "Star", value: "star" },
+    { title: "Shield", value: "shield" },
+    { title: "Home", value: "home" },
+    { title: "People", value: "users" },
+    { title: "Smile", value: "smile" },
+    { title: "Music", value: "music" },
+    { title: "Open book", value: "book" },
+    { title: "Anchor", value: "anchor" }
+  ]
+};
+
 // Without an explicit preview, Sanity lists show objects as a raw data dump
 // like "items: [{href: ..., label: ...}]".
 const singletonPreview = (title: string) => ({
@@ -276,7 +310,7 @@ const aboutPage = {
                   name: "icon",
                   title: "Icon",
                   type: "string",
-                  options: { list: ["heartHandshake", "ear", "feather", "compass", "handshake", "mountain"] }
+                  options: iconOptions
                 }
               ],
               preview: {
@@ -340,7 +374,7 @@ const retreatPage = {
               fields: [
                 { name: "title", title: "Title", type: "string" },
                 { name: "text", title: "Text", type: "text" },
-                { name: "icon", title: "Icon", type: "string", options: { list: ["leaf", "brain", "heart", "sparkles"] } }
+                { name: "icon", title: "Icon", type: "string", options: iconOptions }
               ]
             }
           ]

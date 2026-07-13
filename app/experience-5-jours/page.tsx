@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Brain, Heart, Leaf, Sparkles } from "lucide-react";
 import CheckList from "@/components/CheckList";
 import CTAButton from "@/components/CTAButton";
 import Hero from "@/components/Hero";
@@ -7,7 +6,7 @@ import Section from "@/components/Section";
 import ScrollReveal from "@/components/ScrollReveal";
 import TherapyCard from "@/components/TherapyCard";
 import { getCmsContent } from "@/lib/cms";
-import type { ApproachPillar } from "@/lib/cms-types";
+import { getSectionIcon } from "@/lib/icons";
 
 export async function generateMetadata() {
   const { retreat } = await getCmsContent();
@@ -16,13 +15,6 @@ export async function generateMetadata() {
     title: retreat.metadataTitle
   };
 }
-
-const approachIcons: Record<ApproachPillar["icon"], typeof Leaf> = {
-  leaf: Leaf,
-  brain: Brain,
-  heart: Heart,
-  sparkles: Sparkles
-};
 
 export default async function RetreatPage() {
   const { retreat } = await getCmsContent();
@@ -73,7 +65,7 @@ export default async function RetreatPage() {
       >
         <ScrollReveal className="grid gap-6 md:grid-cols-2">
           {retreat.approach.items.map(({ title, icon, text }) => {
-            const Icon = approachIcons[icon];
+            const Icon = getSectionIcon(icon);
 
             return (
               <article
