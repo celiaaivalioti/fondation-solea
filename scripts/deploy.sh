@@ -28,9 +28,11 @@ head_sha=$(git rev-parse HEAD)
 echo "Waiting for the deployment workflow to start for $head_sha…"
 run_id=""
 for _ in $(seq 1 15); do
-  run_id=$(gh run list --workflow "Deploy to Infomaniak" --branch main \
+  # "|| true": right after the workflow file is first pushed, GitHub may not
+  # have registered it yet — keep polling instead of aborting.
+  run_id=$(gh run list --workflow deploy.yml --branch main \
     --json databaseId,headSha --jq ".[] | select(.headSha == \"$head_sha\") | .databaseId" \
-    --limit 10 | head -n 1)
+    --limit 10 2>/dev/null | head -n 1 || true)
   if [ -n "$run_id" ]; then
     break
   fi
