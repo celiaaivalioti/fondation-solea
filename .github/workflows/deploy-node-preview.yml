@@ -22,7 +22,6 @@ jobs:
           username: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
           password: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
           port: ${{ secrets.INFOMANIAK_SSH_PORT }}
-          script_stop: true
           script: |
             set -e
             cd /srv/customer/sites/preview.fondation-solea.ch
