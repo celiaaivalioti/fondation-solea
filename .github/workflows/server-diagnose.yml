@@ -1,0 +1,32 @@
+name: Server diagnose
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Inspect deployed bundle state
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.INFOMANIAK_SSH_HOST }}
+          username: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
+          password: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
+          port: ${{ secrets.INFOMANIAK_SSH_PORT }}
+          script: |
+            cd /srv/customer/sites/preview.fondation-solea.ch || exit 1
+            echo "--- root ---"
+            ls -la | head -20
+            echo "--- server.js present ---"
+            ls -la server.js package.json 2>&1
+            echo "--- css chunk on disk ---"
+            ls -la .next/static/chunks/*.css 2>&1 | head -5
+            ls -la .next/static/chunks/0yudp3k4b7dsl.css 2>&1
+            echo "--- BUILD_ID ---"
+            cat .next/BUILD_ID 2>&1
+            echo "--- permissions of static tree ---"
+            find .next/static -maxdepth 2 -type d -exec ls -ld {} \; 2>/dev/null | head -6
+            echo "--- processes ---"
+            ps aux 2>/dev/null | grep -iE "node|next" | grep -v grep || echo "no node processes visible"
