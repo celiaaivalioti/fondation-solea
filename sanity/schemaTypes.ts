@@ -321,7 +321,30 @@ const aboutPage = {
         }
       ]
     },
-    { ...checklistField, name: "principles", title: "Principles" },
+    {
+      name: "principles",
+      title: "Principles",
+      type: "object",
+      fields: [
+        { name: "eyebrow", title: "Eyebrow", type: "string" },
+        { name: "title", title: "Title", type: "string" },
+        { name: "intro", title: "Intro", type: "text" },
+        {
+          name: "items",
+          title: "Items",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                { name: "title", title: "Title", type: "string" },
+                { name: "text", title: "Text", type: "text" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       name: "committee",
       title: "Committee",
