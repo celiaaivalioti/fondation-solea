@@ -34,6 +34,7 @@ export type SiteSettings = {
   phone: string;
   address: string;
   footerTagline: string;
+  showDonationCta: boolean;
   donationLabel: string;
   legalLinks: NavigationItem[];
   socialLinks: Array<NavigationItem & { platform: "linkedin" | "facebook" | "instagram" }>;

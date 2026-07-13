@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import CheckList from "@/components/CheckList";
 import Hero from "@/components/Hero";
 import Section from "@/components/Section";
@@ -5,7 +6,13 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { getCmsContent } from "@/lib/cms";
 
 export async function generateMetadata() {
-  const { support } = await getCmsContent();
+  const { site, support } = await getCmsContent();
+
+  if (!site.showDonationCta) {
+    return {
+      title: "Page indisponible"
+    };
+  }
 
   return {
     title: support.metadataTitle
@@ -13,7 +20,11 @@ export async function generateMetadata() {
 }
 
 export default async function SupportPage() {
-  const { support } = await getCmsContent();
+  const { site, support } = await getCmsContent();
+
+  if (!site.showDonationCta) {
+    notFound();
+  }
 
   return (
     <>

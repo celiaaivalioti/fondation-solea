@@ -120,6 +120,13 @@ const siteSettings = {
     { name: "phone", title: "Phone", type: "string" },
     { name: "address", title: "Address", type: "string" },
     { name: "footerTagline", title: "Footer tagline", type: "string" },
+    {
+      name: "showDonationCta",
+      title: "Show donation page and buttons",
+      type: "boolean",
+      initialValue: true,
+      description: "Turn this off to hide the donation buttons and make the Nous soutenir page unavailable."
+    },
     { name: "donationLabel", title: "Donation button label", type: "string" },
     { name: "legalLinks", title: "Footer legal links", type: "array", of: [{ type: "link" }] },
     {

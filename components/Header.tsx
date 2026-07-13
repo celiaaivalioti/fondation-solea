@@ -80,12 +80,14 @@ export default function Header({ navigation, site }: HeaderProps) {
           })}
         </nav>
         <div className="hidden items-center gap-3 sm:flex">
-          <CTAButton
-            href="/nous-soutenir"
-            className={isScrolled ? "!min-h-10 !px-5 !py-2.5 !text-base" : "!min-h-12 !px-6 !py-3"}
-          >
-            {site.donationLabel}
-          </CTAButton>
+          {site.showDonationCta && (
+            <CTAButton
+              href="/nous-soutenir"
+              className={isScrolled ? "!min-h-10 !px-5 !py-2.5 !text-base" : "!min-h-12 !px-6 !py-3"}
+            >
+              {site.donationLabel}
+            </CTAButton>
+          )}
           <button
             className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 text-base font-medium transition xl:hidden ${
               isOverlay
@@ -145,9 +147,11 @@ export default function Header({ navigation, site }: HeaderProps) {
               </Link>
             );
           })}
-          <CTAButton href="/nous-soutenir" className="mt-2 w-full" onClick={() => setIsOpen(false)}>
-            {site.donationLabel}
-          </CTAButton>
+          {site.showDonationCta && (
+            <CTAButton href="/nous-soutenir" className="mt-2 w-full" onClick={() => setIsOpen(false)}>
+              {site.donationLabel}
+            </CTAButton>
+          )}
         </nav>
       )}
     </header>

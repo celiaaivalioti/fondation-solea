@@ -31,14 +31,16 @@ export default function Footer({ navigation, site }: FooterProps) {
             />
           </Link>
           <p className="mt-4 max-w-sm leading-8 text-bark/75">{site.footerTagline}</p>
-          <div className="mt-6">
-            <Link
-              href="/nous-soutenir"
-              className="inline-flex min-h-14 items-center rounded-full bg-parchment px-8 py-4 text-lg font-medium text-bark transition hover:brightness-95"
-            >
-              {site.donationLabel}
-            </Link>
-          </div>
+          {site.showDonationCta && (
+            <div className="mt-6">
+              <Link
+                href="/nous-soutenir"
+                className="inline-flex min-h-14 items-center rounded-full bg-parchment px-8 py-4 text-lg font-medium text-bark transition hover:brightness-95"
+              >
+                {site.donationLabel}
+              </Link>
+            </div>
+          )}
         </div>
         <div className="grid gap-8 sm:grid-cols-3">
           <nav className="grid gap-3" aria-label="Navigation secondaire">

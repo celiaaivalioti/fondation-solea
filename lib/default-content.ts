@@ -11,6 +11,7 @@ export const defaultContent: CmsContent = {
     phone: "+33 6 00 00 00 00",
     address: "Un lieu ressource au cœur du vivant",
     footerTagline: "Construire son chemin, ensemble",
+    showDonationCta: true,
     donationLabel: "Faire un don",
     legalLinks: [
       { label: "Mentions légales", href: "#" },
