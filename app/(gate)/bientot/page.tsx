@@ -26,9 +26,6 @@ export default async function ComingSoonPage() {
       <h1 className="mt-10 max-w-2xl font-display text-[clamp(2rem,5vw,3.25rem)] font-light leading-tight text-bark">
         Notre site est actuellement en préparation.
       </h1>
-      <p className="mt-6 max-w-xl text-lg leading-8 text-bark/70">
-        Construire son chemin, ensemble.
-      </p>
       <p className="mt-10 text-lg text-bark/70">
         Pour nous contacter&nbsp;:{" "}
         <a
