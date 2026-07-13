@@ -16,14 +16,17 @@ jobs:
           password: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
           port: ${{ secrets.INFOMANIAK_SSH_PORT }}
           script: |
-            echo "HOME=$HOME"
-            echo "--- home directory ---"
-            ls -la "$HOME" || true
-            echo "--- sites directories ---"
-            ls -la "$HOME/sites" 2>/dev/null || true
-            ls -la /srv/customer/sites 2>/dev/null || true
-            ls -la /home/clients 2>/dev/null || true
-            echo "--- tooling ---"
-            command -v git node npm pkill || true
-            node -v 2>/dev/null || echo "no node"
-            npm -v 2>/dev/null || echo "no npm"
+            echo "--- site dir ---"
+            ls -la "$HOME/sites/fondation-solea.ch" || true
+            echo "--- node search ---"
+            ls /usr/local/bin 2>/dev/null | head -20 || true
+            ls /opt 2>/dev/null || true
+            find "$HOME" -maxdepth 3 -name "node" -o -maxdepth 3 -name ".nvm" 2>/dev/null || true
+            compgen -c | grep -iE "^node|^npm|^nvm" | sort -u || true
+            echo "--- login shell env ---"
+            bash -lc 'command -v node npm; node -v 2>/dev/null' || true
+            cat "$HOME/.profile" "$HOME/.bashrc" 2>/dev/null | grep -viE "password|secret" | head -20 || true
+            echo "--- running processes ---"
+            ps aux 2>/dev/null | grep -iE "node|next" | grep -v grep || echo "no node processes"
+            echo "--- os ---"
+            cat /etc/os-release 2>/dev/null | head -3 || true
