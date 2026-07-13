@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test git fetch with auto-gc disabled
+      - name: Check repo state and resource limits
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.INFOMANIAK_SSH_HOST }}
@@ -17,15 +17,24 @@ jobs:
           port: ${{ secrets.INFOMANIAK_SSH_PORT }}
           script: |
             cd /srv/customer/sites/preview.fondation-solea.ch || exit 1
-            echo "test1: fetch with gc disabled"
-            git -c gc.auto=0 -c gc.autoDetach=false fetch --quiet origin main
-            echo "test1 rc=$?"
-            echo "test2: reset"
-            git reset --quiet --hard origin/main
-            echo "test2 rc=$?"
-            echo "test3: loose object count"
-            git count-objects
-            echo "test4: plain no-op fetch (the failing case)"
-            git fetch --quiet origin main
-            echo "test4 rc=$?"
-            echo "all done"
+            echo "HEAD: $(git log --oneline -1 < /dev/null)"
+            echo "cgroup mem max: $(cat /sys/fs/cgroup/memory.max 2>/dev/null || cat /sys/fs/cgroup/memory/memory.limit_in_bytes 2>/dev/null || echo unknown)"
+            echo "cgroup pids max: $(cat /sys/fs/cgroup/pids.max 2>/dev/null || echo unknown)"
+            echo "nproc: $(nproc)"
+            free -m 2>/dev/null | head -2 || true
+            echo "--- ulimits ---"
+            ulimit -a 2>/dev/null | head -14 || true
+
+      - name: Test npm in isolated session
+        if: always()
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.INFOMANIAK_SSH_HOST }}
+          username: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
+          password: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
+          port: ${{ secrets.INFOMANIAK_SSH_PORT }}
+          script: |
+            cd /srv/customer/sites/preview.fondation-solea.ch || exit 1
+            echo "npm test starting"
+            timeout 60 npm ping --registry https://registry.npmjs.org < /dev/null 2>&1 | tail -2 || echo "npm ping rc=$?"
+            echo "npm test done"
