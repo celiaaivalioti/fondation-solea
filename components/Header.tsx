@@ -89,7 +89,9 @@ export default function Header({ navigation, site }: HeaderProps) {
             </CTAButton>
           )}
           <button
-            className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 text-base font-medium transition xl:hidden ${
+            className={`inline-flex items-center gap-2 rounded-full border font-medium transition-all duration-500 ease-out-soft xl:hidden ${
+              isScrolled ? "min-h-10 px-5 py-2.5 text-base" : "min-h-12 px-6 py-3 text-lg"
+            } ${
               isOverlay
                 ? "border-paper/40 text-paper hover:border-paper hover:bg-paper/10"
                 : "border-moss/25 text-moss hover:border-moss hover:bg-linen"
@@ -107,7 +109,9 @@ export default function Header({ navigation, site }: HeaderProps) {
           </button>
         </div>
         <button
-          className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 text-base font-medium transition sm:hidden ${
+          className={`inline-flex items-center gap-2 rounded-full border font-medium transition-all duration-500 ease-out-soft sm:hidden ${
+            isScrolled ? "min-h-10 px-5 py-2.5 text-base" : "min-h-12 px-6 py-3 text-lg"
+          } ${
             isOverlay
               ? "border-paper/40 text-paper hover:border-paper hover:bg-paper/10"
               : "border-moss/25 text-moss hover:border-moss hover:bg-linen"
