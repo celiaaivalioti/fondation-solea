@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Inspect server layout over SSH
+      - name: Test git fetch with auto-gc disabled
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.INFOMANIAK_SSH_HOST }}
@@ -17,18 +17,15 @@ jobs:
           port: ${{ secrets.INFOMANIAK_SSH_PORT }}
           script: |
             cd /srv/customer/sites/preview.fondation-solea.ch || exit 1
-            echo "--- dir contents ---"
-            ls -la | head -30
-            echo "--- git state ---"
-            git rev-parse --is-inside-work-tree 2>&1 || true
-            git remote -v 2>&1 || true
-            git log --oneline -1 2>&1 || true
-            echo "--- outbound https ---"
-            curl -sI --max-time 10 https://github.com 2>&1 | head -2 || echo "curl to github failed"
-            echo "--- disk ---"
-            df -h . 2>&1 | tail -1 || true
-            echo "--- fetch test ---"
-            git fetch --quiet origin main > /tmp/fetch.log 2>&1
-            echo "fetch rc=$?"
-            tail -5 /tmp/fetch.log 2>/dev/null || true
-            echo "--- done ---"
+            echo "test1: fetch with gc disabled"
+            git -c gc.auto=0 -c gc.autoDetach=false fetch --quiet origin main
+            echo "test1 rc=$?"
+            echo "test2: reset"
+            git reset --quiet --hard origin/main
+            echo "test2 rc=$?"
+            echo "test3: loose object count"
+            git count-objects
+            echo "test4: plain no-op fetch (the failing case)"
+            git fetch --quiet origin main
+            echo "test4 rc=$?"
+            echo "all done"
