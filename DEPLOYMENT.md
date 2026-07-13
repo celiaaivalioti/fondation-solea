@@ -91,6 +91,29 @@ The workflow in `.github/workflows/deploy-infomaniak.yml` checks that the app bu
 GitHub > Actions > Build check > Run workflow
 ```
 
+The workflow in `.github/workflows/deploy-node-preview.yml` updates the Infomaniak Node preview app over SSH after code is pushed to `main`.
+
+Required GitHub repository secrets for the Node preview deployment:
+
+```bash
+INFOMANIAK_SSH_HOST
+INFOMANIAK_SSH_USERNAME
+INFOMANIAK_SSH_PASSWORD
+INFOMANIAK_SSH_PORT
+```
+
+The workflow runs:
+
+```bash
+cd /srv/customer/sites/preview.fondation-solea.ch
+git fetch origin main
+git reset --hard origin/main
+npm ci
+npm run build
+```
+
+If Infomaniak does not automatically reload the managed Node process after a build, restart it from the Node site dashboard.
+
 ## Sanity content model
 
 The Sanity schema blueprint lives in:
