@@ -64,12 +64,14 @@ jobs:
             # First deploy: the directory may exist without being a git clone.
             # git reset --hard keeps untracked files (.env.local, node_modules).
             if [ ! -d .git ]; then
-              git init -b main
+              git init -q -b main
               git remote add origin https://github.com/celiaaivalioti/fondation-solea.git
             fi
-            git fetch origin main
-            git reset --hard origin/main
-            npm ci
+            # --quiet: progress output on stderr can SIGPIPE the SSH session
+            git fetch --quiet origin main
+            git reset --quiet --hard origin/main
+            echo "Checked out $(git rev-parse --short HEAD)"
+            npm ci --no-audit --no-fund --loglevel=error
             npm run build
             # Infomaniak supervises the Node process and restarts it if it
             # exits, so killing it is how we pick up the new build.
