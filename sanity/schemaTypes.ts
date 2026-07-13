@@ -30,6 +30,7 @@ const ctaField = {
       name: "variant",
       title: "Button style",
       type: "string",
+      description: "Optional — leave empty to use the default style for this section.",
       options: {
         list: ["primary", "secondary", "paper", "ghost", "paperGhost"]
       }
@@ -38,6 +39,13 @@ const ctaField = {
   preview: {
     select: { title: "label", subtitle: "href" }
   }
+};
+
+// Hero buttons have their style fixed by the design (they must stay legible
+// on top of photos), so the style dropdown is omitted there.
+const ctaFieldWithoutVariant = {
+  ...ctaField,
+  fields: ctaField.fields.filter((field) => field.name !== "variant")
 };
 
 const imageField = {
@@ -72,9 +80,9 @@ const heroField = {
     { name: "title", title: "Title", type: "string" },
     { name: "text", title: "Text", type: "text" },
     imageField,
-    { ...ctaField, name: "primary", title: "Primary button" },
-    { ...ctaField, name: "secondary", title: "Secondary button" },
-    { ...ctaField, name: "tertiary", title: "Tertiary button" }
+    { ...ctaFieldWithoutVariant, name: "primary", title: "Primary button" },
+    { ...ctaFieldWithoutVariant, name: "secondary", title: "Secondary button" },
+    { ...ctaFieldWithoutVariant, name: "tertiary", title: "Tertiary button" }
   ]
 };
 
