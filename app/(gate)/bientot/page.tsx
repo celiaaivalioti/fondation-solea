@@ -24,15 +24,18 @@ export default async function ComingSoonPage() {
         className="h-12 w-auto"
       />
       <h1 className="mt-10 max-w-2xl font-display text-[clamp(2rem,5vw,3.25rem)] font-light leading-tight text-bark">
-        Notre site ouvre bientôt
+        Notre site est actuellement en préparation.
       </h1>
       <p className="mt-6 max-w-xl text-lg leading-8 text-bark/70">
-        {site.tagline}
+        Construire son chemin, ensemble.
       </p>
       <p className="mt-10 text-lg text-bark/70">
         Pour nous contacter&nbsp;:{" "}
-        <a href={`mailto:${site.email}`} className="font-medium text-moss underline-offset-4 hover:underline">
-          {site.email}
+        <a
+          href="mailto:contact@fondation-solea.ch"
+          className="font-medium text-moss underline-offset-4 hover:underline"
+        >
+          contact@fondation-solea.ch
         </a>
       </p>
     </main>
