@@ -17,9 +17,27 @@ const readBuildId = () => {
   }
 };
 
+// Runtime secrets (SMTP credentials for the forms) live outside the site
+// directory so rsync --delete never removes them. The deploy workflow
+// writes this file from GitHub secrets; the Infomaniak panel has no
+// environment-variable settings for Node sites.
+const runtimeEnv = {};
+const envFilePath = path.join(__dirname, "..", "..", "solea-runtime.env");
+try {
+  for (const line of fs.readFileSync(envFilePath, "utf8").split("\n")) {
+    const match = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (match) {
+      runtimeEnv[match[1]] = match[2];
+    }
+  }
+} catch {
+  // No env file (e.g. local run): the server starts without it.
+}
+
 const initialBuildId = readBuildId();
 const child = spawn(process.execPath, [path.join(__dirname, "server.js")], {
   stdio: "inherit",
+  env: { ...process.env, ...runtimeEnv },
 });
 
 child.on("exit", (code, signal) => {

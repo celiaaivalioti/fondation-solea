@@ -68,6 +68,26 @@ jobs:
           rsync -az --delete -e "$RSH" .next/standalone/ "$DEST/"
           echo "Upload done."
 
+      # The Infomaniak Node panel has no environment-variable settings, so
+      # runtime secrets are written to a file outside the site directory
+      # (rsync --delete never touches it); start-standalone.js loads it.
+      - name: Write runtime env file
+        env:
+          SSHPASS: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
+          SSH_HOST: ${{ secrets.INFOMANIAK_SSH_HOST }}
+          SSH_USER: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
+          SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        run: |
+          if [ -z "$SMTP_PASSWORD" ]; then
+            echo "SMTP_PASSWORD secret not set - skipping mail configuration."
+            exit 0
+          fi
+          printf 'SMTP_HOST=mail.infomaniak.com\nSMTP_PORT=465\nSMTP_USER=contact@fondation-solea.ch\nSMTP_PASSWORD=%s\nCONTACT_FORM_TO=contact@fondation-solea.ch\n' "$SMTP_PASSWORD" \
+            | sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+              "umask 077; cat > /srv/customer/solea-runtime.env"
+          echo "Runtime env file written."
+
       - name: Restart Node app
         env:
           SSHPASS: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
