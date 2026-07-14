@@ -1,0 +1,109 @@
+import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
+
+export const runtime = "nodejs";
+
+// Per-form whitelist: only these fields ever end up in the email, so the
+// endpoint cannot be used to send arbitrary content.
+const forms = {
+  contact: {
+    subject: "Nouveau message via le site (formulaire de contact)",
+    fields: [
+      ["firstName", "Prénom"],
+      ["lastName", "Nom"],
+      ["email", "Email"],
+      ["phone", "Téléphone"],
+      ["message", "Message"]
+    ],
+    required: ["firstName", "lastName", "email", "message"]
+  },
+  inscription: {
+    subject: "Nouvelle demande d'inscription via le site",
+    fields: [
+      ["firstName", "Prénom"],
+      ["lastName", "Nom"],
+      ["email", "Email"],
+      ["phone", "Téléphone"],
+      ["address", "Adresse"],
+      ["cancerType", "Type de cancer"],
+      ["diagnosisDate", "Date du diagnostic"],
+      ["inTreatment", "Actuellement en traitement"],
+      ["treatmentType", "Type de traitement"],
+      ["needsAssistance", "Besoin d'assistance particulière"],
+      ["assistanceType", "Type d'assistance"]
+    ],
+    required: ["firstName", "lastName", "email", "phone", "address", "cancerType", "inTreatment", "needsAssistance"]
+  }
+} as const;
+
+type FormKind = keyof typeof forms;
+
+export async function POST(request: Request) {
+  let payload: { kind?: string; values?: Record<string, unknown>; website?: string };
+
+  try {
+    payload = await request.json();
+  } catch {
+    return NextResponse.json({ error: "invalid request" }, { status: 400 });
+  }
+
+  // Honeypot: real visitors never fill this hidden field.
+  if (payload.website) {
+    return NextResponse.json({ ok: true });
+  }
+
+  const form = forms[payload.kind as FormKind];
+  if (!form || typeof payload.values !== "object" || payload.values === null) {
+    return NextResponse.json({ error: "invalid request" }, { status: 400 });
+  }
+
+  const values: Record<string, string> = {};
+  for (const [name] of form.fields) {
+    const value = payload.values[name];
+    if (typeof value === "string" && value.trim() !== "") {
+      values[name] = value.trim().slice(0, 5000);
+    }
+  }
+
+  for (const name of form.required) {
+    if (!values[name]) {
+      return NextResponse.json({ error: "missing fields" }, { status: 400 });
+    }
+  }
+
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPassword = process.env.SMTP_PASSWORD;
+  const recipient = process.env.CONTACT_FORM_TO ?? "contact@fondation-solea.ch";
+
+  if (!smtpHost || !smtpUser || !smtpPassword) {
+    console.error("Form submission received but SMTP is not configured (SMTP_HOST/SMTP_USER/SMTP_PASSWORD).");
+    return NextResponse.json({ error: "mail not configured" }, { status: 500 });
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: smtpHost,
+    port: Number(process.env.SMTP_PORT ?? 465),
+    secure: Number(process.env.SMTP_PORT ?? 465) === 465,
+    auth: { user: smtpUser, pass: smtpPassword }
+  });
+
+  const lines = form.fields
+    .filter(([name]) => values[name])
+    .map(([name, label]) => `${label} : ${values[name]}`);
+
+  try {
+    await transporter.sendMail({
+      from: `"Site Fondation Solea" <${smtpUser}>`,
+      to: recipient,
+      replyTo: values.email,
+      subject: form.subject,
+      text: `${lines.join("\n")}\n\n—\nEnvoyé depuis le formulaire du site fondation-solea.ch`
+    });
+  } catch (error) {
+    console.error("Form email failed to send:", error);
+    return NextResponse.json({ error: "send failed" }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true });
+}
