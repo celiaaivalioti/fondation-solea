@@ -23,7 +23,7 @@ export default async function ComingSoonPage() {
         priority
         className="h-12 w-auto"
       />
-      <h1 className="mt-10 max-w-2xl font-display text-[clamp(2rem,5vw,3.25rem)] font-light leading-tight text-bark">
+      <h1 className="mt-10 max-w-2xl font-display text-[clamp(1.5rem,3vw,2.25rem)] font-light leading-tight text-bark">
         Notre site est actuellement en préparation.
       </h1>
       <p className="mt-10 text-lg text-bark/70">
