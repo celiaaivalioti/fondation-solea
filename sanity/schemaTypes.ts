@@ -40,25 +40,20 @@ const singletonPreview = (title: string) => ({
   }
 });
 
-// Groups the URL and the new-tab switch side by side in the Studio.
-const destinationFieldset = { name: "destination", options: { columns: 2 } };
-
 const newTabField = {
   name: "newTab",
   title: "Open in a new tab",
   type: "boolean",
-  initialValue: false,
-  fieldset: "destination"
+  initialValue: false
 };
 
 const linkField = {
   name: "link",
   title: "Link",
   type: "object",
-  fieldsets: [destinationFieldset],
   fields: [
     { name: "label", title: "Label", type: "string" },
-    { name: "href", title: "URL or path", type: "string", fieldset: "destination" },
+    { name: "href", title: "URL or path", type: "string" },
     newTabField
   ],
   preview: {
@@ -70,10 +65,9 @@ const ctaField = {
   name: "cta",
   title: "Call to action",
   type: "object",
-  fieldsets: [destinationFieldset],
   fields: [
     { name: "label", title: "Label", type: "string" },
-    { name: "href", title: "URL or path", type: "string", fieldset: "destination" },
+    { name: "href", title: "URL or path", type: "string" },
     newTabField,
     {
       name: "variant",
@@ -214,10 +208,9 @@ const siteSettings = {
       of: [
         {
           type: "object",
-          fieldsets: [destinationFieldset],
           fields: [
             { name: "label", title: "Label", type: "string" },
-            { name: "href", title: "URL", type: "string", fieldset: "destination" },
+            { name: "href", title: "URL", type: "string" },
             newTabField,
             {
               name: "platform",
@@ -510,11 +503,10 @@ const seminarsPage = {
           of: [
             {
               type: "object",
-              fieldsets: [destinationFieldset],
-              fields: [
+                          fields: [
                 { name: "title", title: "Title", type: "string" },
                 { name: "text", title: "Text", type: "text" },
-                { name: "href", title: "URL or path", type: "string", fieldset: "destination" },
+                { name: "href", title: "URL or path", type: "string" },
                 newTabField
               ]
             }
