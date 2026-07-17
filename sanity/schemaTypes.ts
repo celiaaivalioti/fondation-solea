@@ -101,7 +101,7 @@ const imageField = {
       title: "Optional frontend image class",
       type: "string",
       description:
-        "Use approved classes, for example image-desaturate-soft or object-[65%_center] image-desaturate-soft."
+        "Use approved classes, for example image-desaturate-soft, image-desaturate-strong, or object-[65%_center] image-desaturate-soft."
     }
   ]
 };
