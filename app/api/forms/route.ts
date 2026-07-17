@@ -74,6 +74,8 @@ export async function POST(request: Request) {
   const smtpHost = process.env.SMTP_HOST;
   const smtpUser = process.env.SMTP_USER;
   const smtpPassword = process.env.SMTP_PASSWORD;
+  const smtpFrom = process.env.SMTP_FROM ?? smtpUser;
+  const smtpFromName = process.env.SMTP_FROM_NAME ?? "Site Fondation Solea";
   const recipient = process.env.CONTACT_FORM_TO ?? "contact@fondation-solea.ch";
 
   if (!smtpHost || !smtpUser || !smtpPassword) {
@@ -94,7 +96,7 @@ export async function POST(request: Request) {
 
   try {
     await transporter.sendMail({
-      from: `"Site Fondation Solea" <${smtpUser}>`,
+      from: `"${smtpFromName}" <${smtpFrom}>`,
       to: recipient,
       replyTo: values.email,
       subject: form.subject,

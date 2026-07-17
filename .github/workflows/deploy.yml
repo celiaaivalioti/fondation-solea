@@ -77,15 +77,34 @@ jobs:
           SSH_HOST: ${{ secrets.INFOMANIAK_SSH_HOST }}
           SSH_USER: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
           SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          SMTP_FROM_NAME: ${{ secrets.SMTP_FROM_NAME }}
+          CONTACT_FORM_TO: ${{ secrets.CONTACT_FORM_TO }}
         run: |
           if [ -z "$SMTP_PASSWORD" ]; then
             echo "SMTP_PASSWORD secret not set - skipping mail configuration."
             exit 0
           fi
-          printf 'SMTP_HOST=mail.infomaniak.com\nSMTP_PORT=465\nSMTP_USER=contact@fondation-solea.ch\nSMTP_PASSWORD=%s\nCONTACT_FORM_TO=contact@fondation-solea.ch\n' "$SMTP_PASSWORD" \
-            | sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
-              "umask 077; cat > /srv/customer/solea-runtime.env"
+          SMTP_HOST_VALUE="${SMTP_HOST:-mail.infomaniak.com}"
+          SMTP_PORT_VALUE="${SMTP_PORT:-465}"
+          SMTP_USER_VALUE="${SMTP_USER:-contact@fondation-solea.ch}"
+          SMTP_FROM_VALUE="${SMTP_FROM:-no-reply@fondation-solea.ch}"
+          SMTP_FROM_NAME_VALUE="${SMTP_FROM_NAME:-Site Fondation Solea}"
+          CONTACT_FORM_TO_VALUE="${CONTACT_FORM_TO:-contact@fondation-solea.ch}"
+          {
+            printf 'SMTP_HOST=%s\n' "$SMTP_HOST_VALUE"
+            printf 'SMTP_PORT=%s\n' "$SMTP_PORT_VALUE"
+            printf 'SMTP_USER=%s\n' "$SMTP_USER_VALUE"
+            printf 'SMTP_PASSWORD=%s\n' "$SMTP_PASSWORD"
+            printf 'SMTP_FROM=%s\n' "$SMTP_FROM_VALUE"
+            printf 'SMTP_FROM_NAME=%s\n' "$SMTP_FROM_NAME_VALUE"
+            printf 'CONTACT_FORM_TO=%s\n' "$CONTACT_FORM_TO_VALUE"
+          } | sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+            "umask 077; cat > /srv/customer/solea-runtime.env"
           echo "Runtime env file written."
 
       - name: Restart Node app
