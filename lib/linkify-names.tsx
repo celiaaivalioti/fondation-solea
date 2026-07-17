@@ -2,11 +2,13 @@ import type { ReactNode } from "react";
 
 type NameLink = { label: string; href: string };
 
-// Wraps every occurrence of the given names in a text with a link to their
-// bio anchor. Names that don't appear in the text are simply ignored, so
-// CMS edits can never break the page.
+// Wraps the first occurrence of each given name in a text with a link to
+// its bio anchor (later mentions, e.g. a quote attribution, stay plain).
+// Names that don't appear in the text are simply ignored, so CMS edits can
+// never break the page.
 export function linkifyNames(text: string, links: NameLink[]): ReactNode {
   const parts: ReactNode[] = [];
+  const used = new Set<string>();
   let rest = text;
   let key = 0;
 
@@ -14,7 +16,7 @@ export function linkifyNames(text: string, links: NameLink[]): ReactNode {
     let earliest: { index: number; link: NameLink } | null = null;
 
     for (const link of links) {
-      if (!link.label || !link.href) {
+      if (!link.label || !link.href || used.has(link.label)) {
         continue;
       }
       const index = rest.indexOf(link.label);
@@ -27,6 +29,8 @@ export function linkifyNames(text: string, links: NameLink[]): ReactNode {
       parts.push(rest);
       break;
     }
+
+    used.add(earliest.link.label);
 
     if (earliest.index > 0) {
       parts.push(rest.slice(0, earliest.index));
