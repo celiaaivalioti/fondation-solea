@@ -1,4 +1,5 @@
 import Image from "next/image";
+import CheckList from "@/components/CheckList";
 import CTAButton from "@/components/CTAButton";
 import Hero from "@/components/Hero";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -24,6 +25,8 @@ export default async function AboutPage() {
         eyebrow={about.hero.eyebrow}
         title={about.hero.title}
         text={linkifyNames(about.hero.text, about.foundation.founderLinks)}
+        quote={about.hero.quote}
+        quoteAttribution={about.hero.quoteAttribution}
         image={about.hero.image.url}
         imageAlt={about.hero.image.alt}
         imageClassName={about.hero.image.className}
@@ -65,6 +68,49 @@ export default async function AboutPage() {
           ))}
         </ScrollReveal>
       </section>
+
+      <section className="relative px-5 py-24 sm:px-8 lg:py-28">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="mb-5">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
+              {about.mission.eyebrow}
+            </p>
+          </div>
+          <h2 className="font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-[1.1] text-bark text-balance">
+            {about.mission.title}
+          </h2>
+          {about.mission.intro && (
+            <p className="mt-6 text-[1.12rem] leading-[1.85] text-bark/72 text-pretty">
+              {about.mission.intro}
+            </p>
+          )}
+          <ScrollReveal className="mx-auto mt-12 max-w-xl text-left">
+            <CheckList items={about.mission.items} />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <Section
+        tone="linen"
+        eyebrow={about.principles.eyebrow}
+        title={about.principles.title}
+      >
+        <ScrollReveal className="grid gap-8 sm:grid-cols-2">
+          {about.principles.items.map((principle, index) => (
+            <article key={principle.title} className="grid content-start gap-3">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-paper text-3xl font-semibold text-moss">
+                {index + 1}
+              </div>
+              <div>
+                <h3 className="font-display text-[clamp(1.45rem,2vw,2rem)] font-light leading-tight text-bark">
+                  {principle.title}
+                </h3>
+                <p className="mt-3 leading-[1.8] text-bark/70">{principle.text}</p>
+              </div>
+            </article>
+          ))}
+        </ScrollReveal>
+      </Section>
 
       <section className="relative bg-ivory/65 px-5 py-24 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-[1400px]">
@@ -108,28 +154,6 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <Section
-        tone="linen"
-        eyebrow={about.principles.eyebrow}
-        title={about.principles.title}
-      >
-        <ScrollReveal className="grid gap-8 sm:grid-cols-2">
-          {about.principles.items.map((principle, index) => (
-            <article key={principle.title} className="grid content-start gap-3">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-paper text-3xl font-semibold text-moss">
-                {index + 1}
-              </div>
-              <div>
-                <h3 className="font-display text-[clamp(1.45rem,2vw,2rem)] font-light leading-tight text-bark">
-                  {principle.title}
-                </h3>
-                <p className="mt-3 leading-[1.8] text-bark/70">{principle.text}</p>
-              </div>
-            </article>
-          ))}
-        </ScrollReveal>
-      </Section>
-
       <section className="relative bg-ivory/65 px-5 py-24 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-[1400px]">
           <div className="max-w-4xl">
@@ -160,7 +184,7 @@ export default async function AboutPage() {
                       src={member.image.url}
                       alt={member.image.alt}
                       fill
-                      className="object-cover"
+                      className="object-cover object-top"
                       sizes="(min-width: 1280px) 18vw, (min-width: 768px) 45vw, 90vw"
                     />
                   </div>

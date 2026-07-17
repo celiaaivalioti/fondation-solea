@@ -113,6 +113,8 @@ const heroField = {
     { name: "eyebrow", title: "Eyebrow", type: "string" },
     { name: "title", title: "Title", type: "string" },
     { name: "text", title: "Text", type: "text" },
+    { name: "quote", title: "Quote", type: "text" },
+    { name: "quoteAttribution", title: "Quote attribution", type: "string" },
     imageField,
     { ...ctaFieldWithoutVariant, name: "primary", title: "Primary button" },
     { ...ctaFieldWithoutVariant, name: "secondary", title: "Secondary button" },
@@ -293,6 +295,7 @@ const aboutPage = {
         }
       ]
     },
+    { ...checklistField, name: "mission", title: "Mission" },
     {
       name: "values",
       title: "Values",
@@ -381,7 +384,6 @@ const retreatPage = {
     { name: "metadataTitle", title: "Metadata title", type: "string" },
     heroField,
     { ...textSectionField, name: "immersive", title: "Immersive section" },
-    { ...checklistField, name: "mission", title: "Mission" },
     {
       name: "approach",
       title: "Approach pillars",

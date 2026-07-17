@@ -48,17 +48,6 @@ export default async function RetreatPage() {
       </section>
 
       <Section
-        tone="linen"
-        eyebrow={retreat.mission.eyebrow}
-        title={retreat.mission.title}
-        intro={retreat.mission.intro}
-      >
-        <ScrollReveal>
-          <CheckList items={retreat.mission.items} />
-        </ScrollReveal>
-      </Section>
-
-      <Section
         eyebrow={retreat.approach.eyebrow}
         title={retreat.approach.title}
         intro={retreat.approach.intro}

@@ -9,6 +9,7 @@ type HeroProps = {
   image: string;
   imageAlt: string;
   quote?: string;
+  quoteAttribution?: string;
   primaryHref?: string;
   primaryLabel?: string;
   secondaryHref?: string;
@@ -31,6 +32,7 @@ export default function Hero({
   image,
   imageAlt,
   quote,
+  quoteAttribution,
   primaryHref = "/inscription",
   primaryLabel = "S'inscrire",
   secondaryHref = "/qui-sommes-nous",
@@ -83,9 +85,16 @@ export default function Hero({
               {text}
             </p>
             {quote && (
-              <blockquote className="mt-10 max-w-xl border-l-2 border-paper/55 pl-6 font-display text-[1.5rem] font-light italic leading-[1.45] text-paper/95">
-                {quote}
-              </blockquote>
+              <figure className="mt-10 max-w-xl border-l-2 border-paper/55 pl-6">
+                <blockquote className="font-display text-[1.5rem] font-light italic leading-[1.45] text-paper/95">
+                  {quote}
+                </blockquote>
+                {quoteAttribution && (
+                  <figcaption className="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-paper/70">
+                    {quoteAttribution}
+                  </figcaption>
+                )}
+              </figure>
             )}
             {action ?? (
               <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
@@ -142,9 +151,16 @@ export default function Hero({
             {text}
           </p>
           {quote && (
-            <blockquote className="mt-10 max-w-xl border-l-2 border-moss/40 pl-6 font-display text-[1.55rem] font-light italic leading-[1.45] text-moss">
-              {quote}
-            </blockquote>
+            <figure className="mt-10 max-w-xl border-l-2 border-moss/40 pl-6">
+              <blockquote className="font-display text-[1.55rem] font-light italic leading-[1.45] text-moss">
+                {quote}
+              </blockquote>
+              {quoteAttribution && (
+                <figcaption className="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-bark/56">
+                  {quoteAttribution}
+                </figcaption>
+              )}
+            </figure>
           )}
           {action ?? (
             <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">

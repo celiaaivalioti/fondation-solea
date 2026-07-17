@@ -14,6 +14,8 @@ export type HeroContent = {
   eyebrow?: string;
   title: string;
   text: string;
+  quote?: string;
+  quoteAttribution?: string;
   image: CmsImage;
   primary?: Cta;
   secondary?: Cta;
@@ -85,6 +87,12 @@ export type AboutContent = {
     founderLinks: NavigationItem[];
   };
   testimonials: Array<{ quote: string; attribution: string }>;
+  mission: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    items: string[];
+  };
   values: {
     eyebrow: string;
     title: string;
@@ -128,12 +136,6 @@ export type RetreatContent = {
   metadataTitle: string;
   hero: HeroContent;
   immersive: TextSection;
-  mission: {
-    eyebrow: string;
-    title: string;
-    intro: string;
-    items: string[];
-  };
   approach: {
     eyebrow: string;
     title: string;

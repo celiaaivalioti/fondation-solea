@@ -91,6 +91,18 @@ export const defaultContent: CmsContent = {
         { label: "Samy Zayani", href: "#samy-zayani" }
       ]
     },
+    mission: {
+      eyebrow: "Mission",
+      title: "Le bien-être du patient au centre.",
+      intro: "Chaque décision prise par Solea est guidée par le bien-être du patient.",
+      items: [
+        "Rompre le cercle négatif le plus tôt possible",
+        "Transmettre des connaissances et des outils concrets",
+        "Favoriser le bien-être physique, émotionnel et mental",
+        "Permettre au patient de redevenir acteur de sa santé",
+        "Soulager temporairement les proches aidants"
+      ]
+    },
     testimonials: [
       {
         quote:
@@ -263,18 +275,6 @@ export const defaultContent: CmsContent = {
         "Notre ambition est de redonner espoir, énergie et autonomie à celles et ceux qui traversent l’épreuve de la maladie.",
         "Dans un cadre naturel et apaisant, les participants pourront séjourner (5 jours / 4 nuits) et bénéficier de thérapies complémentaires, d’ateliers, de moments d’échange, de conférences, d’activités collectives et de temps de repos.",
         "L’objectif est de créer un espace où chacun peut souffler, retrouver du lien, explorer de nouvelles ressources et initier un mouvement intérieur positif."
-      ]
-    },
-    mission: {
-      eyebrow: "Mission",
-      title: "Le bien-être du patient au centre.",
-      intro: "Chaque décision prise par Solea est guidée par le bien-être du patient.",
-      items: [
-        "Rompre le cercle négatif le plus tôt possible",
-        "Transmettre des connaissances et des outils concrets",
-        "Favoriser le bien-être physique, émotionnel et mental",
-        "Permettre au patient de redevenir acteur de sa santé",
-        "Soulager temporairement les proches aidants"
       ]
     },
     approach: {
