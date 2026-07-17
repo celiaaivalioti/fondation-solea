@@ -86,10 +86,6 @@ export const defaultContent: CmsContent = {
       visionTitle: "Notre vision",
       visionText:
         "Nous sommes convaincus que le chemin de guérison est favorisé lorsque le corps, le mental et l'âme (re)trouvent équilibre et harmonie. Solea accompagne chaque personne en souffrance, en complément de son traitement médical, afin d'optimiser son chemin vers la guérison, le plus tôt possible.",
-      historyTitle: "Notre histoire",
-      historyTextBefore: "Solea est née des expériences personnelles de",
-      historyTextAfter:
-        ", qui ont traversé la maladie et en ont fait une opportunité de transformation profonde.",
       founderLinks: [
         { label: "Marie-France Provot-Ivanov", href: "#marie-france-ivanova" },
         { label: "Samy Zayani", href: "#samy-zayani" }

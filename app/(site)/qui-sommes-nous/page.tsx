@@ -34,7 +34,7 @@ export default async function AboutPage() {
       />
 
       <section className="relative bg-parchment px-5 py-16 text-bark sm:px-8 lg:py-20 lg:pb-28">
-        <div className="mx-auto grid max-w-[1400px] gap-14 lg:grid-cols-2 lg:gap-20">
+        <div className="mx-auto max-w-[1400px]">
           <ScrollReveal className="max-w-2xl">
             <div className="mb-5">
               <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
@@ -46,27 +46,6 @@ export default async function AboutPage() {
             </h2>
             <p className="mt-8 leading-[1.9] text-bark/82">
               {about.foundation.visionText}
-            </p>
-          </ScrollReveal>
-
-          <ScrollReveal className="max-w-2xl">
-            <h2 className="font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-[1.1] text-bark text-balance lg:mt-10">
-              {about.foundation.historyTitle}
-            </h2>
-            <p className="mt-8 leading-[1.9] text-bark/76">
-              {about.foundation.historyTextBefore}{" "}
-              {about.foundation.founderLinks.map((link, index) => (
-                <span key={link.href}>
-                  {index > 0 && " et "}
-                  <a
-                    href={link.href}
-                    className="font-semibold text-bark underline decoration-bark/35 underline-offset-4 transition hover:decoration-bark"
-                  >
-                    {link.label}
-                  </a>
-                </span>
-              ))}
-              {about.foundation.historyTextAfter}
             </p>
           </ScrollReveal>
         </div>

@@ -267,10 +267,13 @@ const aboutPage = {
         { name: "eyebrow", title: "Eyebrow", type: "string" },
         { name: "visionTitle", title: "Vision title", type: "string" },
         { name: "visionText", title: "Vision text", type: "text" },
-        { name: "historyTitle", title: "History title", type: "string" },
-        { name: "historyTextBefore", title: "History text before links", type: "string" },
-        { name: "historyTextAfter", title: "History text after links", type: "string" },
-        { name: "founderLinks", title: "Founder links", type: "array", of: [{ type: "link" }] }
+        {
+          name: "founderLinks",
+          title: "Founder bio links",
+          description: "Founder names that become links to their bio when they appear in the page intro text.",
+          type: "array",
+          of: [{ type: "link" }]
+        }
       ]
     },
     {

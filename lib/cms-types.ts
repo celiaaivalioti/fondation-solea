@@ -82,9 +82,6 @@ export type AboutContent = {
     eyebrow: string;
     visionTitle: string;
     visionText: string;
-    historyTitle: string;
-    historyTextBefore: string;
-    historyTextAfter: string;
     founderLinks: NavigationItem[];
   };
   testimonials: Array<{ quote: string; attribution: string }>;
