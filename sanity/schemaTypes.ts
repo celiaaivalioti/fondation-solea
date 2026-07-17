@@ -100,7 +100,8 @@ const imageField = {
       name: "className",
       title: "Optional frontend image class",
       type: "string",
-      description: "Use only for existing crop classes, for example object-cover object-[65%_center]."
+      description:
+        "Use approved classes, for example object-cover object-[65%_center] image-desaturate-soft."
     }
   ]
 };
