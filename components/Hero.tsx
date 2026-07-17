@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import CTAButton from "./CTAButton";
 import ParallaxBackground from "./ParallaxBackground";
 
@@ -44,6 +45,33 @@ function HeroText({ text, className }: { text: React.ReactNode; className: strin
   );
 }
 
+function imageCropProps(className: string) {
+  const style: CSSProperties & Record<`--${string}`, string> = {};
+  const classes = className
+    .split(/\s+/)
+    .map((token) => token.trim())
+    .filter(Boolean)
+    .filter((token) => {
+      const match = token.match(/^(sm:)?object-\[([^\]]+)\]$/);
+      if (!match) {
+        return true;
+      }
+
+      const value = match[2].replace(/_/g, " ");
+      style[match[1] ? "--cms-object-position-sm" : "--cms-object-position"] = value;
+      return false;
+    });
+
+  if (style["--cms-object-position"] || style["--cms-object-position-sm"]) {
+    classes.push("cms-object-position");
+  }
+
+  return {
+    className: classes.join(" ") || "object-cover",
+    style
+  };
+}
+
 export default function Hero({
   eyebrow,
   title,
@@ -62,6 +90,8 @@ export default function Hero({
   imageClassName,
   layout = "split"
 }: HeroProps) {
+  const heroImage = imageCropProps(imageClassName ?? "object-cover object-[35%_center]");
+
   if (layout === "background") {
     return (
       <section className="relative isolate overflow-hidden">
@@ -73,7 +103,8 @@ export default function Hero({
               alt={imageAlt}
               fill
               priority
-              className={imageClassName ?? "object-cover object-[35%_center]"}
+              className={heroImage.className}
+              style={heroImage.style}
               sizes="100vw"
             />
           </ParallaxBackground>
@@ -206,7 +237,8 @@ export default function Hero({
               alt={imageAlt}
               fill
               priority
-              className={imageClassName ?? "object-cover"}
+              className={heroImage.className}
+              style={heroImage.style}
               sizes="(min-width: 1024px) 48vw, 100vw"
             />
             {/* Subtle inner vignette */}

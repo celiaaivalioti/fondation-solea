@@ -131,12 +131,22 @@
     background: var(--accent-rule);
   }
 
+  .cms-object-position {
+    object-position: var(--cms-object-position, center);
+  }
+
   .reveal {
     opacity: 0;
   }
 
   .reveal.is-visible {
     animation: rise-in var(--reveal-duration) var(--ease-out-soft) both;
+  }
+}
+
+@media (min-width: 640px) {
+  .cms-object-position {
+    object-position: var(--cms-object-position-sm, var(--cms-object-position, center));
   }
 }
 
