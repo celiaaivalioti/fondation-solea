@@ -222,7 +222,7 @@ export default function Hero({
                 {quote}
               </blockquote>
               {quoteAttribution && (
-                <figcaption className="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-bark/56">
+                <figcaption className="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-moss">
                   {quoteAttribution}
                 </figcaption>
               )}
