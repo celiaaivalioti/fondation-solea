@@ -53,13 +53,23 @@ function imageCropProps(className: string) {
     .filter(Boolean)
     .filter((token) => {
       const match = token.match(/^(sm:)?object-\[([^\]]+)\]$/);
-      if (!match) {
-        return true;
+      if (match) {
+        const value = match[2].replace(/_/g, " ");
+        style[match[1] ? "--cms-object-position-sm" : "--cms-object-position"] = value;
+        return false;
       }
 
-      const value = match[2].replace(/_/g, " ");
-      style[match[1] ? "--cms-object-position-sm" : "--cms-object-position"] = value;
-      return false;
+      if (token === "image-desaturate-soft") {
+        style.filter = "saturate(0.55)";
+        return false;
+      }
+
+      if (token === "image-desaturate-strong") {
+        style.filter = "saturate(0.35)";
+        return false;
+      }
+
+      return true;
     });
 
   if (style["--cms-object-position"] || style["--cms-object-position-sm"]) {

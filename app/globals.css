@@ -135,14 +135,6 @@
     object-position: var(--cms-object-position, center);
   }
 
-  .image-desaturate-soft {
-    filter: saturate(0.55);
-  }
-
-  .image-desaturate-strong {
-    filter: saturate(0.35);
-  }
-
   .reveal {
     opacity: 0;
   }
