@@ -91,8 +91,8 @@ jobs:
           fi
           SMTP_HOST_VALUE="${SMTP_HOST:-mail.infomaniak.com}"
           SMTP_PORT_VALUE="${SMTP_PORT:-465}"
-          SMTP_USER_VALUE="${SMTP_USER:-contact@fondation-solea.ch}"
-          SMTP_FROM_VALUE="${SMTP_FROM:-no-reply@fondation-solea.ch}"
+          SMTP_USER_VALUE="${SMTP_USER:-samy.zayani@fondation-solea.ch}"
+          SMTP_FROM_VALUE="${SMTP_FROM:-samy.zayani@fondation-solea.ch}"
           SMTP_FROM_NAME_VALUE="${SMTP_FROM_NAME:-Site Fondation Solea}"
           CONTACT_FORM_TO_VALUE="${CONTACT_FORM_TO:-contact@fondation-solea.ch}"
           {
