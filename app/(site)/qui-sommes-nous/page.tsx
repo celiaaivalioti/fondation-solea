@@ -47,7 +47,7 @@ export default async function AboutPage() {
             <h2 className="font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-[1.1] text-bark text-balance">
               {about.foundation.visionTitle}
             </h2>
-            <p className="mt-8 leading-[1.9] text-bark/82">
+            <p className="mt-8 text-[1.15rem] leading-[1.9] text-bark/82">
               {about.foundation.visionText}
             </p>
           </ScrollReveal>
