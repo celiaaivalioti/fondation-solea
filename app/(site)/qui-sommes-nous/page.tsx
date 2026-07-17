@@ -5,6 +5,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import Section from "@/components/Section";
 import { getCmsContent } from "@/lib/cms";
 import { getSectionIcon } from "@/lib/icons";
+import { linkifyNames } from "@/lib/linkify-names";
 
 export async function generateMetadata() {
   const { about } = await getCmsContent();
@@ -22,7 +23,7 @@ export default async function AboutPage() {
       <Hero
         eyebrow={about.hero.eyebrow}
         title={about.hero.title}
-        text={about.hero.text}
+        text={linkifyNames(about.hero.text, about.foundation.founderLinks)}
         image={about.hero.image.url}
         imageAlt={about.hero.image.alt}
         imageClassName={about.hero.image.className}

@@ -5,7 +5,7 @@ import ParallaxBackground from "./ParallaxBackground";
 type HeroProps = {
   eyebrow?: string;
   title: string;
-  text: string;
+  text: React.ReactNode;
   image: string;
   imageAlt: string;
   quote?: string;
