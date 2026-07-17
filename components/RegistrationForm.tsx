@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import DatePicker from "./DatePicker";
 import { type FormStatus, submitForm } from "@/lib/submit-form";
 
@@ -11,6 +11,7 @@ const labelClass = "grid gap-2 text-[13px] font-semibold uppercase tracking-[0.1
 
 export default function RegistrationForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
+  const openedAt = useRef(Date.now());
   const [inTreatment, setInTreatment] = useState("");
   const [needsAssistance, setNeedsAssistance] = useState("");
 
@@ -53,7 +54,7 @@ export default function RegistrationForm() {
       aria-label="Formulaire d'inscription au séjour"
       onSubmit={(event) => {
         event.preventDefault();
-        submitForm("inscription", event.currentTarget, setStatus);
+        submitForm("inscription", event.currentTarget, setStatus, openedAt.current);
       }}
     >
       <label className={labelClass}>

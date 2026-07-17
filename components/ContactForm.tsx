@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { type FormStatus, submitForm } from "@/lib/submit-form";
 
 const inputClass =
@@ -10,6 +10,7 @@ const labelClass = "grid gap-2 text-[13px] font-semibold uppercase tracking-[0.1
 
 export default function ContactForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
+  const openedAt = useRef(Date.now());
 
   if (status === "sent") {
     return (
@@ -46,7 +47,7 @@ export default function ContactForm() {
       aria-label="Formulaire de contact"
       onSubmit={(event) => {
         event.preventDefault();
-        submitForm("contact", event.currentTarget, setStatus);
+        submitForm("contact", event.currentTarget, setStatus, openedAt.current);
       }}
     >
       <label className={labelClass}>

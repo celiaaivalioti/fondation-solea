@@ -38,8 +38,47 @@ const forms = {
 
 type FormKind = keyof typeof forms;
 
+// Rate limit: at most 5 submissions per IP per 10 minutes. In-memory is
+// fine here — the site runs as a single Node process.
+const RATE_LIMIT = 5;
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const submissionLog = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const recent = (submissionLog.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+
+  if (recent.length >= RATE_LIMIT) {
+    submissionLog.set(ip, recent);
+    return true;
+  }
+
+  recent.push(now);
+  submissionLog.set(ip, recent);
+
+  if (submissionLog.size > 10_000) {
+    for (const [key, times] of submissionLog) {
+      if (times.every((t) => now - t >= RATE_WINDOW_MS)) {
+        submissionLog.delete(key);
+      }
+    }
+  }
+
+  return false;
+}
+
+// Humans need at least a few seconds to fill a form; the client sends how
+// long the form was open. Too-fast submissions get a retriable error (the
+// form keeps its values), so a fast legitimate user just clicks again.
+const MIN_FILL_TIME_MS = 3000;
+
 export async function POST(request: Request) {
-  let payload: { kind?: string; values?: Record<string, unknown>; website?: string };
+  let payload: {
+    kind?: string;
+    values?: Record<string, unknown>;
+    website?: string;
+    elapsedMs?: unknown;
+  };
 
   try {
     payload = await request.json();
@@ -50,6 +89,15 @@ export async function POST(request: Request) {
   // Honeypot: real visitors never fill this hidden field.
   if (payload.website) {
     return NextResponse.json({ ok: true });
+  }
+
+  const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0].trim();
+  if (isRateLimited(ip)) {
+    return NextResponse.json({ error: "too many requests" }, { status: 429 });
+  }
+
+  if (typeof payload.elapsedMs !== "number" || payload.elapsedMs < MIN_FILL_TIME_MS) {
+    return NextResponse.json({ error: "too fast" }, { status: 400 });
   }
 
   const form = forms[payload.kind as FormKind];
