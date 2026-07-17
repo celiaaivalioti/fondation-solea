@@ -20,7 +20,12 @@ export async function generateMetadata(): Promise<Metadata> {
       default: site.name,
       template: `%s | ${site.name}`
     },
-    description: site.tagline
+    description: site.tagline,
+    icons: {
+      icon: "/favicon.png",
+      shortcut: "/favicon.png",
+      apple: "/favicon.png"
+    }
   };
 }
 
