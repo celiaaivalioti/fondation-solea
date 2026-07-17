@@ -4,7 +4,7 @@ type SectionProps = {
   intro?: string;
   children: React.ReactNode;
   className?: string;
-  tone?: "default" | "linen" | "ivory";
+  tone?: "default" | "linen" | "ivory" | "parchment";
   /**
    * Tighter vertical padding - used on the first section of a page,
    * directly under the hero, to avoid an oversized seam.
@@ -24,7 +24,8 @@ export default function Section({
   const toneClass = {
     default: "",
     linen: "bg-linen/55",
-    ivory: "bg-ivory/65"
+    ivory: "bg-ivory/65",
+    parchment: "bg-parchment"
   }[tone];
 
   const paddingClass = compact

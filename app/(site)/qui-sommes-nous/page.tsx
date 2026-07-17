@@ -158,7 +158,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="relative bg-ivory/65 px-5 py-24 sm:px-8 lg:py-28">
+      <section className="relative bg-parchment px-5 py-24 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-[1400px]">
           <div className="max-w-4xl">
             <div className="mb-5">

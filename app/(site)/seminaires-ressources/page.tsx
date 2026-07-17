@@ -29,7 +29,8 @@ export default async function SeminarsPage() {
         primaryLabel={seminars.hero.primary?.label}
       />
       <Section
-        compact
+        tone="parchment"
+        className="py-28 lg:py-36"
         eyebrow={seminars.themes.eyebrow}
         title={seminars.themes.title}
         intro={seminars.themes.intro}
