@@ -66,8 +66,12 @@ function imageCropProps(className: string) {
     classes.push("cms-object-position");
   }
 
+  if (!classes.some((token) => token === "object-cover" || token === "object-contain" || token === "object-fill")) {
+    classes.unshift("object-cover");
+  }
+
   return {
-    className: classes.join(" ") || "object-cover",
+    className: classes.join(" "),
     style
   };
 }
