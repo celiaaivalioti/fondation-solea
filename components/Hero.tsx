@@ -25,6 +25,25 @@ type HeroProps = {
   layout?: "split" | "background";
 };
 
+function HeroText({ text, className }: { text: React.ReactNode; className: string }) {
+  if (typeof text !== "string") {
+    return <p className={className}>{text}</p>;
+  }
+
+  const paragraphs = text
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.replace(/\s*\n\s*/g, " ").trim())
+    .filter(Boolean);
+
+  return (
+    <div className={`${className} grid gap-5`}>
+      {paragraphs.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
+    </div>
+  );
+}
+
 export default function Hero({
   eyebrow,
   title,
@@ -81,9 +100,10 @@ export default function Hero({
             <h1 className="font-display text-[clamp(2rem,4.2vw,4rem)] font-light leading-[1.05] text-balance">
               {title}
             </h1>
-            <p className="mt-7 max-w-[58ch] text-[1.15rem] leading-[1.85] text-paper/85 font-medium text-pretty sm:text-[1.25rem]">
-              {text}
-            </p>
+            <HeroText
+              text={text}
+              className="mt-7 max-w-[58ch] text-[1.15rem] leading-[1.85] text-paper/85 font-medium text-pretty sm:text-[1.25rem]"
+            />
             {quote && (
               <figure className="mt-10 max-w-xl border-l-2 border-paper/55 pl-6">
                 <blockquote className="font-display text-[1.5rem] font-light italic leading-[1.45] text-paper/95">
@@ -147,11 +167,12 @@ export default function Hero({
           <h1 className="font-display text-[clamp(2rem,4.2vw,4rem)] font-light leading-[1.05] text-bark text-balance">
             {title}
           </h1>
-          <p className="mt-8 max-w-[58ch] text-[1.15rem] leading-9 text-bark/72 sm:text-[1.25rem] sm:leading-[1.85] text-pretty">
-            {text}
-          </p>
+          <HeroText
+            text={text}
+            className="mt-8 max-w-[58ch] text-[1.15rem] leading-9 text-bark/72 sm:text-[1.25rem] sm:leading-[1.85] text-pretty"
+          />
           {quote && (
-            <figure className="mt-10 max-w-xl border-l-2 border-moss/40 pl-6">
+            <figure className="mt-5 max-w-xl border-l-2 border-moss/40 pl-6">
               <blockquote className="font-display text-[1.55rem] font-light italic leading-[1.45] text-moss">
                 {quote}
               </blockquote>

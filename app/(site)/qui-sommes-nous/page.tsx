@@ -38,7 +38,7 @@ export default async function AboutPage() {
 
       <section className="relative bg-parchment px-5 py-16 text-bark sm:px-8 lg:py-20 lg:pb-28">
         <div className="mx-auto max-w-[1400px]">
-          <ScrollReveal className="max-w-2xl">
+          <ScrollReveal className="mx-auto max-w-2xl text-center">
             <div className="mb-5">
               <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
                 {about.foundation.eyebrow}
@@ -70,22 +70,26 @@ export default async function AboutPage() {
       </section>
 
       <section className="relative px-5 py-24 sm:px-8 lg:py-28">
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-5">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
-              {about.mission.eyebrow}
-            </p>
+        <div className="mx-auto grid max-w-[1400px] gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
+          <div>
+            <div className="mb-5">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
+                {about.mission.eyebrow}
+              </p>
+            </div>
+            <h2 className="max-w-2xl font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-[1.1] text-bark text-balance">
+              {about.mission.title}
+            </h2>
           </div>
-          <h2 className="font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-[1.1] text-bark text-balance">
-            {about.mission.title}
-          </h2>
-          {about.mission.intro && (
-            <p className="mt-6 text-[1.12rem] leading-[1.85] text-bark/72 text-pretty">
-              {about.mission.intro}
-            </p>
-          )}
-          <ScrollReveal className="mx-auto mt-12 max-w-xl text-left">
-            <CheckList items={about.mission.items} />
+          <ScrollReveal className="max-w-2xl">
+            {about.mission.intro && (
+              <p className="text-[1.12rem] leading-[1.85] text-bark/72 text-pretty">
+                {about.mission.intro}
+              </p>
+            )}
+            <div className="mt-10">
+              <CheckList items={about.mission.items} />
+            </div>
           </ScrollReveal>
         </div>
       </section>
