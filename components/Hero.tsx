@@ -147,7 +147,7 @@ export default function Hero({
             </h1>
             <HeroText
               text={text}
-              className="mt-7 max-w-[58ch] text-[1.15rem] leading-[1.85] text-paper/85 font-medium text-pretty sm:text-[1.25rem]"
+              className="mt-7 max-w-[58ch] text-[1.15rem] leading-[1.65] text-paper/85 font-medium text-pretty sm:text-[1.25rem]"
             />
             {quote && (
               <figure className="mt-10 max-w-xl border-l-2 border-paper/55 pl-6">
@@ -214,7 +214,7 @@ export default function Hero({
           </h1>
           <HeroText
             text={text}
-            className="mt-8 max-w-[58ch] text-[1.15rem] leading-9 text-bark/72 sm:text-[1.25rem] sm:leading-[1.85] text-pretty"
+            className="mt-8 max-w-[58ch] text-[1.15rem] leading-9 text-bark/72 sm:text-[1.25rem] sm:leading-[1.65] text-pretty"
           />
           {quote && (
             <figure className="mt-5 max-w-xl border-l-2 border-moss/40 pl-6">

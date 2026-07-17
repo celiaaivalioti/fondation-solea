@@ -83,7 +83,7 @@ export default async function AboutPage() {
           </div>
           <ScrollReveal className="max-w-2xl">
             {about.mission.intro && (
-              <p className="text-[1.12rem] leading-[1.85] text-bark/72 text-pretty">
+              <p className="text-[1.12rem] leading-[1.65] text-bark/72 text-pretty">
                 {about.mission.intro}
               </p>
             )}
@@ -250,7 +250,7 @@ export default async function AboutPage() {
               <h3 className="mt-4 font-display text-[clamp(1.8rem,3vw,2.8rem)] font-light leading-tight text-bark">
                 {founder.name}
               </h3>
-              <div className="mt-5 grid gap-5 leading-[1.85] text-bark/72">
+              <div className="mt-5 grid gap-5 leading-[1.65] text-bark/72">
                 {founder.paragraphs?.slice(0, 1).map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}

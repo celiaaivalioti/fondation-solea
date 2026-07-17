@@ -39,7 +39,7 @@ export default async function RetreatPage() {
             {retreat.immersive.title}
           </h2>
 
-          <div className="mt-8 grid gap-6 text-[1.15rem] leading-[1.85] text-bark/80 text-pretty">
+          <div className="mt-8 grid gap-6 text-[1.15rem] leading-[1.65] text-bark/80 text-pretty">
             {retreat.immersive.paragraphs?.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
@@ -65,7 +65,7 @@ export default async function RetreatPage() {
                 <h3 className="mt-5 font-display text-[1.55rem] font-light leading-tight text-bark">
                   {title}
                 </h3>
-                <p className="mt-5 text-[1.05rem] leading-[1.85] text-bark/70 text-pretty">{text}</p>
+                <p className="mt-5 text-[1.05rem] leading-[1.65] text-bark/70 text-pretty">{text}</p>
               </article>
             );
           })}
@@ -86,7 +86,7 @@ export default async function RetreatPage() {
             <h2 className="font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-[1.1] text-bark text-balance">
               {retreat.therapies.title}
             </h2>
-            <p className="mt-6 max-w-[72ch] text-[1.12rem] leading-[1.85] text-bark/72 text-pretty">
+            <p className="mt-6 max-w-[72ch] text-[1.12rem] leading-[1.65] text-bark/72 text-pretty">
               {retreat.therapies.intro}
             </p>
           </div>

@@ -13,7 +13,7 @@ export default function ProfileCard({ name, role, text }: ProfileCardProps) {
       <h3 className="mt-4 font-display text-[1.85rem] font-light leading-[1.1] text-bark">
         {name}
       </h3>
-      <p className="mt-5 text-[1.05rem] leading-[1.85] text-bark/70 text-pretty">{text}</p>
+      <p className="mt-5 text-[1.05rem] leading-[1.65] text-bark/70 text-pretty">{text}</p>
     </article>
   );
 }

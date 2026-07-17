@@ -34,7 +34,7 @@ export default function RegistrationForm() {
         <h2 className="font-display text-[2rem] font-light leading-tight text-bark">
           Merci pour votre inscription.
         </h2>
-        <p className="mt-4 leading-[1.85] text-bark/72">
+        <p className="mt-4 leading-[1.65] text-bark/72">
           Nous vous reviendrons dans les plus brefs délais.
         </p>
         <button

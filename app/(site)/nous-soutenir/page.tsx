@@ -67,7 +67,7 @@ export default async function SupportPage() {
       <Section compact eyebrow={support.cause.eyebrow} title={support.cause.title}>
         <ScrollReveal>
           {support.cause.paragraphs?.map((paragraph) => (
-            <p key={paragraph} className="max-w-[58ch] text-[1.15rem] leading-[1.85] text-bark/80 text-pretty">
+            <p key={paragraph} className="max-w-[58ch] text-[1.15rem] leading-[1.65] text-bark/80 text-pretty">
               {paragraph}
             </p>
           ))}

@@ -47,7 +47,7 @@ export default async function Home() {
             )}
 
             {home.manifesto.paragraphs?.map((paragraph) => (
-              <p key={paragraph} className="whitespace-pre-line text-[1.15rem] leading-[1.85] text-bark/80 text-pretty">
+              <p key={paragraph} className="whitespace-pre-line text-[1.15rem] leading-[1.65] text-bark/80 text-pretty">
                 {paragraph}
               </p>
             ))}

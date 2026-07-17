@@ -37,7 +37,7 @@ export default async function ContactPage() {
           <h1 className="font-display text-[clamp(2rem,4.2vw,4rem)] font-light leading-[1.05] text-bark text-balance">
             {contact.title}
           </h1>
-          <p className="mt-8 max-w-[58ch] text-[1.15rem] leading-9 text-bark/72 sm:text-[1.25rem] sm:leading-[1.85] text-pretty">
+          <p className="mt-8 max-w-[58ch] text-[1.15rem] leading-9 text-bark/72 sm:text-[1.25rem] sm:leading-[1.65] text-pretty">
             {contact.text}
           </p>
           <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
