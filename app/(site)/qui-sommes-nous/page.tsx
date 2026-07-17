@@ -265,7 +265,7 @@ export default async function AboutPage() {
               </div>
               {founder.cta && (
                 <div className="mt-8">
-                  <CTAButton href={founder.cta.href} variant={founder.cta.variant ?? "secondary"}>
+                  <CTAButton href={founder.cta.href} variant={founder.cta.variant ?? "secondary"} newTab={founder.cta.newTab}>
                     {founder.cta.label}
                   </CTAButton>
                 </div>

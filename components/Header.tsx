@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { NavigationItem, SiteSettings } from "@/lib/cms-types";
+import { newTabProps } from "@/lib/links";
 import CTAButton from "./CTAButton";
 
 type HeaderProps = {
@@ -67,6 +68,7 @@ export default function Header({ navigation, site }: HeaderProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                {...newTabProps(item.newTab)}
                 aria-current={active ? "page" : undefined}
                 className={`relative ${isScrolled ? "text-[16px]" : "text-[18px]"} tracking-[0.005em] transition-all duration-500 ease-out-soft after:absolute after:bottom-[-7px] after:left-0 after:h-px after:transition-all after:duration-500 after:ease-out-soft ${
                   isOverlay
@@ -141,6 +143,7 @@ export default function Header({ navigation, site }: HeaderProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                {...newTabProps(item.newTab)}
                 aria-current={active ? "page" : undefined}
                 className={`rounded-xl px-4 py-3.5 text-xl font-medium transition hover:bg-linen hover:text-moss ${
                   active ? "bg-linen text-moss" : "text-bark/82"

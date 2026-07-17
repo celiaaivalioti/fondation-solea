@@ -40,13 +40,26 @@ const singletonPreview = (title: string) => ({
   }
 });
 
+// Groups the URL and the new-tab switch side by side in the Studio.
+const destinationFieldset = { name: "destination", options: { columns: 2 } };
+
+const newTabField = {
+  name: "newTab",
+  title: "Open in a new tab",
+  type: "boolean",
+  initialValue: false,
+  fieldset: "destination"
+};
+
 const linkField = {
   name: "link",
   title: "Link",
   type: "object",
+  fieldsets: [destinationFieldset],
   fields: [
     { name: "label", title: "Label", type: "string" },
-    { name: "href", title: "URL or path", type: "string" }
+    { name: "href", title: "URL or path", type: "string", fieldset: "destination" },
+    newTabField
   ],
   preview: {
     select: { title: "label", subtitle: "href" }
@@ -57,9 +70,11 @@ const ctaField = {
   name: "cta",
   title: "Call to action",
   type: "object",
+  fieldsets: [destinationFieldset],
   fields: [
     { name: "label", title: "Label", type: "string" },
-    { name: "href", title: "URL or path", type: "string" },
+    { name: "href", title: "URL or path", type: "string", fieldset: "destination" },
+    newTabField,
     {
       name: "variant",
       title: "Button style",
@@ -75,11 +90,12 @@ const ctaField = {
   }
 };
 
-// Hero buttons have their style fixed by the design (they must stay legible
-// on top of photos), so the style dropdown is omitted there.
+// Hero buttons have their style and navigation fixed by the design (they
+// must stay legible on top of photos and lead into the site), so the style
+// dropdown and the new-tab switch are omitted there.
 const ctaFieldWithoutVariant = {
   ...ctaField,
-  fields: ctaField.fields.filter((field) => field.name !== "variant")
+  fields: ctaField.fields.filter((field) => field.name !== "variant" && field.name !== "newTab")
 };
 
 const imageField = {
@@ -198,9 +214,11 @@ const siteSettings = {
       of: [
         {
           type: "object",
+          fieldsets: [destinationFieldset],
           fields: [
             { name: "label", title: "Label", type: "string" },
-            { name: "href", title: "URL", type: "string" },
+            { name: "href", title: "URL", type: "string", fieldset: "destination" },
+            newTabField,
             {
               name: "platform",
               title: "Platform",
@@ -492,10 +510,12 @@ const seminarsPage = {
           of: [
             {
               type: "object",
+              fieldsets: [destinationFieldset],
               fields: [
                 { name: "title", title: "Title", type: "string" },
                 { name: "text", title: "Text", type: "text" },
-                { name: "href", title: "URL or path", type: "string" }
+                { name: "href", title: "URL or path", type: "string", fieldset: "destination" },
+                newTabField
               ]
             }
           ]

@@ -8,6 +8,7 @@ export type Cta = {
   label: string;
   href: string;
   variant?: "primary" | "secondary" | "paper" | "ghost" | "paperGhost";
+  newTab?: boolean;
 };
 
 export type HeroContent = {
@@ -25,6 +26,7 @@ export type HeroContent = {
 export type NavigationItem = {
   label: string;
   href: string;
+  newTab?: boolean;
 };
 
 export type SiteSettings = {
@@ -179,6 +181,7 @@ export type SeminarsContent = {
       title: string;
       text: string;
       href?: string;
+      newTab?: boolean;
     }>;
   };
 };

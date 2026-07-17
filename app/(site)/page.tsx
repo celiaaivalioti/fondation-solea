@@ -55,7 +55,7 @@ export default async function Home() {
 
           {home.manifesto.cta && (
             <div className="mt-12 flex justify-start">
-              <CTAButton href={home.manifesto.cta.href} variant={home.manifesto.cta.variant ?? "primary"}>
+              <CTAButton href={home.manifesto.cta.href} variant={home.manifesto.cta.variant ?? "primary"} newTab={home.manifesto.cta.newTab}>
                 {home.manifesto.cta.label}
               </CTAButton>
             </div>

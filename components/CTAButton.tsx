@@ -6,6 +6,7 @@ type CTAButtonProps = {
   variant?: "primary" | "secondary" | "paper" | "ghost" | "paperGhost";
   className?: string;
   onClick?: () => void;
+  newTab?: boolean;
 };
 
 export default function CTAButton({
@@ -13,7 +14,8 @@ export default function CTAButton({
   children,
   variant = "primary",
   className = "",
-  onClick
+  onClick,
+  newTab
 }: CTAButtonProps) {
   const variantClass = {
     primary:
@@ -49,7 +51,12 @@ export default function CTAButton({
   }
 
   return (
-    <Link href={href} onClick={onClick} className={sharedClassName}>
+    <Link
+      href={href}
+      onClick={onClick}
+      className={sharedClassName}
+      {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+    >
       {children}
     </Link>
   );

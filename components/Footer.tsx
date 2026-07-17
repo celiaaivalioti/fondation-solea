@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactElement } from "react";
 import type { NavigationItem, SiteSettings } from "@/lib/cms-types";
+import { newTabProps } from "@/lib/links";
 
 type FooterProps = {
   navigation: NavigationItem[];
@@ -79,6 +80,7 @@ export default function Footer({ navigation, site }: FooterProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                {...newTabProps(item.newTab)}
                 className="text-lg text-bark/75 transition hover:text-bark"
               >
                 {item.label}
@@ -93,7 +95,7 @@ export default function Footer({ navigation, site }: FooterProps) {
           <div className="text-lg leading-8 text-bark/75">
             <p className="mb-2 font-bold text-bark">Liens</p>
             {site.legalLinks.map((item) => (
-              <Link key={item.label} href={item.href} className="block transition hover:text-bark">
+              <Link key={item.label} href={item.href} {...newTabProps(item.newTab)} className="block transition hover:text-bark">
                 {item.label}
               </Link>
             ))}
@@ -102,6 +104,7 @@ export default function Footer({ navigation, site }: FooterProps) {
                 <a
                   key={`${item.platform}-${item.href}`}
                   href={item.href}
+                  {...newTabProps(item.newTab)}
                   aria-label={item.label}
                   className="flex h-9 w-9 items-center justify-center rounded-full border border-bark/25 transition hover:border-bark hover:bg-bark hover:text-fern"
                 >

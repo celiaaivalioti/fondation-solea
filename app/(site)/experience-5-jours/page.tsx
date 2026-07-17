@@ -132,7 +132,7 @@ export default async function RetreatPage() {
             ))}
           </div>
           <div className="mt-4">
-            <CTAButton href={retreat.place.cta.href} variant={retreat.place.cta.variant ?? "primary"}>
+            <CTAButton href={retreat.place.cta.href} variant={retreat.place.cta.variant ?? "primary"} newTab={retreat.place.cta.newTab}>
               {retreat.place.cta.label}
             </CTAButton>
           </div>

@@ -42,12 +42,12 @@ export default async function ContactPage() {
           </p>
           <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
             {contact.primary && (
-              <CTAButton href={primaryHref} variant={contact.primary.variant ?? "primary"}>
+              <CTAButton href={primaryHref} variant={contact.primary.variant ?? "primary"} newTab={contact.primary.newTab}>
                 {contact.primary.label}
               </CTAButton>
             )}
             {contact.secondary && (
-              <CTAButton href={contact.secondary.href} variant={contact.secondary.variant ?? "secondary"}>
+              <CTAButton href={contact.secondary.href} variant={contact.secondary.variant ?? "secondary"} newTab={contact.secondary.newTab}>
                 {contact.secondary.label}
               </CTAButton>
             )}

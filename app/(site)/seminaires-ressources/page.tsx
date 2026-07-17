@@ -61,7 +61,7 @@ export default async function SeminarsPage() {
                 </p>
                 {resource.href && (
                   <div className="mt-6">
-                    <CTAButton href={resource.href} variant="secondary">
+                    <CTAButton href={resource.href} variant="secondary" newTab={resource.newTab}>
                       Découvrir
                     </CTAButton>
                   </div>
