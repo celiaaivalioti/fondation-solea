@@ -95,7 +95,7 @@ export default async function AboutPage() {
       </section>
 
       <Section
-        tone="linen"
+        tone="parchment"
         eyebrow={about.principles.eyebrow}
         title={about.principles.title}
       >
