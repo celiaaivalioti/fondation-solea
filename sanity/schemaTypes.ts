@@ -471,7 +471,7 @@ const retreatPage = {
 
 const seminarsPage = {
   name: "seminarsPage",
-  title: "Séminaires et ressources",
+  title: "Un pôle de savoir",
   type: "document",
   fields: [
     { name: "metadataTitle", title: "Metadata title", type: "string" },
@@ -503,7 +503,7 @@ const seminarsPage = {
       ]
     }
   ],
-  ...singletonPreview("Séminaires et ressources")
+  ...singletonPreview("Un pôle de savoir")
 };
 
 const supportPage = {

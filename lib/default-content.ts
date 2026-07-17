@@ -27,7 +27,7 @@ export const defaultContent: CmsContent = {
     { label: "Accueil", href: "/" },
     { label: "Qui sommes-nous", href: "/qui-sommes-nous" },
     { label: "L’expérience de 5 jours", href: "/experience-5-jours" },
-    { label: "Séminaires & ressources", href: "/seminaires-ressources" },
+    { label: "Un pôle de savoir", href: "/seminaires-ressources" },
     { label: "S’inscrire", href: "/inscription" },
     { label: "Contact", href: "/contact" }
   ],
@@ -417,9 +417,9 @@ export const defaultContent: CmsContent = {
     }
   },
   seminars: {
-    metadataTitle: "Séminaires et ressources",
+    metadataTitle: "Un pôle de savoir",
     hero: {
-      eyebrow: "Séminaires & ressources",
+      eyebrow: "Un pôle de savoir",
       title: "Des séminaires ouverts à tous",
       text:
         "Au-delà des séjours de 5 jours, Solea propose des séminaires réguliers, ouverts à tous les patients et leurs proches, pour faire de ce lieu un véritable pôle de savoir, de partage et de sensibilisation.",
