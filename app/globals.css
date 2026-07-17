@@ -21,6 +21,7 @@
   --palette-border: 229 219 207;
   --palette-white: 255 255 255;
   --palette-neutral-shadow: 34 42 42;
+  --palette-warm-shadow: 58 45 33;
   --palette-green-shadow: 6 56 44;
 
   /* Semantic colour channels consumed by Tailwind */
@@ -36,6 +37,7 @@
   --color-stroke: var(--palette-border);
   --color-on-dark: var(--palette-white);
   --color-overlay-neutral: var(--palette-neutral-shadow);
+  --color-overlay-warm: var(--palette-warm-shadow);
   --color-overlay-green: var(--palette-green-shadow);
 
   /* Semantic button colour channels */

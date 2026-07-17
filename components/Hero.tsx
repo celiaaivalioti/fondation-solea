@@ -125,11 +125,11 @@ export default function Hero({
           {/* Gradient overlay - stronger on the left for text contrast */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-r from-[rgb(var(--color-overlay-neutral)/0.65)] via-[rgb(var(--color-overlay-neutral)/0.25)] to-[rgb(var(--color-overlay-neutral)/0.08)]"
+            className="absolute inset-0 bg-gradient-to-r from-[rgb(var(--color-overlay-warm)/0.65)] via-[rgb(var(--color-overlay-warm)/0.25)] to-[rgb(var(--color-overlay-warm)/0.08)]"
           />
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--color-overlay-neutral)/0.45)] via-transparent to-[rgb(var(--color-overlay-neutral)/0.14)]"
+            className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--color-overlay-warm)/0.45)] via-transparent to-[rgb(var(--color-overlay-warm)/0.14)]"
           />
         </div>
 
