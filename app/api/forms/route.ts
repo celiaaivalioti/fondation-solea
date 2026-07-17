@@ -57,11 +57,11 @@ function isRateLimited(ip: string): boolean {
   submissionLog.set(ip, recent);
 
   if (submissionLog.size > 10_000) {
-    for (const [key, times] of submissionLog) {
+    submissionLog.forEach((times, key) => {
       if (times.every((t) => now - t >= RATE_WINDOW_MS)) {
         submissionLog.delete(key);
       }
-    }
+    });
   }
 
   return false;
