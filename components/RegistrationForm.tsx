@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DatePicker from "./DatePicker";
 import { type FormStatus, submitForm } from "@/lib/submit-form";
 
@@ -11,7 +11,11 @@ const labelClass = "grid gap-2 text-[13px] font-semibold uppercase tracking-[0.1
 
 export default function RegistrationForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
-  const openedAt = useRef(Date.now());
+  const openedAt = useRef(0);
+
+  useEffect(() => {
+    openedAt.current = Date.now();
+  }, []);
   const [inTreatment, setInTreatment] = useState("");
   const [needsAssistance, setNeedsAssistance] = useState("");
 
