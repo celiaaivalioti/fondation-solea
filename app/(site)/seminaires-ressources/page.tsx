@@ -27,6 +27,10 @@ export default async function SeminarsPage() {
         imageClassName={seminars.hero.image.className}
         primaryHref={seminars.hero.primary?.href}
         primaryLabel={seminars.hero.primary?.label}
+        secondaryHref={seminars.hero.secondary?.href}
+        secondaryLabel={seminars.hero.secondary?.label}
+        tertiaryHref={seminars.hero.tertiary?.href}
+        tertiaryLabel={seminars.hero.tertiary?.label}
       />
       <Section
         tone="parchment"
