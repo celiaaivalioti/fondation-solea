@@ -61,7 +61,7 @@ export default async function AboutPage() {
               <blockquote className="mx-auto max-w-2xl font-display text-[clamp(1.35rem,2.2vw,1.65rem)] font-light leading-[1.45] text-paper">
                 {testimonial.quote}
               </blockquote>
-              <figcaption className="mt-6 text-base font-semibold uppercase tracking-[0.16em] text-paper/58">
+              <figcaption className="mt-6 text-base font-semibold uppercase tracking-[0.16em] text-paper">
                 {testimonial.attribution}
               </figcaption>
             </figure>
