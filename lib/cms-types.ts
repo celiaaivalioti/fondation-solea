@@ -40,6 +40,7 @@ export type SiteSettings = {
   footerTagline: string;
   showDonationCta: boolean;
   donationLabel: string;
+  googleAnalyticsId?: string;
   legalLinks: NavigationItem[];
   socialLinks: Array<NavigationItem & { platform: string }>;
 };

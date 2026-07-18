@@ -200,6 +200,19 @@ const siteSettings = {
       description: "Turn this off to hide the donation buttons and make the Nous soutenir page unavailable."
     },
     { name: "donationLabel", title: "Donation button label", type: "string" },
+    {
+      name: "googleAnalyticsId",
+      title: "Google Analytics ID",
+      type: "string",
+      description:
+        "Measurement ID from Google Analytics, looks like G-XXXXXXXXXX. Leave empty to disable analytics.",
+      validation: (rule: { custom: (fn: (value?: string) => true | string) => unknown }) =>
+        rule.custom((value?: string) =>
+          !value || /^[A-Za-z0-9-]+$/.test(value.trim())
+            ? true
+            : "Only letters, numbers and dashes are allowed (e.g. G-ABC123XYZ)."
+        )
+    },
     { name: "legalLinks", title: "Footer legal links", type: "array", of: [{ type: "link" }] },
     {
       name: "socialLinks",
