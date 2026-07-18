@@ -35,7 +35,8 @@ const contentQuery = `{
     hero{..., image${imageProjection}}
   },
   "registration": *[_type == "registrationPage"][0],
-  "contact": *[_type == "contactPage"][0]
+  "contact": *[_type == "contactPage"][0],
+  "privacy": *[_type == "privacyPage"][0]
 }`;
 
 type UnknownRecord = Record<string, unknown>;

@@ -585,6 +585,32 @@ const contactPage = {
   ...singletonPreview("Contact")
 };
 
+const privacyPage = {
+  name: "privacyPage",
+  title: "Politique de confidentialité",
+  type: "document",
+  fields: [
+    { name: "metadataTitle", title: "Metadata title", type: "string" },
+    { name: "title", title: "Title", type: "string" },
+    { name: "intro", title: "Intro", type: "text" },
+    {
+      name: "sections",
+      title: "Sections",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            { name: "title", title: "Title", type: "string" },
+            { name: "text", title: "Text", type: "text" }
+          ]
+        }
+      ]
+    }
+  ],
+  ...singletonPreview("Politique de confidentialité")
+};
+
 export const schemaTypes = [
   ...objects,
   siteSettings,
@@ -595,5 +621,6 @@ export const schemaTypes = [
   seminarsPage,
   supportPage,
   registrationPage,
-  contactPage
+  contactPage,
+  privacyPage
 ];

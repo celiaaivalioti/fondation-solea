@@ -225,4 +225,12 @@ export type CmsContent = {
   support: SupportContent;
   registration: FormPageContent;
   contact: FormPageContent;
+  privacy: PrivacyContent;
+};
+
+export type PrivacyContent = {
+  metadataTitle: string;
+  title: string;
+  intro?: string;
+  sections: Array<{ title: string; text: string }>;
 };

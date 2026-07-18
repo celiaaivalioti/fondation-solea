@@ -514,5 +514,37 @@ export const defaultContent: CmsContent = {
       href: "/inscription",
       variant: "secondary"
     }
+  },
+  privacy: {
+    metadataTitle: "Politique de confidentialité",
+    title: "Politique de confidentialité",
+    intro:
+      "La fondation Solea accorde une grande importance à la protection de vos données personnelles. Cette page décrit les données que nous collectons et l’usage que nous en faisons.",
+    sections: [
+      {
+        title: "Responsable du traitement",
+        text: "La fondation Solea est responsable du traitement des données collectées sur ce site. Pour toute question relative à vos données, écrivez-nous à contact@fondation-solea.ch."
+      },
+      {
+        title: "Formulaires de contact et d’inscription",
+        text: "Les informations transmises via nos formulaires (coordonnées et, pour l’inscription, informations relatives à votre situation) nous sont envoyées par e-mail et servent uniquement à répondre à votre demande ou à traiter votre inscription. Elles ne sont jamais vendues ni partagées avec des tiers."
+      },
+      {
+        title: "Mesure d’audience",
+        text: "Avec votre accord, nous utilisons Google Analytics pour établir des statistiques de fréquentation anonymes et améliorer le site. Vous pouvez refuser cette mesure d’audience sans aucune restriction d’accès au site."
+      },
+      {
+        title: "Cookies",
+        text: "Les seuls cookies déposés par ce site sont ceux de Google Analytics, et uniquement après votre acceptation. Votre choix est conservé dans votre navigateur et peut être modifié en effaçant les données du site."
+      },
+      {
+        title: "Hébergement",
+        text: "Ce site est hébergé en Suisse par Infomaniak Network SA (Genève)."
+      },
+      {
+        title: "Vos droits",
+        text: "Conformément à la législation applicable (nLPD, RGPD), vous disposez d’un droit d’accès, de rectification et de suppression de vos données. Pour l’exercer, contactez-nous à contact@fondation-solea.ch."
+      }
+    ]
   }
 };
