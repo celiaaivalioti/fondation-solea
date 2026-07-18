@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
 import "./globals.css";
 import CookieConsent from "@/components/CookieConsent";
+import BackToTop from "@/components/BackToTop";
 import { getCmsContent } from "@/lib/cms";
 
 const figtree = Figtree({
@@ -45,6 +46,7 @@ export default async function RootLayout({
     <html lang="fr" data-scroll-behavior="smooth">
       <body className={`${figtree.variable} min-h-screen antialiased`}>
         {children}
+        <BackToTop />
         {analyticsEnabled && <CookieConsent gaId={gaId as string} />}
       </body>
     </html>
