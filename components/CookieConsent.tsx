@@ -1,28 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 const storageKey = "solea-cookie-consent";
+const consentEvent = "solea-consent-change";
 
 type Consent = "accepted" | "refused";
+
+// The stored choice is external state (localStorage), so we read it through
+// useSyncExternalStore rather than a setState-in-effect. The "storage" event
+// covers other tabs; the custom event covers changes within this tab.
+function subscribe(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(consentEvent, callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(consentEvent, callback);
+  };
+}
+
+function getSnapshot(): Consent | "pending" {
+  const stored = window.localStorage.getItem(storageKey);
+  return stored === "accepted" || stored === "refused" ? stored : "pending";
+}
+
+// On the server (and the first client render) there is no stored choice to
+// read; returning null keeps the banner out of the initial markup and avoids
+// a hydration mismatch.
+function getServerSnapshot(): Consent | "pending" | null {
+  return null;
+}
 
 // Renders Google Analytics only after the visitor accepts; shows the
 // banner until a choice is made and remembers it in the browser.
 export default function CookieConsent({ gaId }: { gaId: string }) {
-  // null = not mounted yet (avoids a hydration mismatch), "pending" = no
-  // stored choice.
-  const [consent, setConsent] = useState<Consent | "pending" | null>(null);
-
-  useEffect(() => {
-    const stored = window.localStorage.getItem(storageKey);
-    setConsent(stored === "accepted" || stored === "refused" ? stored : "pending");
-  }, []);
+  const consent = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const choose = (value: Consent) => {
     window.localStorage.setItem(storageKey, value);
-    setConsent(value);
+    window.dispatchEvent(new Event(consentEvent));
   };
 
   return (
