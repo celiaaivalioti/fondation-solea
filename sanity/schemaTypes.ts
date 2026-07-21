@@ -611,6 +611,16 @@ const privacyPage = {
   ...singletonPreview("Politique de confidentialité")
 };
 
+const faqPage = {
+  name: "faqPage",
+  title: "Questions fréquentes",
+  type: "document",
+  fields: [
+    { name: "metadataTitle", title: "Metadata title", type: "string" }
+  ],
+  ...singletonPreview("Questions fréquentes")
+};
+
 export const schemaTypes = [
   ...objects,
   siteSettings,
@@ -622,5 +632,6 @@ export const schemaTypes = [
   supportPage,
   registrationPage,
   contactPage,
-  privacyPage
+  privacyPage,
+  faqPage
 ];

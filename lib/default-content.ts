@@ -28,6 +28,7 @@ export const defaultContent: CmsContent = {
     { label: "Qui sommes-nous", href: "/qui-sommes-nous" },
     { label: "L’expérience de 5 jours", href: "/experience-5-jours" },
     { label: "Un pôle de savoir", href: "/seminaires-ressources" },
+    { label: "Questions fréquentes", href: "/questions-frequentes" },
     { label: "S’inscrire", href: "/inscription" },
     { label: "Contact", href: "/contact" }
   ],
