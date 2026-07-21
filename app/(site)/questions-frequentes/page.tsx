@@ -195,7 +195,7 @@ export default function FAQPage() {
           <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss mb-6">
             Questions fréquentes
           </p>
-          <h1 className="font-display text-[clamp(2rem,4.2vw,4rem)] font-light leading-[1.05] text-bark text-balance">
+          <h1 className="font-display text-[clamp(1.75rem,3vw,2.75rem)] font-light leading-[1.1] text-bark text-balance">
             Vos questions, nos réponses
           </h1>
         </div>
