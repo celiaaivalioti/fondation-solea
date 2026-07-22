@@ -47,7 +47,7 @@ export default async function AboutPage() {
             <h2 className="font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-[1.1] text-bark text-balance">
               {about.foundation.visionTitle}
             </h2>
-            <p className="mt-8 text-[1.15rem] leading-[1.9] text-bark/82">
+            <p className="mt-8 whitespace-pre-line text-[1.15rem] leading-[1.9] text-bark/82">
               {about.foundation.visionText}
             </p>
           </ScrollReveal>
@@ -58,7 +58,7 @@ export default async function AboutPage() {
         <ScrollReveal className="mx-auto grid max-w-5xl gap-12">
           {about.testimonials.map((testimonial) => (
             <figure key={testimonial.attribution} className="text-center">
-              <blockquote className="mx-auto max-w-2xl font-display text-[clamp(1.35rem,2.2vw,1.65rem)] font-light leading-[1.45] text-paper">
+              <blockquote className="mx-auto max-w-2xl whitespace-pre-line font-display text-[clamp(1.35rem,2.2vw,1.65rem)] font-light leading-[1.45] text-paper">
                 {testimonial.quote}
               </blockquote>
               <figcaption className="mt-6 text-base font-semibold uppercase tracking-[0.16em] text-paper">
@@ -83,7 +83,7 @@ export default async function AboutPage() {
           </div>
           <ScrollReveal className="max-w-2xl">
             {about.mission.intro && (
-              <p className="text-[1.12rem] leading-[1.65] text-bark/72 text-pretty">
+              <p className="whitespace-pre-line text-[1.12rem] leading-[1.65] text-bark/72 text-pretty">
                 {about.mission.intro}
               </p>
             )}
@@ -109,7 +109,7 @@ export default async function AboutPage() {
                 <h3 className="font-display text-[clamp(1.45rem,2vw,2rem)] font-light leading-tight text-bark">
                   {principle.title}
                 </h3>
-                <p className="mt-3 leading-[1.8] text-bark/70">{principle.text}</p>
+                <p className="mt-3 whitespace-pre-line leading-[1.8] text-bark/70">{principle.text}</p>
               </div>
             </article>
           ))}
@@ -195,7 +195,7 @@ export default async function AboutPage() {
                 </div>
 
                 <div className="p-6">
-                  <p className="font-display text-[1.25rem] font-regular leading-[1.5] text-bark">
+                  <p className="whitespace-pre-line font-display text-[1.25rem] font-regular leading-[1.5] text-bark">
                     “{member.quote}”
                   </p>
                   <div className="mt-7">
@@ -252,15 +252,15 @@ export default async function AboutPage() {
               </h3>
               <div className="mt-5 grid gap-5 leading-[1.65] text-bark/72">
                 {founder.paragraphs?.slice(0, 1).map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
+                  <p key={paragraph} className="whitespace-pre-line">{paragraph}</p>
                 ))}
                 {founder.quote && (
-                  <blockquote className="border-l-2 border-moss/30 pl-5 font-display text-[1.25rem] font-light leading-[1.55] text-bark">
+                  <blockquote className="whitespace-pre-line border-l-2 border-moss/30 pl-5 font-display text-[1.25rem] font-light leading-[1.55] text-bark">
                     “{founder.quote}”
                   </blockquote>
                 )}
                 {founder.paragraphs?.slice(1).map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
+                  <p key={paragraph} className="whitespace-pre-line">{paragraph}</p>
                 ))}
               </div>
               {founder.cta && (

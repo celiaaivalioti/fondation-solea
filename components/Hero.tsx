@@ -33,13 +33,15 @@ function HeroText({ text, className }: { text: React.ReactNode; className: strin
 
   const paragraphs = text
     .split(/\n{2,}/)
-    .map((paragraph) => paragraph.replace(/\s*\n\s*/g, " ").trim())
+    .map((paragraph) => paragraph.trim())
     .filter(Boolean);
 
   return (
     <div className={`${className} grid gap-5`}>
       {paragraphs.map((paragraph) => (
-        <p key={paragraph}>{paragraph}</p>
+        <p key={paragraph} className="whitespace-pre-line">
+          {paragraph}
+        </p>
       ))}
     </div>
   );
@@ -151,7 +153,7 @@ export default function Hero({
             />
             {quote && (
               <figure className="mt-10 max-w-xl">
-                <blockquote className="font-display text-[1.5rem] font-light italic leading-[1.45] text-paper/95">
+                <blockquote className="whitespace-pre-line font-display text-[1.5rem] font-light italic leading-[1.45] text-paper/95">
                   {quote}
                 </blockquote>
                 {quoteAttribution && (
@@ -218,7 +220,7 @@ export default function Hero({
           />
           {quote && (
             <figure className="mt-5 max-w-xl">
-              <blockquote className="font-display text-[1.55rem] font-light italic leading-[1.45] text-moss">
+              <blockquote className="whitespace-pre-line font-display text-[1.55rem] font-light italic leading-[1.45] text-moss">
                 {quote}
               </blockquote>
               {quoteAttribution && (

@@ -72,7 +72,7 @@ export default function CommitteeSlideshow({
               </div>
 
               <div className="p-8 sm:p-10">
-                <p className="font-display text-[clamp(1.3rem,2.1vw,1.85rem)] font-light leading-tight text-bark">
+                <p className="whitespace-pre-line font-display text-[clamp(1.3rem,2.1vw,1.85rem)] font-light leading-tight text-bark">
                   “{member.quote}”
                 </p>
                 <div className="mt-8">

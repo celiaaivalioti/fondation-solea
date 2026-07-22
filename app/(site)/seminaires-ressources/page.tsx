@@ -56,7 +56,7 @@ export default async function SeminarsPage() {
                 <h3 className="font-display text-[1.45rem] font-light leading-tight text-bark">
                   {resource.title}
                 </h3>
-                <p className="mt-4 text-[1rem] leading-[1.75] text-bark/70 text-pretty">
+                <p className="mt-4 whitespace-pre-line text-[1rem] leading-[1.75] text-bark/70 text-pretty">
                   {resource.text}
                 </p>
                 {resource.href && (

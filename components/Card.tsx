@@ -15,7 +15,7 @@ export default function Card({ title, text, meta }: CardProps) {
       <h3 className="font-display text-[1.55rem] font-light leading-tight text-bark">
         {title}
       </h3>
-      <p className="mt-5 text-[1.05rem] leading-[1.65] text-bark/70 text-pretty">{text}</p>
+      <p className="mt-5 whitespace-pre-line text-[1.05rem] leading-[1.65] text-bark/70 text-pretty">{text}</p>
     </article>
   );
 }

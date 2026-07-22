@@ -67,7 +67,7 @@ export default async function SupportPage() {
       <Section compact eyebrow={support.cause.eyebrow} title={support.cause.title}>
         <ScrollReveal>
           {support.cause.paragraphs?.map((paragraph) => (
-            <p key={paragraph} className="max-w-[58ch] text-[1.15rem] leading-[1.65] text-bark/80 text-pretty">
+            <p key={paragraph} className="max-w-[58ch] whitespace-pre-line text-[1.15rem] leading-[1.65] text-bark/80 text-pretty">
               {paragraph}
             </p>
           ))}
@@ -83,7 +83,7 @@ export default async function SupportPage() {
       <section className="relative bg-[rgb(var(--button-primary-bg)/1)] px-5 py-16 text-paper sm:px-8 lg:py-24">
         <ScrollReveal className="mx-auto max-w-5xl">
           <figure className="text-center">
-            <blockquote className="mx-auto max-w-2xl font-display text-[clamp(1.35rem,2.2vw,1.65rem)] font-light leading-[1.45] text-paper">
+            <blockquote className="mx-auto max-w-2xl whitespace-pre-line font-display text-[clamp(1.35rem,2.2vw,1.65rem)] font-light leading-[1.45] text-paper">
               {support.testimonial.quote}
             </blockquote>
           </figure>

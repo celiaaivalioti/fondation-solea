@@ -50,7 +50,7 @@ export default function Section({
               </h2>
             )}
             {intro && (
-              <p className="mt-6 max-w-[58ch] text-[1.12rem] leading-[1.65] text-bark/72 text-pretty">
+              <p className="mt-6 max-w-[58ch] whitespace-pre-line text-[1.12rem] leading-[1.65] text-bark/72 text-pretty">
                 {intro}
               </p>
             )}

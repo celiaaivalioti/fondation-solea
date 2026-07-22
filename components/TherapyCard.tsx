@@ -29,7 +29,7 @@ export default function TherapyCard({ title, text, image }: TherapyCardProps) {
           {title}
         </h3>
         {text && (
-          <p className="mt-5 text-[1rem] leading-[1.75] text-bark/70 text-pretty">{text}</p>
+          <p className="mt-5 whitespace-pre-line text-[1rem] leading-[1.75] text-bark/70 text-pretty">{text}</p>
         )}
       </div>
     </article>
