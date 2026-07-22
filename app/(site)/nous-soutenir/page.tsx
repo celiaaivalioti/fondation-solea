@@ -3,6 +3,7 @@ import CheckList from "@/components/CheckList";
 import Hero from "@/components/Hero";
 import Section from "@/components/Section";
 import ScrollReveal from "@/components/ScrollReveal";
+import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
 
 export async function generateMetadata() {
@@ -66,11 +67,11 @@ export default async function SupportPage() {
 
       <Section compact eyebrow={support.cause.eyebrow} title={support.cause.title}>
         <ScrollReveal>
-          {support.cause.paragraphs?.map((paragraph) => (
-            <p key={paragraph} className="max-w-[58ch] whitespace-pre-line text-[1.15rem] leading-[1.65] text-bark/80 text-pretty">
-              {paragraph}
-            </p>
-          ))}
+          <RichText
+            text={support.cause.paragraphs?.join("\n\n")}
+            className="max-w-[58ch]"
+            paragraphClassName="text-[1.15rem] leading-[1.65] text-bark/80 text-pretty"
+          />
         </ScrollReveal>
       </Section>
 

@@ -1,3 +1,5 @@
+import RichText from "./RichText";
+
 type PillarCardProps = {
   title: string;
   text: string;
@@ -18,7 +20,11 @@ export default function PillarCard({ title, text, index }: PillarCardProps) {
         <h3 className="font-display text-[1.85rem] font-light leading-[1.1] text-bark">
           {title}
         </h3>
-        <p className="mt-4 whitespace-pre-line text-[1.05rem] leading-[1.65] text-bark/70 text-pretty">{text}</p>
+        <RichText
+          text={text}
+          className="mt-4"
+          paragraphClassName="text-[1.05rem] leading-[1.65] text-bark/70 text-pretty"
+        />
       </div>
     </article>
   );

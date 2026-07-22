@@ -4,6 +4,7 @@ import CTAButton from "@/components/CTAButton";
 import Hero from "@/components/Hero";
 import ScrollReveal from "@/components/ScrollReveal";
 import Section from "@/components/Section";
+import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
 import { getSectionIcon } from "@/lib/icons";
 import { linkifyNames } from "@/lib/linkify-names";
@@ -47,9 +48,11 @@ export default async function AboutPage() {
             <h2 className="font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-[1.1] text-bark text-balance">
               {about.foundation.visionTitle}
             </h2>
-            <p className="mt-8 whitespace-pre-line text-[1.15rem] leading-[1.9] text-bark/82">
-              {about.foundation.visionText}
-            </p>
+            <RichText
+              text={about.foundation.visionText}
+              className="mt-8"
+              paragraphClassName="text-[1.15rem] leading-[1.9] text-bark/82"
+            />
           </ScrollReveal>
         </div>
       </section>
@@ -82,11 +85,10 @@ export default async function AboutPage() {
             </h2>
           </div>
           <ScrollReveal className="max-w-2xl">
-            {about.mission.intro && (
-              <p className="whitespace-pre-line text-[1.12rem] leading-[1.65] text-bark/72 text-pretty">
-                {about.mission.intro}
-              </p>
-            )}
+            <RichText
+              text={about.mission.intro}
+              paragraphClassName="text-[1.12rem] leading-[1.65] text-bark/72 text-pretty"
+            />
             <div className="mt-10">
               <CheckList items={about.mission.items} />
             </div>
@@ -109,7 +111,11 @@ export default async function AboutPage() {
                 <h3 className="font-display text-[clamp(1.45rem,2vw,2rem)] font-light leading-tight text-bark">
                   {principle.title}
                 </h3>
-                <p className="mt-3 whitespace-pre-line leading-[1.8] text-bark/70">{principle.text}</p>
+                <RichText
+                  text={principle.text}
+                  className="mt-3"
+                  paragraphClassName="leading-[1.8] text-bark/70"
+                />
               </div>
             </article>
           ))}

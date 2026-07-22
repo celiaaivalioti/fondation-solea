@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import CTAButton from "@/components/CTAButton";
 import ScrollReveal from "@/components/ScrollReveal";
+import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
 
 export async function generateMetadata() {
@@ -46,11 +47,11 @@ export default async function Home() {
               </blockquote>
             )}
 
-            {home.manifesto.paragraphs?.map((paragraph) => (
-              <p key={paragraph} className="whitespace-pre-line text-[1.15rem] leading-[1.65] text-bark/80 text-pretty">
-                {paragraph}
-              </p>
-            ))}
+            <RichText
+              text={home.manifesto.paragraphs?.join("\n\n")}
+              gapClassName="gap-6"
+              paragraphClassName="text-[1.15rem] leading-[1.65] text-bark/80 text-pretty"
+            />
           </div>
 
           {home.manifesto.cta && (

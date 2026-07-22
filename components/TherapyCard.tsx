@@ -1,4 +1,5 @@
 import Image from "next/image";
+import RichText from "./RichText";
 
 type TherapyCardProps = {
   title: string;
@@ -28,9 +29,11 @@ export default function TherapyCard({ title, text, image }: TherapyCardProps) {
         <h3 className="font-display text-[1.45rem] font-light leading-tight text-bark">
           {title}
         </h3>
-        {text && (
-          <p className="mt-5 whitespace-pre-line text-[1rem] leading-[1.75] text-bark/70 text-pretty">{text}</p>
-        )}
+        <RichText
+          text={text}
+          className="mt-5"
+          paragraphClassName="text-[1rem] leading-[1.75] text-bark/70 text-pretty"
+        />
       </div>
     </article>
   );

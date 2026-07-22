@@ -1,3 +1,5 @@
+import RichText from "./RichText";
+
 type SectionProps = {
   eyebrow?: string;
   title?: string;
@@ -49,11 +51,11 @@ export default function Section({
                 {title}
               </h2>
             )}
-            {intro && (
-              <p className="mt-6 max-w-[58ch] whitespace-pre-line text-[1.12rem] leading-[1.65] text-bark/72 text-pretty">
-                {intro}
-              </p>
-            )}
+            <RichText
+              text={intro}
+              className="mt-6 max-w-[58ch]"
+              paragraphClassName="text-[1.12rem] leading-[1.65] text-bark/72 text-pretty"
+            />
           </div>
         )}
         <div>{children}</div>
