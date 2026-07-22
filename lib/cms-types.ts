@@ -241,6 +241,18 @@ export type ContactFieldKey = "firstName" | "lastName" | "email" | "phone" | "me
 export type RegistrationFormConfig = Record<RegistrationFieldKey, FieldConfig>;
 export type ContactFormConfig = Record<ContactFieldKey, FieldConfig>;
 
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+export type FaqContent = {
+  metadataTitle: string;
+  eyebrow: string;
+  title: string;
+  items: FaqItem[];
+};
+
 export type CmsContent = {
   site: SiteSettings;
   navigation: NavigationItem[];
@@ -252,6 +264,7 @@ export type CmsContent = {
   registration: FormPageContent;
   contact: FormPageContent;
   privacy: PrivacyContent;
+  faq: FaqContent;
   registrationForm: RegistrationFormConfig;
   contactForm: ContactFormConfig;
 };

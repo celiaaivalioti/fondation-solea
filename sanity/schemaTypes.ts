@@ -661,7 +661,37 @@ const faqPage = {
   title: "Questions fréquentes",
   type: "document",
   fields: [
-    { name: "metadataTitle", title: "Metadata title", type: "string" }
+    { name: "metadataTitle", title: "Metadata title", type: "string" },
+    { name: "eyebrow", title: "Surtitre", type: "string" },
+    { name: "title", title: "Titre", type: "string" },
+    {
+      name: "items",
+      title: "Questions",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "faqItem",
+          fields: [
+            { name: "question", title: "Question", type: "string" },
+            {
+              name: "answer",
+              title: "Réponse",
+              type: "text",
+              rows: 6,
+              description:
+                "Laissez une ligne vide entre les paragraphes. Une ligne commençant par « - » devient une puce."
+            }
+          ],
+          preview: {
+            select: { title: "question" },
+            prepare: (value: { title?: string }) => ({
+              title: value.title || "Nouvelle question"
+            })
+          }
+        }
+      ]
+    }
   ],
   ...singletonPreview("Questions fréquentes")
 };

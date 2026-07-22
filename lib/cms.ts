@@ -37,6 +37,7 @@ const contentQuery = `{
   "registration": *[_type == "registrationPage"][0],
   "contact": *[_type == "contactPage"][0],
   "privacy": *[_type == "privacyPage"][0],
+  "faq": *[_type == "faqPage"][0],
   "registrationForm": *[_type == "registrationForm"][0],
   "contactForm": *[_type == "contactForm"][0]
 }`;

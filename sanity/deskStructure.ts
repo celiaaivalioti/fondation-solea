@@ -8,6 +8,7 @@ import type { StructureResolver } from "sanity/structure";
 // document (no list, no "+"), so the client cannot create duplicates that
 // would confuse the `*[_type == "..."][0]` frontend queries.
 export const singletons = [
+  { id: "faqPage", title: "Questions fréquentes" },
   { id: "registrationForm", title: "Formulaire d'inscription" },
   { id: "contactForm", title: "Formulaire de contact" }
 ];
