@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { ContactFormConfig } from "@/lib/cms-types";
 import { type FormStatus, submitForm } from "@/lib/submit-form";
 
 const inputClass =
@@ -8,7 +9,9 @@ const inputClass =
 
 const labelClass = "grid gap-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-bark/72";
 
-export default function ContactForm() {
+// Field visibility, labels and required state come from Sanity (see
+// lib/form-config.ts for the defaults and catalog).
+export default function ContactForm({ config }: { config: ContactFormConfig }) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const openedAt = useRef(0);
 
@@ -54,26 +57,62 @@ export default function ContactForm() {
         submitForm("contact", event.currentTarget, setStatus, openedAt.current);
       }}
     >
-      <label className={labelClass}>
-        Prénom
-        <input className={inputClass} name="firstName" autoComplete="given-name" required />
-      </label>
-      <label className={labelClass}>
-        Nom
-        <input className={inputClass} name="lastName" autoComplete="family-name" required />
-      </label>
-      <label className={labelClass}>
-        Email
-        <input className={inputClass} type="email" name="email" autoComplete="email" required />
-      </label>
-      <label className={labelClass}>
-        Téléphone
-        <input className={inputClass} type="tel" name="phone" autoComplete="tel" />
-      </label>
-      <label className={`${labelClass} sm:col-span-2`}>
-        Votre message
-        <textarea className={`${inputClass} min-h-48 py-3`} name="message" required />
-      </label>
+      {config.firstName.enabled && (
+        <label className={labelClass}>
+          {config.firstName.label}
+          <input
+            className={inputClass}
+            name="firstName"
+            autoComplete="given-name"
+            required={config.firstName.required}
+          />
+        </label>
+      )}
+      {config.lastName.enabled && (
+        <label className={labelClass}>
+          {config.lastName.label}
+          <input
+            className={inputClass}
+            name="lastName"
+            autoComplete="family-name"
+            required={config.lastName.required}
+          />
+        </label>
+      )}
+      {config.email.enabled && (
+        <label className={labelClass}>
+          {config.email.label}
+          <input
+            className={inputClass}
+            type="email"
+            name="email"
+            autoComplete="email"
+            required={config.email.required}
+          />
+        </label>
+      )}
+      {config.phone.enabled && (
+        <label className={labelClass}>
+          {config.phone.label}
+          <input
+            className={inputClass}
+            type="tel"
+            name="phone"
+            autoComplete="tel"
+            required={config.phone.required}
+          />
+        </label>
+      )}
+      {config.message.enabled && (
+        <label className={`${labelClass} sm:col-span-2`}>
+          {config.message.label}
+          <textarea
+            className={`${inputClass} min-h-48 py-3`}
+            name="message"
+            required={config.message.required}
+          />
+        </label>
+      )}
       <input
         type="text"
         name="website"

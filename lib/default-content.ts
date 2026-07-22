@@ -1,4 +1,5 @@
 import type { CmsContent } from "./cms-types";
+import { defaultContactForm, defaultRegistrationForm } from "./form-config";
 
 export const defaultContent: CmsContent = {
   site: {
@@ -547,5 +548,7 @@ export const defaultContent: CmsContent = {
         text: "Conformément à la législation applicable (nLPD, RGPD), vous disposez d’un droit d’accès, de rectification et de suppression de vos données. Pour l’exercer, contactez-nous à contact@fondation-solea.ch."
       }
     ]
-  }
+  },
+  registrationForm: defaultRegistrationForm,
+  contactForm: defaultContactForm
 };

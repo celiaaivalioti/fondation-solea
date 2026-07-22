@@ -10,7 +10,7 @@ export async function generateMetadata() {
 }
 
 export default async function RegistrationPage() {
-  const { registration } = await getCmsContent();
+  const { registration, registrationForm } = await getCmsContent();
 
   return (
     <section className="relative isolate overflow-hidden px-5 py-12 sm:px-8 lg:min-h-[calc(100vh-6rem)] lg:py-10">
@@ -39,7 +39,7 @@ export default async function RegistrationPage() {
         </div>
 
         <div className="relative z-10">
-          <RegistrationForm />
+          <RegistrationForm config={registrationForm} />
         </div>
       </div>
     </section>

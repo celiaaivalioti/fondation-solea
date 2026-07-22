@@ -1,48 +1,30 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { getCmsContent } from "@/lib/cms";
+import { buildContactFields, buildRegistrationFields } from "@/lib/form-config";
 
 export const runtime = "nodejs";
 
-// Per-form whitelist: only these fields ever end up in the email, so the
-// endpoint cannot be used to send arbitrary content.
-const forms = {
-  contact: {
-    subject: "Nouveau message via le site (formulaire de contact)",
-    fields: [
-      ["firstName", "Prénom"],
-      ["lastName", "Nom"],
-      ["email", "Email"],
-      ["phone", "Téléphone"],
-      ["message", "Message"]
-    ],
-    required: ["firstName", "lastName", "email", "message"]
-  },
-  inscription: {
-    subject: "Nouvelle demande d'inscription via le site",
-    // The health fields stay whitelisted so re-enabling them is just a matter
-    // of flipping SHOW_HEALTH_FIELDS in RegistrationForm.tsx and restoring
-    // them to `required` below — empty/absent fields are simply skipped in the
-    // email.
-    fields: [
-      ["firstName", "Prénom"],
-      ["lastName", "Nom"],
-      ["email", "Email"],
-      ["phone", "Téléphone"],
-      ["address", "Adresse"],
-      ["cancerType", "Type de cancer"],
-      ["diagnosisDate", "Date du diagnostic"],
-      ["inTreatment", "Actuellement en traitement"],
-      ["treatmentType", "Type de traitement"],
-      ["needsAssistance", "Besoin d'assistance particulière"],
-      ["assistanceType", "Type d'assistance"]
-    ],
-    // Health fields temporarily not required (hidden on the form). To bring
-    // them back, add "cancerType", "inTreatment", "needsAssistance" here again.
-    required: ["firstName", "lastName", "email", "phone", "address"]
-  }
+const subjects = {
+  contact: "Nouveau message via le site (formulaire de contact)",
+  inscription: "Nouvelle demande d'inscription via le site"
 } as const;
 
-type FormKind = keyof typeof forms;
+type FormKind = keyof typeof subjects;
+
+// The set of possible fields is fixed in lib/form-config.ts; Sanity only
+// toggles/relabels known fields. So the effective (name, label) pairs and the
+// required list are derived from the editable config, but can never contain a
+// field the code does not define — the endpoint stays a strict whitelist.
+async function resolveForm(kind: FormKind) {
+  const content = await getCmsContent();
+  const built =
+    kind === "contact"
+      ? buildContactFields(content.contactForm)
+      : buildRegistrationFields(content.registrationForm);
+
+  return { subject: subjects[kind], ...built };
+}
 
 // Rate limit: at most 5 submissions per IP per 10 minutes. In-memory is
 // fine here — the site runs as a single Node process.
@@ -106,10 +88,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "too fast" }, { status: 400 });
   }
 
-  const form = forms[payload.kind as FormKind];
-  if (!form || typeof payload.values !== "object" || payload.values === null) {
+  if (
+    (payload.kind !== "contact" && payload.kind !== "inscription") ||
+    typeof payload.values !== "object" ||
+    payload.values === null
+  ) {
     return NextResponse.json({ error: "invalid request" }, { status: 400 });
   }
+
+  const form = await resolveForm(payload.kind);
 
   const values: Record<string, string> = {};
   for (const [name] of form.fields) {

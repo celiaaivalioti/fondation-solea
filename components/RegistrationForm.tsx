@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import DatePicker from "./DatePicker";
+import type { RegistrationFormConfig } from "@/lib/cms-types";
 import { type FormStatus, submitForm } from "@/lib/submit-form";
 
 const inputClass =
@@ -9,13 +10,10 @@ const inputClass =
 
 const labelClass = "grid gap-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-bark/72";
 
-// Temporary switch to hide the health-related questions (type de cancer,
-// date du diagnostic, traitement, assistance). Set back to true to bring
-// them back. IMPORTANT: keep this in sync with the `required` list in
-// app/api/forms/route.ts, which is gated on the same flag.
-const SHOW_HEALTH_FIELDS = false;
-
-export default function RegistrationForm() {
+// Field visibility, labels and required state come from Sanity (see
+// lib/form-config.ts for the defaults and catalog). The set of possible
+// fields stays fixed in code; the config only toggles known fields.
+export default function RegistrationForm({ config }: { config: RegistrationFormConfig }) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const openedAt = useRef(0);
 
@@ -67,39 +65,80 @@ export default function RegistrationForm() {
         submitForm("inscription", event.currentTarget, setStatus, openedAt.current);
       }}
     >
-      <label className={labelClass}>
-        Prénom
-        <input className={inputClass} name="firstName" autoComplete="given-name" required />
-      </label>
-      <label className={labelClass}>
-        Nom
-        <input className={inputClass} name="lastName" autoComplete="family-name" required />
-      </label>
-      <label className={labelClass}>
-        Email
-        <input className={inputClass} type="email" name="email" autoComplete="email" required />
-      </label>
-      <label className={labelClass}>
-        Téléphone
-        <input className={inputClass} type="tel" name="phone" autoComplete="tel" required />
-      </label>
-      <label className={`${labelClass} sm:col-span-2`}>
-        Adresse
-        <input className={inputClass} name="address" autoComplete="street-address" required />
-      </label>
-      {SHOW_HEALTH_FIELDS && (
+      {config.firstName.enabled && (
+        <label className={labelClass}>
+          {config.firstName.label}
+          <input
+            className={inputClass}
+            name="firstName"
+            autoComplete="given-name"
+            required={config.firstName.required}
+          />
+        </label>
+      )}
+      {config.lastName.enabled && (
+        <label className={labelClass}>
+          {config.lastName.label}
+          <input
+            className={inputClass}
+            name="lastName"
+            autoComplete="family-name"
+            required={config.lastName.required}
+          />
+        </label>
+      )}
+      {config.email.enabled && (
+        <label className={labelClass}>
+          {config.email.label}
+          <input
+            className={inputClass}
+            type="email"
+            name="email"
+            autoComplete="email"
+            required={config.email.required}
+          />
+        </label>
+      )}
+      {config.phone.enabled && (
+        <label className={labelClass}>
+          {config.phone.label}
+          <input
+            className={inputClass}
+            type="tel"
+            name="phone"
+            autoComplete="tel"
+            required={config.phone.required}
+          />
+        </label>
+      )}
+      {config.address.enabled && (
+        <label className={`${labelClass} sm:col-span-2`}>
+          {config.address.label}
+          <input
+            className={inputClass}
+            name="address"
+            autoComplete="street-address"
+            required={config.address.required}
+          />
+        </label>
+      )}
+      {config.cancerType.enabled && (
+        <label className={labelClass}>
+          {config.cancerType.label}
+          <input className={inputClass} name="cancerType" required={config.cancerType.required} />
+        </label>
+      )}
+      {config.diagnosisDate.enabled && (
+        <label className={labelClass}>
+          {config.diagnosisDate.label}
+          <DatePicker name="diagnosisDate" required={config.diagnosisDate.required} />
+        </label>
+      )}
+      {config.inTreatment.enabled && (
         <>
-          <label className={labelClass}>
-            Type de cancer
-            <input className={inputClass} name="cancerType" required />
-          </label>
-          <label className={labelClass}>
-            Date du diagnostic
-            <DatePicker name="diagnosisDate" required />
-          </label>
           <fieldset className="grid gap-3 rounded-2xl border border-moss/15 bg-linen/40 p-5 sm:col-span-2">
             <legend className="px-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-bark/72">
-              Actuellement en traitement ?
+              {config.inTreatment.label}
             </legend>
             <div className="flex flex-wrap gap-5">
               <label className="flex items-center gap-2 text-base font-medium text-bark/82">
@@ -108,7 +147,7 @@ export default function RegistrationForm() {
                   name="inTreatment"
                   value="oui"
                   className="accent-moss"
-                  required
+                  required={config.inTreatment.required}
                   checked={inTreatment === "oui"}
                   onChange={(event) => setInTreatment(event.target.value)}
                 />
@@ -133,9 +172,13 @@ export default function RegistrationForm() {
               <textarea className={`${inputClass} min-h-28 py-3`} name="treatmentType" required />
             </label>
           )}
+        </>
+      )}
+      {config.needsAssistance.enabled && (
+        <>
           <fieldset className="grid gap-3 rounded-2xl border border-moss/15 bg-linen/40 p-5 sm:col-span-2">
             <legend className="px-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-bark/72">
-              Besoin d’assistance particulière ?
+              {config.needsAssistance.label}
             </legend>
             <div className="flex flex-wrap gap-5">
               <label className="flex items-center gap-2 text-base font-medium text-bark/82">
@@ -144,7 +187,7 @@ export default function RegistrationForm() {
                   name="needsAssistance"
                   value="oui"
                   className="accent-moss"
-                  required
+                  required={config.needsAssistance.required}
                   checked={needsAssistance === "oui"}
                   onChange={(event) => setNeedsAssistance(event.target.value)}
                 />

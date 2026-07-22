@@ -177,7 +177,52 @@ const personField = {
   }
 };
 
-const objects = [linkField, ctaField, heroField, textSectionField, checklistField, personField];
+// One toggleable form field: relabel, show/hide, make optional/required.
+// The set of fields itself is fixed in code (lib/form-config.ts); the Studio
+// only edits these three attributes of each known field.
+const formFieldType = {
+  name: "formField",
+  title: "Champ de formulaire",
+  type: "object",
+  options: { columns: 2 },
+  fields: [
+    { name: "label", title: "Libellé", type: "string" },
+    { name: "enabled", title: "Afficher ce champ", type: "boolean", initialValue: true },
+    { name: "required", title: "Obligatoire", type: "boolean", initialValue: true }
+  ],
+  preview: {
+    select: { title: "label", enabled: "enabled", required: "required" },
+    prepare: (value: { title?: string; enabled?: boolean; required?: boolean }) => ({
+      title: value.title || "Champ",
+      subtitle: `${value.enabled === false ? "Masqué" : "Affiché"}${
+        value.required ? " · obligatoire" : ""
+      }`
+    })
+  }
+};
+
+// Build a document field wrapping a formFieldType with per-field defaults that
+// match lib/form-config.ts, so a freshly created document pre-fills correctly.
+const formFieldEntry = (
+  name: string,
+  title: string,
+  initial: { label: string; enabled: boolean; required: boolean }
+) => ({
+  name,
+  title,
+  type: "formField",
+  initialValue: initial
+});
+
+const objects = [
+  linkField,
+  ctaField,
+  heroField,
+  textSectionField,
+  checklistField,
+  personField,
+  formFieldType
+];
 
 const siteSettings = {
   name: "siteSettings",
@@ -621,6 +666,62 @@ const faqPage = {
   ...singletonPreview("Questions fréquentes")
 };
 
+const registrationForm = {
+  name: "registrationForm",
+  title: "Formulaire d'inscription",
+  type: "document",
+  description:
+    "Afficher/masquer, renommer et rendre obligatoires les champs du formulaire d'inscription.",
+  fields: [
+    formFieldEntry("firstName", "Prénom", { label: "Prénom", enabled: true, required: true }),
+    formFieldEntry("lastName", "Nom", { label: "Nom", enabled: true, required: true }),
+    formFieldEntry("email", "Email", { label: "Email", enabled: true, required: true }),
+    formFieldEntry("phone", "Téléphone", { label: "Téléphone", enabled: true, required: true }),
+    formFieldEntry("address", "Adresse", { label: "Adresse", enabled: true, required: true }),
+    formFieldEntry("cancerType", "Type de cancer", {
+      label: "Type de cancer",
+      enabled: false,
+      required: false
+    }),
+    formFieldEntry("diagnosisDate", "Date du diagnostic", {
+      label: "Date du diagnostic",
+      enabled: false,
+      required: false
+    }),
+    formFieldEntry("inTreatment", "Actuellement en traitement ?", {
+      label: "Actuellement en traitement ?",
+      enabled: false,
+      required: false
+    }),
+    formFieldEntry("needsAssistance", "Besoin d'assistance particulière ?", {
+      label: "Besoin d'assistance particulière ?",
+      enabled: false,
+      required: false
+    })
+  ],
+  ...singletonPreview("Formulaire d'inscription")
+};
+
+const contactForm = {
+  name: "contactForm",
+  title: "Formulaire de contact",
+  type: "document",
+  description:
+    "Afficher/masquer, renommer et rendre obligatoires les champs du formulaire de contact.",
+  fields: [
+    formFieldEntry("firstName", "Prénom", { label: "Prénom", enabled: true, required: true }),
+    formFieldEntry("lastName", "Nom", { label: "Nom", enabled: true, required: true }),
+    formFieldEntry("email", "Email", { label: "Email", enabled: true, required: true }),
+    formFieldEntry("phone", "Téléphone", { label: "Téléphone", enabled: true, required: false }),
+    formFieldEntry("message", "Votre message", {
+      label: "Votre message",
+      enabled: true,
+      required: true
+    })
+  ],
+  ...singletonPreview("Formulaire de contact")
+};
+
 export const schemaTypes = [
   ...objects,
   siteSettings,
@@ -633,5 +734,7 @@ export const schemaTypes = [
   registrationPage,
   contactPage,
   privacyPage,
-  faqPage
+  faqPage,
+  registrationForm,
+  contactForm
 ];

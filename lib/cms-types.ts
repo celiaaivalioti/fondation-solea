@@ -215,6 +215,31 @@ export type FormPageContent = {
   secondary?: Cta;
 };
 
+// Per-field configuration the client can edit in Sanity: relabel, show/hide,
+// and make optional/required. The set of possible fields stays defined in
+// code (lib/form-config.ts) — Sanity only toggles known fields.
+export type FieldConfig = {
+  label: string;
+  enabled: boolean;
+  required: boolean;
+};
+
+export type RegistrationFieldKey =
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "phone"
+  | "address"
+  | "cancerType"
+  | "diagnosisDate"
+  | "inTreatment"
+  | "needsAssistance";
+
+export type ContactFieldKey = "firstName" | "lastName" | "email" | "phone" | "message";
+
+export type RegistrationFormConfig = Record<RegistrationFieldKey, FieldConfig>;
+export type ContactFormConfig = Record<ContactFieldKey, FieldConfig>;
+
 export type CmsContent = {
   site: SiteSettings;
   navigation: NavigationItem[];
@@ -226,6 +251,8 @@ export type CmsContent = {
   registration: FormPageContent;
   contact: FormPageContent;
   privacy: PrivacyContent;
+  registrationForm: RegistrationFormConfig;
+  contactForm: ContactFormConfig;
 };
 
 export type PrivacyContent = {

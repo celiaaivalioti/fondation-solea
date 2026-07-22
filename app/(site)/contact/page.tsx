@@ -11,7 +11,7 @@ export async function generateMetadata() {
 }
 
 export default async function ContactPage() {
-  const { contact, site } = await getCmsContent();
+  const { contact, site, contactForm } = await getCmsContent();
   const primaryHref = contact.primary?.href.startsWith("tel:")
     ? contact.primary.href
     : `tel:${site.phone.replaceAll(" ", "")}`;
@@ -55,7 +55,7 @@ export default async function ContactPage() {
         </div>
 
         <div className="relative z-10">
-          <ContactForm />
+          <ContactForm config={contactForm} />
         </div>
       </div>
     </section>
