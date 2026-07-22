@@ -33,7 +33,7 @@ export default async function RegistrationPage() {
           <h1 className="font-display text-[clamp(2rem,4.2vw,4rem)] font-light leading-[1.05] text-bark text-balance">
             {registration.title}
           </h1>
-          <p className="mt-8 max-w-[58ch] text-[1.15rem] leading-9 text-bark/72 sm:text-[1.25rem] sm:leading-[1.65] text-pretty">
+          <p className="mt-8 max-w-[58ch] whitespace-pre-line text-[1.15rem] leading-9 text-bark/72 sm:text-[1.25rem] sm:leading-[1.65] text-pretty">
             {registration.text}
           </p>
         </div>
