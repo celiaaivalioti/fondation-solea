@@ -20,7 +20,8 @@ export const registrationFieldOrder: RegistrationFieldKey[] = [
   "cancerType",
   "diagnosisDate",
   "inTreatment",
-  "needsAssistance"
+  "needsAssistance",
+  "message"
 ];
 
 export const contactFieldOrder: ContactFieldKey[] = [
@@ -55,7 +56,8 @@ export const defaultRegistrationForm: RegistrationFormConfig = {
     label: "Besoin d'assistance particulière ?",
     enabled: false,
     required: false
-  }
+  },
+  message: { label: "Votre message", enabled: true, required: false }
 };
 
 export const defaultContactForm: ContactFormConfig = {

@@ -214,6 +214,16 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
           )}
         </>
       )}
+      {config.message.enabled && (
+        <label className={`${labelClass} sm:col-span-2`}>
+          {config.message.label}
+          <textarea
+            className={`${inputClass} min-h-40 py-3`}
+            name="message"
+            required={config.message.required}
+          />
+        </label>
+      )}
       <input
         type="text"
         name="website"

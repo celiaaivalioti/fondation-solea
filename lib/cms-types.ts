@@ -233,7 +233,8 @@ export type RegistrationFieldKey =
   | "cancerType"
   | "diagnosisDate"
   | "inTreatment"
-  | "needsAssistance";
+  | "needsAssistance"
+  | "message";
 
 export type ContactFieldKey = "firstName" | "lastName" | "email" | "phone" | "message";
 

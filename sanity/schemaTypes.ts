@@ -697,6 +697,11 @@ const registrationForm = {
       label: "Besoin d'assistance particulière ?",
       enabled: false,
       required: false
+    }),
+    formFieldEntry("message", "Votre message", {
+      label: "Votre message",
+      enabled: true,
+      required: false
     })
   ],
   ...singletonPreview("Formulaire d'inscription")
