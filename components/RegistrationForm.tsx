@@ -9,6 +9,12 @@ const inputClass =
 
 const labelClass = "grid gap-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-bark/72";
 
+// Temporary switch to hide the health-related questions (type de cancer,
+// date du diagnostic, traitement, assistance). Set back to true to bring
+// them back. IMPORTANT: keep this in sync with the `required` list in
+// app/api/forms/route.ts, which is gated on the same flag.
+const SHOW_HEALTH_FIELDS = false;
+
 export default function RegistrationForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
   const openedAt = useRef(0);
@@ -81,85 +87,89 @@ export default function RegistrationForm() {
         Adresse
         <input className={inputClass} name="address" autoComplete="street-address" required />
       </label>
-      <label className={labelClass}>
-        Type de cancer
-        <input className={inputClass} name="cancerType" required />
-      </label>
-      <label className={labelClass}>
-        Date du diagnostic
-        <DatePicker name="diagnosisDate" required />
-      </label>
-      <fieldset className="grid gap-3 rounded-2xl border border-moss/15 bg-linen/40 p-5 sm:col-span-2">
-        <legend className="px-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-bark/72">
-          Actuellement en traitement ?
-        </legend>
-        <div className="flex flex-wrap gap-5">
-          <label className="flex items-center gap-2 text-base font-medium text-bark/82">
-            <input
-              type="radio"
-              name="inTreatment"
-              value="oui"
-              className="accent-moss"
-              required
-              checked={inTreatment === "oui"}
-              onChange={(event) => setInTreatment(event.target.value)}
-            />
-            Oui
+      {SHOW_HEALTH_FIELDS && (
+        <>
+          <label className={labelClass}>
+            Type de cancer
+            <input className={inputClass} name="cancerType" required />
           </label>
-          <label className="flex items-center gap-2 text-base font-medium text-bark/82">
-            <input
-              type="radio"
-              name="inTreatment"
-              value="non"
-              className="accent-moss"
-              checked={inTreatment === "non"}
-              onChange={(event) => setInTreatment(event.target.value)}
-            />
-            Non
+          <label className={labelClass}>
+            Date du diagnostic
+            <DatePicker name="diagnosisDate" required />
           </label>
-        </div>
-      </fieldset>
-      {inTreatment === "oui" && (
-        <label className={`${labelClass} sm:col-span-2`}>
-          Si oui, quel type de traitement ?
-          <textarea className={`${inputClass} min-h-28 py-3`} name="treatmentType" required />
-        </label>
-      )}
-      <fieldset className="grid gap-3 rounded-2xl border border-moss/15 bg-linen/40 p-5 sm:col-span-2">
-        <legend className="px-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-bark/72">
-          Besoin d’assistance particulière ?
-        </legend>
-        <div className="flex flex-wrap gap-5">
-          <label className="flex items-center gap-2 text-base font-medium text-bark/82">
-            <input
-              type="radio"
-              name="needsAssistance"
-              value="oui"
-              className="accent-moss"
-              required
-              checked={needsAssistance === "oui"}
-              onChange={(event) => setNeedsAssistance(event.target.value)}
-            />
-            Oui
-          </label>
-          <label className="flex items-center gap-2 text-base font-medium text-bark/82">
-            <input
-              type="radio"
-              name="needsAssistance"
-              value="non"
-              className="accent-moss"
-              checked={needsAssistance === "non"}
-              onChange={(event) => setNeedsAssistance(event.target.value)}
-            />
-            Non
-          </label>
-        </div>
-      </fieldset>
-      {needsAssistance === "oui" && (
-        <label className={`${labelClass} sm:col-span-2`}>
-          Si oui, quel type d’assistance ?
-          <textarea className={`${inputClass} min-h-28 py-3`} name="assistanceType" required />
-        </label>
+          <fieldset className="grid gap-3 rounded-2xl border border-moss/15 bg-linen/40 p-5 sm:col-span-2">
+            <legend className="px-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-bark/72">
+              Actuellement en traitement ?
+            </legend>
+            <div className="flex flex-wrap gap-5">
+              <label className="flex items-center gap-2 text-base font-medium text-bark/82">
+                <input
+                  type="radio"
+                  name="inTreatment"
+                  value="oui"
+                  className="accent-moss"
+                  required
+                  checked={inTreatment === "oui"}
+                  onChange={(event) => setInTreatment(event.target.value)}
+                />
+                Oui
+              </label>
+              <label className="flex items-center gap-2 text-base font-medium text-bark/82">
+                <input
+                  type="radio"
+                  name="inTreatment"
+                  value="non"
+                  className="accent-moss"
+                  checked={inTreatment === "non"}
+                  onChange={(event) => setInTreatment(event.target.value)}
+                />
+                Non
+              </label>
+            </div>
+          </fieldset>
+          {inTreatment === "oui" && (
+            <label className={`${labelClass} sm:col-span-2`}>
+              Si oui, quel type de traitement ?
+              <textarea className={`${inputClass} min-h-28 py-3`} name="treatmentType" required />
+            </label>
+          )}
+          <fieldset className="grid gap-3 rounded-2xl border border-moss/15 bg-linen/40 p-5 sm:col-span-2">
+            <legend className="px-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-bark/72">
+              Besoin d’assistance particulière ?
+            </legend>
+            <div className="flex flex-wrap gap-5">
+              <label className="flex items-center gap-2 text-base font-medium text-bark/82">
+                <input
+                  type="radio"
+                  name="needsAssistance"
+                  value="oui"
+                  className="accent-moss"
+                  required
+                  checked={needsAssistance === "oui"}
+                  onChange={(event) => setNeedsAssistance(event.target.value)}
+                />
+                Oui
+              </label>
+              <label className="flex items-center gap-2 text-base font-medium text-bark/82">
+                <input
+                  type="radio"
+                  name="needsAssistance"
+                  value="non"
+                  className="accent-moss"
+                  checked={needsAssistance === "non"}
+                  onChange={(event) => setNeedsAssistance(event.target.value)}
+                />
+                Non
+              </label>
+            </div>
+          </fieldset>
+          {needsAssistance === "oui" && (
+            <label className={`${labelClass} sm:col-span-2`}>
+              Si oui, quel type d’assistance ?
+              <textarea className={`${inputClass} min-h-28 py-3`} name="assistanceType" required />
+            </label>
+          )}
+        </>
       )}
       <input
         type="text"

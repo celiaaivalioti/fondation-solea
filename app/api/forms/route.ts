@@ -19,6 +19,10 @@ const forms = {
   },
   inscription: {
     subject: "Nouvelle demande d'inscription via le site",
+    // The health fields stay whitelisted so re-enabling them is just a matter
+    // of flipping SHOW_HEALTH_FIELDS in RegistrationForm.tsx and restoring
+    // them to `required` below — empty/absent fields are simply skipped in the
+    // email.
     fields: [
       ["firstName", "Prénom"],
       ["lastName", "Nom"],
@@ -32,7 +36,9 @@ const forms = {
       ["needsAssistance", "Besoin d'assistance particulière"],
       ["assistanceType", "Type d'assistance"]
     ],
-    required: ["firstName", "lastName", "email", "phone", "address", "cancerType", "inTreatment", "needsAssistance"]
+    // Health fields temporarily not required (hidden on the form). To bring
+    // them back, add "cancerType", "inTreatment", "needsAssistance" here again.
+    required: ["firstName", "lastName", "email", "phone", "address"]
   }
 } as const;
 
