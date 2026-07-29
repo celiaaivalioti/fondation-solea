@@ -1,16 +1,20 @@
 import Accordion from "@/components/Accordion";
 import { getCmsContent } from "@/lib/cms";
+import { type Locale, defaultLocale } from "@/lib/locales";
 
-export async function generateMetadata() {
-  const { faq } = await getCmsContent();
+export async function generateFaqMetadata(locale: Locale = defaultLocale) {
+  const { faq } = await getCmsContent(locale);
 
   return {
-    title: faq.metadataTitle
+    title: faq.metadataTitle,
+    description: faq.title
   };
 }
 
-export default async function FAQPage() {
-  const { faq } = await getCmsContent();
+export const generateMetadata = () => generateFaqMetadata();
+
+export default async function FAQPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
+  const { faq } = await getCmsContent(locale);
 
   return (
     <div className="relative isolate overflow-hidden px-5 py-12 sm:px-8 lg:py-16">

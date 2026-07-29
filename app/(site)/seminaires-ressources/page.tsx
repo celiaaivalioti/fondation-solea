@@ -5,17 +5,21 @@ import Section from "@/components/Section";
 import ScrollReveal from "@/components/ScrollReveal";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { type Locale, defaultLocale } from "@/lib/locales";
 
-export async function generateMetadata() {
-  const { seminars } = await getCmsContent();
+export async function generateSeminarsMetadata(locale: Locale = defaultLocale) {
+  const { seminars } = await getCmsContent(locale);
 
   return {
-    title: seminars.metadataTitle
+    title: seminars.metadataTitle,
+    description: seminars.hero.text
   };
 }
 
-export default async function SeminarsPage() {
-  const { seminars } = await getCmsContent();
+export const generateMetadata = () => generateSeminarsMetadata();
+
+export default async function SeminarsPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
+  const { seminars } = await getCmsContent(locale);
 
   return (
     <>
@@ -65,7 +69,7 @@ export default async function SeminarsPage() {
                 {resource.href && (
                   <div className="mt-6">
                     <CTAButton href={resource.href} variant="secondary" newTab={resource.newTab}>
-                      Découvrir
+                      {locale === "fr" ? "Découvrir" : "Discover"}
                     </CTAButton>
                   </div>
                 )}

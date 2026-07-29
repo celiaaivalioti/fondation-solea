@@ -275,3 +275,5 @@ export type PrivacyContent = {
   intro?: string;
   sections: Array<{ title: string; text: string }>;
 };
+
+export type LocalizedCmsContent = Partial<CmsContent>;

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { ContactFormConfig } from "@/lib/cms-types";
+import { type Locale, defaultLocale } from "@/lib/locales";
 import { type FormStatus, submitForm } from "@/lib/submit-form";
 
 const inputClass =
@@ -11,9 +12,31 @@ const labelClass = "grid gap-2 text-[13px] font-semibold uppercase tracking-[0.1
 
 // Field visibility, labels and required state come from Sanity (see
 // lib/form-config.ts for the defaults and catalog).
-export default function ContactForm({ config }: { config: ContactFormConfig }) {
+export default function ContactForm({
+  config,
+  locale = defaultLocale
+}: {
+  config: ContactFormConfig;
+  locale?: Locale;
+}) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const openedAt = useRef(0);
+  const copy = {
+    sentEyebrow: locale === "fr" ? "Message envoyé" : "Message sent",
+    sentTitle: locale === "fr" ? "Merci pour votre message." : "Thank you for your message.",
+    sentText:
+      locale === "fr"
+        ? "Nous vous répondrons dans les plus brefs délais."
+        : "We will reply as soon as possible.",
+    reset: locale === "fr" ? "Envoyer un nouveau message" : "Send another message",
+    formLabel: locale === "fr" ? "Formulaire de contact" : "Contact form",
+    error:
+      locale === "fr"
+        ? "L’envoi n’a pas abouti. Merci de réessayer, ou écrivez-nous directement à"
+        : "The message could not be sent. Please try again, or write to us directly at",
+    sending: locale === "fr" ? "Envoi en cours…" : "Sending...",
+    submit: locale === "fr" ? "Envoyer le message" : "Send message"
+  };
 
   useEffect(() => {
     openedAt.current = Date.now();
@@ -28,21 +51,21 @@ export default function ContactForm({ config }: { config: ContactFormConfig }) {
       >
         <div className="mb-5">
           <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
-            Message envoyé
+            {copy.sentEyebrow}
           </p>
         </div>
         <h2 className="font-display text-[2rem] font-light leading-tight text-bark">
-          Merci pour votre message.
+          {copy.sentTitle}
         </h2>
         <p className="mt-4 leading-[1.65] text-bark/72">
-          Nous vous répondrons dans les plus brefs délais.
+          {copy.sentText}
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
           className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full border border-moss/25 px-6 py-3 text-lg font-medium text-moss transition hover:border-moss hover:bg-linen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-clay"
         >
-          Envoyer un nouveau message
+          {copy.reset}
         </button>
       </div>
     );
@@ -51,10 +74,10 @@ export default function ContactForm({ config }: { config: ContactFormConfig }) {
   return (
     <form
       className="grid gap-6 rounded-[1.5rem] bg-paper p-7 shadow-soft sm:grid-cols-2 sm:p-10"
-      aria-label="Formulaire de contact"
+      aria-label={copy.formLabel}
       onSubmit={(event) => {
         event.preventDefault();
-        submitForm("contact", event.currentTarget, setStatus, openedAt.current);
+        submitForm("contact", event.currentTarget, setStatus, openedAt.current, locale);
       }}
     >
       {config.firstName.enabled && (
@@ -123,7 +146,7 @@ export default function ContactForm({ config }: { config: ContactFormConfig }) {
       />
       {status === "error" && (
         <p className="text-base leading-7 text-clay sm:col-span-2" role="alert">
-          L’envoi n’a pas abouti. Merci de réessayer, ou écrivez-nous directement à{" "}
+          {copy.error}{" "}
           <a href="mailto:contact@fondation-solea.ch" className="font-medium underline underline-offset-4">
             contact@fondation-solea.ch
           </a>
@@ -135,7 +158,7 @@ export default function ContactForm({ config }: { config: ContactFormConfig }) {
         type="submit"
         disabled={status === "sending"}
       >
-        {status === "sending" ? "Envoi en cours…" : "Envoyer le message"}
+        {status === "sending" ? copy.sending : copy.submit}
       </button>
     </form>
   );

@@ -2,17 +2,21 @@ import ContactForm from "@/components/ContactForm";
 import CTAButton from "@/components/CTAButton";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { type Locale, defaultLocale } from "@/lib/locales";
 
-export async function generateMetadata() {
-  const { contact } = await getCmsContent();
+export async function generateContactMetadata(locale: Locale = defaultLocale) {
+  const { contact } = await getCmsContent(locale);
 
   return {
-    title: contact.metadataTitle
+    title: contact.metadataTitle,
+    description: contact.text
   };
 }
 
-export default async function ContactPage() {
-  const { contact, site, contactForm } = await getCmsContent();
+export const generateMetadata = () => generateContactMetadata();
+
+export default async function ContactPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
+  const { contact, site, contactForm } = await getCmsContent(locale);
   const primaryHref = contact.primary?.href.startsWith("tel:")
     ? contact.primary.href
     : `tel:${site.phone.replaceAll(" ", "")}`;
@@ -58,7 +62,7 @@ export default async function ContactPage() {
         </div>
 
         <div className="relative z-10">
-          <ContactForm config={contactForm} />
+          <ContactForm config={contactForm} locale={locale} />
         </div>
       </div>
     </section>

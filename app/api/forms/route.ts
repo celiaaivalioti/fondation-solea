@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { getCmsContent } from "@/lib/cms";
 import { buildContactFields, buildRegistrationFields } from "@/lib/form-config";
+import { isLocale, type Locale } from "@/lib/locales";
 
 export const runtime = "nodejs";
 
@@ -16,12 +17,12 @@ type FormKind = keyof typeof subjects;
 // toggles/relabels known fields. So the effective (name, label) pairs and the
 // required list are derived from the editable config, but can never contain a
 // field the code does not define — the endpoint stays a strict whitelist.
-async function resolveForm(kind: FormKind) {
-  const content = await getCmsContent();
+async function resolveForm(kind: FormKind, locale: Locale) {
+  const content = await getCmsContent(locale);
   const built =
     kind === "contact"
       ? buildContactFields(content.contactForm)
-      : buildRegistrationFields(content.registrationForm);
+      : buildRegistrationFields(content.registrationForm, locale);
 
   return { subject: subjects[kind], ...built };
 }
@@ -63,6 +64,7 @@ const MIN_FILL_TIME_MS = 3000;
 export async function POST(request: Request) {
   let payload: {
     kind?: string;
+    locale?: unknown;
     values?: Record<string, unknown>;
     website?: string;
     elapsedMs?: unknown;
@@ -96,7 +98,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid request" }, { status: 400 });
   }
 
-  const form = await resolveForm(payload.kind);
+  const locale = typeof payload.locale === "string" && isLocale(payload.locale) ? payload.locale : "fr";
+  const form = await resolveForm(payload.kind, locale);
 
   const values: Record<string, string> = {};
   for (const [name] of form.fields) {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Figtree } from "next/font/google";
 import "./globals.css";
 import CookieConsent from "@/components/CookieConsent";
@@ -37,17 +38,20 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const { site } = await getCmsContent();
+  const requestHeaders = await headers();
+  const pathname = requestHeaders.get("x-pathname") ?? "/";
+  const locale = pathname === "/en" || pathname.startsWith("/en/") ? "en" : "fr";
   // Set in the Studio under Site settings; validated to a safe charset
   // there, re-checked here before it reaches the page.
   const gaId = site.googleAnalyticsId?.trim();
   const analyticsEnabled = Boolean(gaId && /^[A-Za-z0-9-]+$/.test(gaId));
 
   return (
-    <html lang="fr" data-scroll-behavior="smooth">
+    <html lang={locale} data-scroll-behavior="smooth">
       <body className={`${figtree.variable} min-h-screen antialiased`}>
         {children}
         <BackToTop />
-        {analyticsEnabled && <CookieConsent gaId={gaId as string} />}
+        {analyticsEnabled && <CookieConsent gaId={gaId as string} locale={locale} />}
       </body>
     </html>
   );

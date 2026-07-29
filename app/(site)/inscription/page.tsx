@@ -1,20 +1,24 @@
 import RegistrationForm from "@/components/RegistrationForm";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { type Locale, defaultLocale } from "@/lib/locales";
 
-export async function generateMetadata() {
-  const { registration } = await getCmsContent();
+export async function generateRegistrationMetadata(locale: Locale = defaultLocale) {
+  const { registration } = await getCmsContent(locale);
 
   return {
-    title: registration.metadataTitle
+    title: registration.metadataTitle,
+    description: registration.text
   };
 }
 
-export default async function RegistrationPage() {
-  const { registration, registrationForm } = await getCmsContent();
+export const generateMetadata = () => generateRegistrationMetadata();
+
+export default async function RegistrationPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
+  const { registration, registrationForm } = await getCmsContent(locale);
 
   return (
-    <section className="relative isolate overflow-hidden px-5 py-12 sm:px-8 lg:min-h-[calc(100vh-6rem)] lg:py-10">
+    <section className="relative isolate overflow-hidden px-5 pb-24 pt-12 sm:px-8 lg:min-h-[calc(100vh-6rem)] lg:pb-32 lg:pt-10">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-gradient-to-br from-fern/20 to-transparent blur-3xl"
@@ -42,7 +46,7 @@ export default async function RegistrationPage() {
         </div>
 
         <div className="relative z-10">
-          <RegistrationForm config={registrationForm} />
+          <RegistrationForm config={registrationForm} locale={locale} />
         </div>
       </div>
     </section>

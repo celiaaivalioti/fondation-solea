@@ -7,7 +7,8 @@ export async function submitForm(
   kind: "contact" | "inscription",
   form: HTMLFormElement,
   setStatus: (status: FormStatus) => void,
-  openedAt: number
+  openedAt: number,
+  locale: "fr" | "en" = "fr"
 ) {
   setStatus("sending");
 
@@ -25,6 +26,7 @@ export async function submitForm(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         kind,
+        locale,
         values,
         website: String(data.get("website") ?? ""),
         elapsedMs: Date.now() - openedAt

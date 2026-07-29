@@ -224,6 +224,15 @@ const objects = [
   formFieldType
 ];
 
+const englishTranslationField = (fields: unknown[]) => ({
+  name: "en",
+  title: "English translation",
+  type: "object",
+  description:
+    "Optional English copy for the public /en site. Empty fields fall back to the bundled English defaults.",
+  fields
+});
+
 const siteSettings = {
   name: "siteSettings",
   title: "Site settings, contact details and footer",
@@ -245,6 +254,15 @@ const siteSettings = {
       description: "Turn this off to hide the donation buttons and make the Nous soutenir page unavailable."
     },
     { name: "donationLabel", title: "Donation button label", type: "string" },
+    englishTranslationField([
+      { name: "tagline", title: "Tagline", type: "string" },
+      { name: "intro", title: "Intro", type: "text" },
+      { name: "quote", title: "Quote", type: "text" },
+      { name: "address", title: "Address", type: "string" },
+      { name: "footerTagline", title: "Footer tagline", type: "string" },
+      { name: "donationLabel", title: "Donation button label", type: "string" },
+      { name: "legalLinks", title: "Footer legal links", type: "array", of: [{ type: "link" }] }
+    ]),
     {
       name: "googleAnalyticsId",
       title: "Google Analytics ID",
@@ -302,7 +320,10 @@ const navigation = {
   name: "navigation",
   title: "Navigation",
   type: "document",
-  fields: [{ name: "items", title: "Items", type: "array", of: [{ type: "link" }] }],
+  fields: [
+    { name: "items", title: "Items", type: "array", of: [{ type: "link" }] },
+    englishTranslationField([{ name: "items", title: "Items", type: "array", of: [{ type: "link" }] }])
+  ],
   preview: {
     select: { items: "items" },
     prepare: (value: { items?: unknown[] }) => ({
@@ -319,7 +340,12 @@ const homePage = {
   fields: [
     { name: "metadataTitle", title: "Metadata title", type: "string" },
     heroField,
-    { ...textSectionField, name: "manifesto", title: "Manifesto section" }
+    { ...textSectionField, name: "manifesto", title: "Manifesto section" },
+    englishTranslationField([
+      { name: "metadataTitle", title: "Metadata title", type: "string" },
+      heroField,
+      { ...textSectionField, name: "manifesto", title: "Manifesto section" }
+    ])
   ],
   ...singletonPreview("Accueil")
 };
@@ -441,7 +467,104 @@ const aboutPage = {
         { name: "intro", title: "Intro", type: "text" },
         { name: "people", title: "People", type: "array", of: [{ type: "person" }] }
       ]
-    }
+    },
+    englishTranslationField([
+      { name: "metadataTitle", title: "Metadata title", type: "string" },
+      heroField,
+      {
+        name: "foundation",
+        title: "Foundation section",
+        type: "object",
+        fields: [
+          { name: "eyebrow", title: "Eyebrow", type: "string" },
+          { name: "visionTitle", title: "Vision title", type: "string" },
+          { name: "visionText", title: "Vision text", type: "text" },
+          { name: "founderLinks", title: "Founder bio links", type: "array", of: [{ type: "link" }] }
+        ]
+      },
+      {
+        name: "testimonials",
+        title: "Testimonials",
+        type: "array",
+        of: [
+          {
+            type: "object",
+            fields: [
+              { name: "quote", title: "Quote", type: "text" },
+              { name: "attribution", title: "Attribution", type: "string" }
+            ]
+          }
+        ]
+      },
+      { ...checklistField, name: "mission", title: "Mission" },
+      {
+        name: "values",
+        title: "Values",
+        type: "object",
+        fields: [
+          { name: "eyebrow", title: "Eyebrow", type: "string" },
+          { name: "title", title: "Title", type: "string" },
+          {
+            name: "items",
+            title: "Items",
+            type: "array",
+            of: [
+              {
+                type: "object",
+                fields: [
+                  { name: "label", title: "Label", type: "string" },
+                  { name: "icon", title: "Icon", type: "string", options: iconOptions }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: "principles",
+        title: "Principles",
+        type: "object",
+        fields: [
+          { name: "eyebrow", title: "Eyebrow", type: "string" },
+          { name: "title", title: "Title", type: "string" },
+          {
+            name: "items",
+            title: "Items",
+            type: "array",
+            of: [
+              {
+                type: "object",
+                fields: [
+                  { name: "title", title: "Title", type: "string" },
+                  { name: "text", title: "Text", type: "text" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: "committee",
+        title: "Committee",
+        type: "object",
+        fields: [
+          { name: "eyebrow", title: "Eyebrow", type: "string" },
+          { name: "title", title: "Title", type: "string" },
+          { name: "members", title: "Members", type: "array", of: [{ type: "person" }] }
+        ]
+      },
+      {
+        name: "founders",
+        title: "Founders",
+        type: "object",
+        fields: [
+          { name: "eyebrow", title: "Eyebrow", type: "string" },
+          { name: "title", title: "Title", type: "string" },
+          { name: "intro", title: "Intro", type: "text" },
+          { name: "people", title: "People", type: "array", of: [{ type: "person" }] }
+        ]
+      }
+    ])
   ],
   ...singletonPreview("Qui sommes-nous")
 };
@@ -533,7 +656,89 @@ const retreatPage = {
         },
         ctaField
       ]
-    }
+    },
+    englishTranslationField([
+      { name: "metadataTitle", title: "Metadata title", type: "string" },
+      heroField,
+      { ...textSectionField, name: "immersive", title: "Immersive section" },
+      {
+        name: "approach",
+        title: "Approach pillars",
+        type: "object",
+        fields: [
+          { name: "eyebrow", title: "Eyebrow", type: "string" },
+          { name: "title", title: "Title", type: "string" },
+          { name: "intro", title: "Intro", type: "text" },
+          {
+            name: "items",
+            title: "Items",
+            type: "array",
+            of: [
+              {
+                type: "object",
+                fields: [
+                  { name: "title", title: "Title", type: "string" },
+                  { name: "text", title: "Text", type: "text" },
+                  { name: "icon", title: "Icon", type: "string", options: iconOptions }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: "therapies",
+        title: "Therapies",
+        type: "object",
+        fields: [
+          { name: "eyebrow", title: "Eyebrow", type: "string" },
+          { name: "title", title: "Title", type: "string" },
+          { name: "intro", title: "Intro", type: "text" },
+          {
+            name: "items",
+            title: "Therapies",
+            type: "array",
+            of: [
+              {
+                type: "object",
+                fields: [
+                  { name: "title", title: "Title", type: "string" },
+                  { name: "text", title: "Text", type: "text" },
+                  imageField
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      { ...checklistField, name: "program", title: "Program" },
+      {
+        name: "place",
+        title: "Place",
+        type: "object",
+        fields: [
+          { name: "eyebrow", title: "Eyebrow", type: "string" },
+          { name: "title", title: "Title", type: "string" },
+          { name: "intro", title: "Intro", type: "text" },
+          {
+            name: "gallery",
+            title: "Gallery",
+            type: "array",
+            of: [
+              {
+                type: "object",
+                fields: [
+                  imageField,
+                  { name: "alt", title: "Alternative text", type: "string" },
+                  { name: "frameClass", title: "Existing layout class", type: "string" }
+                ]
+              }
+            ]
+          },
+          ctaField
+        ]
+      }
+    ])
   ],
   ...singletonPreview("L'expérience de 5 jours")
 };
@@ -571,7 +776,38 @@ const seminarsPage = {
           ]
         }
       ]
-    }
+    },
+    englishTranslationField([
+      { name: "metadataTitle", title: "Metadata title", type: "string" },
+      heroField,
+      { ...checklistField, name: "themes", title: "Themes" },
+      {
+        name: "resources",
+        title: "Resources",
+        type: "object",
+        fields: [
+          { name: "eyebrow", title: "Eyebrow", type: "string" },
+          { name: "title", title: "Title", type: "string" },
+          { name: "intro", title: "Intro", type: "text" },
+          {
+            name: "items",
+            title: "Resources",
+            type: "array",
+            of: [
+              {
+                type: "object",
+                fields: [
+                  { name: "title", title: "Title", type: "string" },
+                  { name: "text", title: "Text", type: "text" },
+                  { name: "href", title: "URL or path", type: "string" },
+                  newTabField
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ])
   ],
   ...singletonPreview("Un pôle de savoir")
 };
@@ -600,7 +836,29 @@ const supportPage = {
       title: "Closing quote",
       type: "object",
       fields: [{ name: "quote", title: "Quote", type: "text" }]
-    }
+    },
+    englishTranslationField([
+      { name: "metadataTitle", title: "Metadata title", type: "string" },
+      heroField,
+      {
+        name: "donation",
+        title: "Donation form",
+        type: "object",
+        fields: [
+          { name: "amountPlaceholder", title: "Amount placeholder", type: "string" },
+          { name: "currency", title: "Currency", type: "string" },
+          { name: "submitLabel", title: "Submit label", type: "string" }
+        ]
+      },
+      { ...textSectionField, name: "cause", title: "Cause" },
+      { ...checklistField, name: "help", title: "How to help" },
+      {
+        name: "testimonial",
+        title: "Closing quote",
+        type: "object",
+        fields: [{ name: "quote", title: "Quote", type: "text" }]
+      }
+    ])
   ],
   ...singletonPreview("Nous soutenir")
 };
@@ -618,7 +876,7 @@ const registrationPage = {
   name: "registrationPage",
   title: "Inscription",
   type: "document",
-  fields: formPageFields,
+  fields: [...formPageFields, englishTranslationField(formPageFields)],
   ...singletonPreview("Inscription")
 };
 
@@ -626,7 +884,7 @@ const contactPage = {
   name: "contactPage",
   title: "Contact",
   type: "document",
-  fields: formPageFields,
+  fields: [...formPageFields, englishTranslationField(formPageFields)],
   ...singletonPreview("Contact")
 };
 
@@ -651,7 +909,26 @@ const privacyPage = {
           ]
         }
       ]
-    }
+    },
+    englishTranslationField([
+      { name: "metadataTitle", title: "Metadata title", type: "string" },
+      { name: "title", title: "Title", type: "string" },
+      { name: "intro", title: "Intro", type: "text" },
+      {
+        name: "sections",
+        title: "Sections",
+        type: "array",
+        of: [
+          {
+            type: "object",
+            fields: [
+              { name: "title", title: "Title", type: "string" },
+              { name: "text", title: "Text", type: "text" }
+            ]
+          }
+        ]
+      }
+    ])
   ],
   ...singletonPreview("Politique de confidentialité")
 };
@@ -691,7 +968,34 @@ const faqPage = {
           }
         }
       ]
-    }
+    },
+    englishTranslationField([
+      { name: "metadataTitle", title: "Metadata title", type: "string" },
+      { name: "eyebrow", title: "Eyebrow", type: "string" },
+      { name: "title", title: "Title", type: "string" },
+      {
+        name: "items",
+        title: "Questions",
+        type: "array",
+        of: [
+          {
+            type: "object",
+            name: "faqItemEn",
+            fields: [
+              { name: "question", title: "Question", type: "string" },
+              {
+                name: "answer",
+                title: "Answer",
+                type: "text",
+                rows: 6,
+                description:
+                  "Leave an empty line between paragraphs. A line beginning with “-” becomes a bullet."
+              }
+            ]
+          }
+        ]
+      }
+    ])
   ],
   ...singletonPreview("Questions fréquentes")
 };
@@ -732,7 +1036,39 @@ const registrationForm = {
       label: "Votre message",
       enabled: true,
       required: false
-    })
+    }),
+    englishTranslationField([
+      formFieldEntry("firstName", "First name", { label: "First name", enabled: true, required: true }),
+      formFieldEntry("lastName", "Last name", { label: "Last name", enabled: true, required: true }),
+      formFieldEntry("email", "Email", { label: "Email", enabled: true, required: true }),
+      formFieldEntry("phone", "Phone", { label: "Phone", enabled: true, required: true }),
+      formFieldEntry("address", "Address", { label: "Address", enabled: true, required: true }),
+      formFieldEntry("cancerType", "Type of cancer", {
+        label: "Type of cancer",
+        enabled: false,
+        required: false
+      }),
+      formFieldEntry("diagnosisDate", "Diagnosis date", {
+        label: "Diagnosis date",
+        enabled: false,
+        required: false
+      }),
+      formFieldEntry("inTreatment", "Currently receiving treatment?", {
+        label: "Currently receiving treatment?",
+        enabled: false,
+        required: false
+      }),
+      formFieldEntry("needsAssistance", "Need special assistance?", {
+        label: "Need special assistance?",
+        enabled: false,
+        required: false
+      }),
+      formFieldEntry("message", "Your message", {
+        label: "Your message",
+        enabled: true,
+        required: false
+      })
+    ])
   ],
   ...singletonPreview("Formulaire d'inscription")
 };
@@ -752,7 +1088,18 @@ const contactForm = {
       label: "Votre message",
       enabled: true,
       required: true
-    })
+    }),
+    englishTranslationField([
+      formFieldEntry("firstName", "First name", { label: "First name", enabled: true, required: true }),
+      formFieldEntry("lastName", "Last name", { label: "Last name", enabled: true, required: true }),
+      formFieldEntry("email", "Email", { label: "Email", enabled: true, required: true }),
+      formFieldEntry("phone", "Phone", { label: "Phone", enabled: true, required: false }),
+      formFieldEntry("message", "Your message", {
+        label: "Your message",
+        enabled: true,
+        required: true
+      })
+    ])
   ],
   ...singletonPreview("Formulaire de contact")
 };

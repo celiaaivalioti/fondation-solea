@@ -8,17 +8,21 @@ import TherapyCard from "@/components/TherapyCard";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
 import { getSectionIcon } from "@/lib/icons";
+import { type Locale, defaultLocale } from "@/lib/locales";
 
-export async function generateMetadata() {
-  const { retreat } = await getCmsContent();
+export async function generateRetreatMetadata(locale: Locale = defaultLocale) {
+  const { retreat } = await getCmsContent(locale);
 
   return {
-    title: retreat.metadataTitle
+    title: retreat.metadataTitle,
+    description: retreat.hero.text
   };
 }
 
-export default async function RetreatPage() {
-  const { retreat } = await getCmsContent();
+export const generateMetadata = () => generateRetreatMetadata();
+
+export default async function RetreatPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
+  const { retreat } = await getCmsContent(locale);
 
   return (
     <>

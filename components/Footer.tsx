@@ -2,11 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactElement } from "react";
 import type { NavigationItem, SiteSettings } from "@/lib/cms-types";
+import { type Locale, defaultLocale, getLanguageSwitchHref, localizeHref } from "@/lib/locales";
 import { newTabProps } from "@/lib/links";
 
 type FooterProps = {
   navigation: NavigationItem[];
   site: SiteSettings;
+  locale?: Locale;
 };
 
 const socialIcons: Record<string, ReactElement> = {
@@ -39,7 +41,12 @@ const fallbackIcon = (
   <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm7.93 9h-3.45a15.7 15.7 0 0 0-1.46-6.03A8.02 8.02 0 0 1 19.93 11ZM12 4.04c.83 1.2 1.9 3.6 2.16 6.96H9.84c.26-3.35 1.33-5.76 2.16-6.96ZM4.07 13h3.45c.12 2.27.63 4.33 1.46 6.03A8.02 8.02 0 0 1 4.07 13Zm4.91-2H4.07a8.02 8.02 0 0 1 4.91-6.03A15.7 15.7 0 0 0 7.52 11h1.46Zm3.02 8.96c-.83-1.2-1.9-3.6-2.16-6.96h4.32c-.26 3.35-1.33 5.76-2.16 6.96Zm3.02-.93A15.7 15.7 0 0 0 16.48 13h3.45a8.02 8.02 0 0 1-4.91 6.03Z" />
 );
 
-export default function Footer({ navigation, site }: FooterProps) {
+export default function Footer({ navigation, site, locale = defaultLocale }: FooterProps) {
+  const languageOptions: Array<{ locale: Locale; label: string }> = [
+    { locale: "fr", label: "FR" },
+    { locale: "en", label: "EN" }
+  ];
+
   return (
     <footer className="relative overflow-hidden bg-fern px-5 py-28 text-bark sm:px-8">
       <div
@@ -53,7 +60,7 @@ export default function Footer({ navigation, site }: FooterProps) {
 
       <div className="relative mx-auto grid max-w-[1400px] gap-12 md:grid-cols-[1fr_1.5fr]">
         <div>
-          <Link href="/" className="group inline-flex items-center" aria-label={`${site.name} - accueil`}>
+          <Link href={localizeHref("/", locale)} className="group inline-flex items-center" aria-label={`${site.name} - ${locale === "fr" ? "accueil" : "home"}`}>
             <Image
               src="/images/logo-solea-ink.png"
               alt={site.name}
@@ -63,10 +70,34 @@ export default function Footer({ navigation, site }: FooterProps) {
             />
           </Link>
           <p className="mt-4 max-w-sm leading-8 text-bark/75">{site.footerTagline}</p>
+          <div
+            className="mt-12 inline-flex rounded-full border border-bark/15 p-0.5"
+            aria-label={locale === "fr" ? "Choix de langue" : "Language selection"}
+          >
+            {languageOptions.map((option) => {
+              const active = option.locale === locale;
+
+              return (
+                <Link
+                  key={option.locale}
+                  href={getLanguageSwitchHref(locale === "fr" ? "/" : "/en", option.locale)}
+                  hrefLang={option.locale}
+                  aria-current={active ? "true" : undefined}
+                  className={`inline-flex min-h-8 min-w-11 items-center justify-center rounded-full border px-3 text-[12px] font-semibold tracking-[0.12em] transition ${
+                    active
+                      ? "border-bark/65 text-bark"
+                      : "border-transparent text-bark/55 hover:border-bark/20 hover:text-bark/78"
+                  }`}
+                >
+                  {option.label}
+                </Link>
+              );
+            })}
+          </div>
           {site.showDonationCta && (
             <div className="mt-6">
               <Link
-                href="/nous-soutenir"
+                href={localizeHref("/nous-soutenir", locale)}
                 className="inline-flex min-h-14 items-center rounded-full bg-parchment px-8 py-4 text-lg font-medium text-bark transition hover:brightness-95"
               >
                 {site.donationLabel}
@@ -99,7 +130,7 @@ export default function Footer({ navigation, site }: FooterProps) {
                 {item.label}
               </Link>
             ))}
-            <div className="mt-4 flex gap-3" aria-label="Réseaux sociaux">
+            <div className="mt-4 flex gap-3" aria-label={locale === "fr" ? "Réseaux sociaux" : "Social media"}>
               {site.socialLinks.map((item) => (
                 <a
                   key={`${item.platform}-${item.href}`}

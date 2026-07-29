@@ -7,13 +7,13 @@ export default async function SiteLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const content = await getCmsContent();
+  const content = await getCmsContent("fr");
 
   return (
     <>
-      <Header navigation={content.navigation} site={content.site} />
+      <Header navigation={content.navigation} site={content.site} locale="fr" />
       <main>{children}</main>
-      <Footer navigation={content.navigation} site={content.site} />
+      <Footer navigation={content.navigation} site={content.site} locale="fr" />
     </>
   );
 }

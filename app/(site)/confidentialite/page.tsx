@@ -1,16 +1,20 @@
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { type Locale, defaultLocale } from "@/lib/locales";
 
-export async function generateMetadata() {
-  const { privacy } = await getCmsContent();
+export async function generatePrivacyMetadata(locale: Locale = defaultLocale) {
+  const { privacy } = await getCmsContent(locale);
 
   return {
-    title: privacy.metadataTitle
+    title: privacy.metadataTitle,
+    description: privacy.intro
   };
 }
 
-export default async function PrivacyPage() {
-  const { privacy } = await getCmsContent();
+export const generateMetadata = () => generatePrivacyMetadata();
+
+export default async function PrivacyPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
+  const { privacy } = await getCmsContent(locale);
 
   return (
     <div className="px-5 py-20 sm:px-8 lg:py-24">

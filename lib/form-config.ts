@@ -1,9 +1,11 @@
 import type {
   ContactFieldKey,
   ContactFormConfig,
+  FieldConfig,
   RegistrationFieldKey,
   RegistrationFormConfig
 } from "./cms-types";
+import type { Locale } from "./locales";
 
 // The authoritative catalog of form fields lives here in code, not in Sanity.
 // Sanity can only relabel, show/hide, or toggle "required" on these known
@@ -35,10 +37,10 @@ export const contactFieldOrder: ContactFieldKey[] = [
 // Radio questions that reveal a free-text follow-up when answered "oui". The
 // follow-up follows its parent's visibility and keeps a fixed label.
 export const registrationSubFields: Partial<
-  Record<RegistrationFieldKey, { key: string; label: string }>
+  Record<RegistrationFieldKey, { key: string; label: Record<Locale, string> }>
 > = {
-  inTreatment: { key: "treatmentType", label: "Type de traitement" },
-  needsAssistance: { key: "assistanceType", label: "Type d'assistance" }
+  inTreatment: { key: "treatmentType", label: { fr: "Type de traitement", en: "Type of treatment" } },
+  needsAssistance: { key: "assistanceType", label: { fr: "Type d'assistance", en: "Type of assistance" } }
 };
 
 // Defaults mirror the current live form: the health questions start hidden
@@ -73,12 +75,32 @@ type BuiltFields = { fields: [string, string][]; required: string[] };
 // Turn an editable config into the concrete list of (name, label) pairs and
 // required names the email endpoint enforces. Only enabled fields are kept,
 // and conditional follow-ups are appended after their enabled parent.
-export function buildRegistrationFields(config: RegistrationFormConfig): BuiltFields {
+function withEnabledFallback<T extends Record<string, FieldConfig>>(config: T, fallback: T): T {
+  const resolved = { ...config };
+
+  for (const key of Object.keys(fallback)) {
+    const typedKey = key as keyof T;
+    resolved[typedKey] = {
+      ...fallback[typedKey],
+      ...config[typedKey],
+      enabled: config[typedKey]?.enabled ?? fallback[typedKey].enabled,
+      required: config[typedKey]?.required ?? fallback[typedKey].required
+    };
+  }
+
+  return resolved;
+}
+
+export function buildRegistrationFields(
+  config: RegistrationFormConfig,
+  locale: Locale = "fr"
+): BuiltFields {
   const fields: [string, string][] = [];
   const required: string[] = [];
+  const resolvedConfig = withEnabledFallback(config, defaultRegistrationForm);
 
   for (const key of registrationFieldOrder) {
-    const field = config[key];
+    const field = resolvedConfig[key];
     if (!field?.enabled) {
       continue;
     }
@@ -92,7 +114,7 @@ export function buildRegistrationFields(config: RegistrationFormConfig): BuiltFi
     if (sub) {
       // The follow-up is optional server-side: it only exists when the user
       // answered "oui", which the client already enforces.
-      fields.push([sub.key, sub.label]);
+      fields.push([sub.key, sub.label[locale]]);
     }
   }
 
@@ -102,9 +124,10 @@ export function buildRegistrationFields(config: RegistrationFormConfig): BuiltFi
 export function buildContactFields(config: ContactFormConfig): BuiltFields {
   const fields: [string, string][] = [];
   const required: string[] = [];
+  const resolvedConfig = withEnabledFallback(config, defaultContactForm);
 
   for (const key of contactFieldOrder) {
-    const field = config[key];
+    const field = resolvedConfig[key];
     if (!field?.enabled) {
       continue;
     }

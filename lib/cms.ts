@@ -1,6 +1,8 @@
 import { defaultContent } from "./default-content";
+import { defaultContentEn } from "./default-content-en";
 import { hasSanityConfig, sanityClient } from "./sanity";
 import type { CmsContent } from "./cms-types";
+import { type Locale, defaultLocale, localizeHref } from "./locales";
 
 const imageProjection = `{
   ...,
@@ -85,13 +87,21 @@ function normalizeSanityValue(value: unknown): unknown {
   return normalized;
 }
 
-function mergeContent<T>(fallback: T, override: unknown): T {
+function mergeContent<T>(fallback: T, override: unknown, preserveArrayFallback = false): T {
   if (override === null || override === undefined) {
     return fallback;
   }
 
   if (Array.isArray(fallback)) {
-    return (Array.isArray(override) && override.length > 0 ? override : fallback) as T;
+    if (!Array.isArray(override) || override.length === 0) {
+      return fallback;
+    }
+
+    const length = preserveArrayFallback ? Math.max(fallback.length, override.length) : override.length;
+
+    return Array.from({ length }, (_, index) =>
+      mergeContent(fallback[index], override[index], preserveArrayFallback)
+    ) as T;
   }
 
   if (isRecord(fallback) && isRecord(override)) {
@@ -102,7 +112,7 @@ function mergeContent<T>(fallback: T, override: unknown): T {
         continue;
       }
 
-      merged[key] = mergeContent((fallback as UnknownRecord)[key], value);
+      merged[key] = mergeContent((fallback as UnknownRecord)[key], value, preserveArrayFallback);
     }
 
     return merged as T;
@@ -111,19 +121,133 @@ function mergeContent<T>(fallback: T, override: unknown): T {
   return override as T;
 }
 
-export async function getCmsContent(): Promise<CmsContent> {
+const sharedStringKeys = new Set([
+  "url",
+  "localUrl",
+  "className",
+  "href",
+  "platform",
+  "googleAnalyticsId",
+  "email",
+  "phone",
+  "currency"
+]);
+
+function stripFrenchText(value: unknown, key?: string): unknown {
+  if (Array.isArray(value)) {
+    const stripped = value.map((item) => stripFrenchText(item));
+    return stripped.some((item) => item !== undefined) ? stripped : undefined;
+  }
+
+  if (!isRecord(value)) {
+    if (typeof value === "string" && !sharedStringKeys.has(key ?? "")) {
+      return undefined;
+    }
+
+    return value;
+  }
+
+  const stripped: UnknownRecord = {};
+
+  for (const [nestedKey, nestedValue] of Object.entries(value)) {
+    if (nestedKey === "en") {
+      continue;
+    }
+
+    if (nestedKey === "label" && typeof nestedValue === "string" && typeof value.platform === "string") {
+      stripped[nestedKey] = nestedValue;
+      continue;
+    }
+
+    const result = stripFrenchText(nestedValue, nestedKey);
+    if (result !== undefined) {
+      stripped[nestedKey] = result;
+    }
+  }
+
+  return Object.keys(stripped).length > 0 ? stripped : undefined;
+}
+
+function extractEnglishOverrides(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    const localized = value.map(extractEnglishOverrides);
+    return localized.some((item) => item !== undefined) ? localized : undefined;
+  }
+
+  if (!isRecord(value)) {
+    return undefined;
+  }
+
+  const extracted: UnknownRecord = {};
+
+  if (isRecord(value.en)) {
+    Object.assign(extracted, value.en);
+  }
+
+  for (const [key, nestedValue] of Object.entries(value)) {
+    if (key === "en") {
+      continue;
+    }
+
+    const nested = extractEnglishOverrides(nestedValue);
+    if (nested !== undefined) {
+      extracted[key] = nested;
+    }
+  }
+
+  return Object.keys(extracted).length > 0 ? extracted : undefined;
+}
+
+function localizeLinks<T>(value: T, locale: Locale, key?: string): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => localizeLinks(item, locale)) as T;
+  }
+
+  if (!isRecord(value)) {
+    if (key === "href" && typeof value === "string") {
+      return localizeHref(value, locale) as T;
+    }
+
+    return value;
+  }
+
+  const localized: UnknownRecord = {};
+  for (const [nestedKey, nestedValue] of Object.entries(value)) {
+    localized[nestedKey] = localizeLinks(nestedValue, locale, nestedKey);
+  }
+
+  return localized as T;
+}
+
+function resolveContent(fallback: CmsContent, override: unknown, locale: Locale): CmsContent {
+  if (locale === defaultLocale) {
+    return localizeLinks(mergeContent(fallback, override), locale);
+  }
+
+  const sharedValues = stripFrenchText(override);
+  const englishValues = extractEnglishOverrides(override);
+
+  return localizeLinks(
+    mergeContent(mergeContent(fallback, sharedValues), englishValues, true),
+    locale
+  );
+}
+
+export async function getCmsContent(locale: Locale = defaultLocale): Promise<CmsContent> {
+  const fallback = locale === "en" ? defaultContentEn : defaultContent;
+
   if (!hasSanityConfig || !sanityClient) {
-    return defaultContent;
+    return localizeLinks(fallback, locale);
   }
 
   try {
     const sanityContent = await sanityClient.fetch(contentQuery);
     const normalized = normalizeSanityValue(sanityContent);
 
-    return mergeContent(defaultContent, normalized);
+    return resolveContent(fallback, normalized, locale);
   } catch (error) {
     console.warn("Sanity content fetch failed. Falling back to bundled defaults.", error);
-    return defaultContent;
+    return localizeLinks(fallback, locale);
   }
 }
 

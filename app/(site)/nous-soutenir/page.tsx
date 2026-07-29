@@ -5,23 +5,27 @@ import Section from "@/components/Section";
 import ScrollReveal from "@/components/ScrollReveal";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { type Locale, defaultLocale } from "@/lib/locales";
 
-export async function generateMetadata() {
-  const { site, support } = await getCmsContent();
+export async function generateSupportMetadata(locale: Locale = defaultLocale) {
+  const { site, support } = await getCmsContent(locale);
 
   if (!site.showDonationCta) {
     return {
-      title: "Page indisponible"
+      title: locale === "fr" ? "Page indisponible" : "Page unavailable"
     };
   }
 
   return {
-    title: support.metadataTitle
+    title: support.metadataTitle,
+    description: support.hero.text
   };
 }
 
-export default async function SupportPage() {
-  const { site, support } = await getCmsContent();
+export const generateMetadata = () => generateSupportMetadata();
+
+export default async function SupportPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
+  const { site, support } = await getCmsContent(locale);
 
   if (!site.showDonationCta) {
     notFound();
@@ -39,7 +43,7 @@ export default async function SupportPage() {
         action={
           <form className="mt-12 flex max-w-xl flex-col gap-4 sm:flex-row sm:items-center">
             <label className="sr-only" htmlFor="donation-amount">
-              Montant du don en CHF
+              {locale === "fr" ? "Montant du don en CHF" : "Donation amount in CHF"}
             </label>
             <div className="relative min-w-0 flex-1">
               <input

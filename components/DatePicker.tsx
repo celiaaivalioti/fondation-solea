@@ -2,18 +2,49 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
+import { type Locale, defaultLocale } from "@/lib/locales";
 
 type DatePickerProps = {
   name: string;
   required?: boolean;
+  locale?: Locale;
 };
 
-const monthFormatter = new Intl.DateTimeFormat("fr-FR", {
+const localeMap: Record<Locale, string> = {
+  fr: "fr-FR",
+  en: "en-GB"
+};
+
+const weekdays: Record<Locale, string[]> = {
+  fr: ["L", "M", "M", "J", "V", "S", "D"],
+  en: ["M", "T", "W", "T", "F", "S", "S"]
+};
+
+const copy = {
+  fr: {
+    dateLabel: "Date du diagnostic",
+    dialogLabel: "Choisir une date",
+    previousMonth: "Mois précédent",
+    nextMonth: "Mois suivant",
+    placeholder: "jj.mm.aaaa",
+    clear: "Effacer",
+    today: "Aujourd’hui"
+  },
+  en: {
+    dateLabel: "Diagnosis date",
+    dialogLabel: "Choose a date",
+    previousMonth: "Previous month",
+    nextMonth: "Next month",
+    placeholder: "dd.mm.yyyy",
+    clear: "Clear",
+    today: "Today"
+  }
+};
+
+const monthFormatter = (locale: Locale) => new Intl.DateTimeFormat(localeMap[locale], {
   month: "long",
   year: "numeric"
 });
-
-const weekdays = ["L", "M", "M", "J", "V", "S", "D"];
 
 function toIsoDate(date: Date) {
   const year = date.getFullYear();
@@ -23,8 +54,8 @@ function toIsoDate(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-function toDisplayDate(date: Date) {
-  return new Intl.DateTimeFormat("fr-FR", {
+function toDisplayDate(date: Date, locale: Locale) {
+  return new Intl.DateTimeFormat(localeMap[locale], {
     day: "2-digit",
     month: "2-digit",
     year: "numeric"
@@ -52,7 +83,7 @@ function getCalendarDays(month: Date) {
   });
 }
 
-export default function DatePicker({ name, required = false }: DatePickerProps) {
+export default function DatePicker({ name, required = false, locale = defaultLocale }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [visibleMonth, setVisibleMonth] = useState(() => new Date());
@@ -70,8 +101,9 @@ export default function DatePicker({ name, required = false }: DatePickerProps) 
     return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, []);
 
-  const selectedValue = selectedDate ? toDisplayDate(selectedDate) : "";
+  const selectedValue = selectedDate ? toDisplayDate(selectedDate, locale) : "";
   const selectedIsoValue = selectedDate ? toIsoDate(selectedDate) : "";
+  const labels = copy[locale];
 
   return (
     <div ref={wrapperRef} className="relative">
@@ -81,7 +113,7 @@ export default function DatePicker({ name, required = false }: DatePickerProps) 
           value={selectedIsoValue}
           required={required}
           readOnly
-          aria-label="Date du diagnostic"
+          aria-label={labels.dateLabel}
           className="sr-only"
           tabIndex={-1}
         />
@@ -93,7 +125,7 @@ export default function DatePicker({ name, required = false }: DatePickerProps) 
           onClick={() => setIsOpen((value) => !value)}
         >
           <span className={selectedDate ? "text-bark" : "text-bark/45"}>
-            {selectedValue || "jj.mm.aaaa"}
+            {selectedValue || labels.placeholder}
           </span>
           <CalendarDays aria-hidden="true" className="h-5 w-5 text-bark/70" strokeWidth={1.7} />
         </button>
@@ -102,17 +134,17 @@ export default function DatePicker({ name, required = false }: DatePickerProps) 
       {isOpen && (
         <div
           role="dialog"
-          aria-label="Choisir une date"
+          aria-label={labels.dialogLabel}
           className="absolute right-0 z-50 mt-3 w-[min(22rem,calc(100vw-3rem))] rounded-[1.75rem] bg-paper p-5 shadow-[0_24px_90px_rgb(var(--color-stroke)/0.95)]"
         >
           <div className="flex items-center justify-between gap-4">
             <p className="text-lg font-medium capitalize text-bark">
-              {monthFormatter.format(visibleMonth)}
+              {monthFormatter(locale).format(visibleMonth)}
             </p>
             <div className="flex gap-2">
               <button
                 type="button"
-                aria-label="Mois précédent"
+                aria-label={labels.previousMonth}
                 className="grid h-11 w-11 place-items-center rounded-full bg-linen text-bark transition hover:bg-ivory focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clay"
                 onClick={() =>
                   setVisibleMonth(
@@ -124,7 +156,7 @@ export default function DatePicker({ name, required = false }: DatePickerProps) 
               </button>
               <button
                 type="button"
-                aria-label="Mois suivant"
+                aria-label={labels.nextMonth}
                 className="grid h-11 w-11 place-items-center rounded-full bg-linen text-bark transition hover:bg-ivory focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clay"
                 onClick={() =>
                   setVisibleMonth(
@@ -138,7 +170,7 @@ export default function DatePicker({ name, required = false }: DatePickerProps) 
           </div>
 
           <div className="mt-5 grid grid-cols-7 gap-1 text-center text-sm font-medium text-bark/58">
-            {weekdays.map((weekday, index) => (
+            {weekdays[locale].map((weekday, index) => (
               <span key={`${weekday}-${index}`} className="py-2">
                 {weekday}
               </span>
@@ -179,7 +211,7 @@ export default function DatePicker({ name, required = false }: DatePickerProps) 
               className="rounded-full px-4 py-2 text-base font-medium text-bark/62 transition hover:bg-linen hover:text-bark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clay"
               onClick={() => setSelectedDate(null)}
             >
-              Effacer
+              {labels.clear}
             </button>
             <button
               type="button"
@@ -191,7 +223,7 @@ export default function DatePicker({ name, required = false }: DatePickerProps) 
                 setIsOpen(false);
               }}
             >
-              Aujourd’hui
+              {labels.today}
             </button>
           </div>
         </div>

@@ -8,17 +8,21 @@ import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
 import { getSectionIcon } from "@/lib/icons";
 import { linkifyNames } from "@/lib/linkify-names";
+import { type Locale, defaultLocale } from "@/lib/locales";
 
-export async function generateMetadata() {
-  const { about } = await getCmsContent();
+export async function generateAboutMetadata(locale: Locale = defaultLocale) {
+  const { about } = await getCmsContent(locale);
 
   return {
-    title: about.metadataTitle
+    title: about.metadataTitle,
+    description: about.hero.text
   };
 }
 
-export default async function AboutPage() {
-  const { about } = await getCmsContent();
+export const generateMetadata = () => generateAboutMetadata();
+
+export default async function AboutPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
+  const { about } = await getCmsContent(locale);
 
   return (
     <>

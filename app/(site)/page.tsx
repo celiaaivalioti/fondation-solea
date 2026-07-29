@@ -3,17 +3,21 @@ import CTAButton from "@/components/CTAButton";
 import ScrollReveal from "@/components/ScrollReveal";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { type Locale, defaultLocale } from "@/lib/locales";
 
-export async function generateMetadata() {
-  const { home } = await getCmsContent();
+export async function generateHomeMetadata(locale: Locale = defaultLocale) {
+  const { home } = await getCmsContent(locale);
 
   return {
-    title: home.metadataTitle
+    title: home.metadataTitle,
+    description: home.hero.text
   };
 }
 
-export default async function Home() {
-  const { home } = await getCmsContent();
+export const generateMetadata = () => generateHomeMetadata();
+
+export default async function Home({ locale = defaultLocale }: { locale?: Locale } = {}) {
+  const { home } = await getCmsContent(locale);
 
   return (
     <>

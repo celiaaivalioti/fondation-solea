@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import DatePicker from "./DatePicker";
 import type { RegistrationFormConfig } from "@/lib/cms-types";
+import { type Locale, defaultLocale } from "@/lib/locales";
 import { type FormStatus, submitForm } from "@/lib/submit-form";
 
 const inputClass =
@@ -13,9 +14,38 @@ const labelClass = "grid gap-2 text-[13px] font-semibold uppercase tracking-[0.1
 // Field visibility, labels and required state come from Sanity (see
 // lib/form-config.ts for the defaults and catalog). The set of possible
 // fields stays fixed in code; the config only toggles known fields.
-export default function RegistrationForm({ config }: { config: RegistrationFormConfig }) {
+export default function RegistrationForm({
+  config,
+  locale = defaultLocale
+}: {
+  config: RegistrationFormConfig;
+  locale?: Locale;
+}) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const openedAt = useRef(0);
+  const copy = {
+    confirmation: locale === "fr" ? "Confirmation" : "Confirmation",
+    sentTitle: locale === "fr" ? "Merci pour votre inscription." : "Thank you for your application.",
+    sentText:
+      locale === "fr"
+        ? "Nous vous reviendrons dans les plus brefs délais."
+        : "We will get back to you as soon as possible.",
+    reset: locale === "fr" ? "Envoyer une nouvelle inscription" : "Send another application",
+    formLabel:
+      locale === "fr" ? "Formulaire d'inscription au séjour" : "Application form for the stay",
+    yes: locale === "fr" ? "Oui" : "Yes",
+    no: locale === "fr" ? "Non" : "No",
+    treatmentType:
+      locale === "fr" ? "Si oui, quel type de traitement ?" : "If yes, what type of treatment?",
+    assistanceType:
+      locale === "fr" ? "Si oui, quel type d’assistance ?" : "If yes, what type of assistance?",
+    error:
+      locale === "fr"
+        ? "L’envoi n’a pas abouti. Merci de réessayer, ou écrivez-nous directement à"
+        : "The application could not be sent. Please try again, or write to us directly at",
+    sending: locale === "fr" ? "Envoi en cours…" : "Sending...",
+    submit: locale === "fr" ? "Envoyer l’inscription" : "Send application"
+  };
 
   useEffect(() => {
     openedAt.current = Date.now();
@@ -32,14 +62,14 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
       >
         <div className="mb-5">
           <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
-            Confirmation
+            {copy.confirmation}
           </p>
         </div>
         <h2 className="font-display text-[2rem] font-light leading-tight text-bark">
-          Merci pour votre inscription.
+          {copy.sentTitle}
         </h2>
         <p className="mt-4 leading-[1.65] text-bark/72">
-          Nous vous reviendrons dans les plus brefs délais.
+          {copy.sentText}
         </p>
         <button
           type="button"
@@ -50,7 +80,7 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
           }}
           className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full border border-moss/25 px-6 py-3 text-lg font-medium text-moss transition hover:border-moss hover:bg-linen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-clay"
         >
-          Envoyer une nouvelle inscription
+          {copy.reset}
         </button>
       </div>
     );
@@ -59,10 +89,10 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
   return (
     <form
       className="grid gap-6 rounded-[1.5rem] bg-paper p-7 shadow-soft sm:grid-cols-2 sm:p-10"
-      aria-label="Formulaire d'inscription au séjour"
+      aria-label={copy.formLabel}
       onSubmit={(event) => {
         event.preventDefault();
-        submitForm("inscription", event.currentTarget, setStatus, openedAt.current);
+        submitForm("inscription", event.currentTarget, setStatus, openedAt.current, locale);
       }}
     >
       {config.firstName.enabled && (
@@ -131,7 +161,7 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
       {config.diagnosisDate.enabled && (
         <label className={labelClass}>
           {config.diagnosisDate.label}
-          <DatePicker name="diagnosisDate" required={config.diagnosisDate.required} />
+          <DatePicker name="diagnosisDate" required={config.diagnosisDate.required} locale={locale} />
         </label>
       )}
       {config.inTreatment.enabled && (
@@ -151,7 +181,7 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
                   checked={inTreatment === "oui"}
                   onChange={(event) => setInTreatment(event.target.value)}
                 />
-                Oui
+                {copy.yes}
               </label>
               <label className="flex items-center gap-2 text-base font-medium text-bark/82">
                 <input
@@ -162,13 +192,13 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
                   checked={inTreatment === "non"}
                   onChange={(event) => setInTreatment(event.target.value)}
                 />
-                Non
+                {copy.no}
               </label>
             </div>
           </fieldset>
           {inTreatment === "oui" && (
             <label className={`${labelClass} sm:col-span-2`}>
-              Si oui, quel type de traitement ?
+              {copy.treatmentType}
               <textarea className={`${inputClass} min-h-28 py-3`} name="treatmentType" required />
             </label>
           )}
@@ -191,7 +221,7 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
                   checked={needsAssistance === "oui"}
                   onChange={(event) => setNeedsAssistance(event.target.value)}
                 />
-                Oui
+                {copy.yes}
               </label>
               <label className="flex items-center gap-2 text-base font-medium text-bark/82">
                 <input
@@ -202,13 +232,13 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
                   checked={needsAssistance === "non"}
                   onChange={(event) => setNeedsAssistance(event.target.value)}
                 />
-                Non
+                {copy.no}
               </label>
             </div>
           </fieldset>
           {needsAssistance === "oui" && (
             <label className={`${labelClass} sm:col-span-2`}>
-              Si oui, quel type d’assistance ?
+              {copy.assistanceType}
               <textarea className={`${inputClass} min-h-28 py-3`} name="assistanceType" required />
             </label>
           )}
@@ -234,7 +264,7 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
       />
       {status === "error" && (
         <p className="text-base leading-7 text-clay sm:col-span-2" role="alert">
-          L’envoi n’a pas abouti. Merci de réessayer, ou écrivez-nous directement à{" "}
+          {copy.error}{" "}
           <a href="mailto:contact@fondation-solea.ch" className="font-medium underline underline-offset-4">
             contact@fondation-solea.ch
           </a>
@@ -246,7 +276,7 @@ export default function RegistrationForm({ config }: { config: RegistrationFormC
         type="submit"
         disabled={status === "sending"}
       >
-        {status === "sending" ? "Envoi en cours…" : "Envoyer l’inscription"}
+        {status === "sending" ? copy.sending : copy.submit}
       </button>
     </form>
   );
