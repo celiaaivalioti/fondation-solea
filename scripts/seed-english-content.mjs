@@ -41,6 +41,7 @@ const sharedKeys = new Set([
   "platform",
   "newTab",
   "variant",
+  "logoHeight",
   "icon",
   "id",
   "currency",

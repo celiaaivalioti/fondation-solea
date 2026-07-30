@@ -517,6 +517,7 @@ export const defaultContent: CmsContent = {
         logos: [
           {
             name: "Mécène fondateur",
+            logoHeight: 48,
             image: {
               url: "/images/sponsors/mecene-logo-1.png",
               alt: "Logo du mécène fondateur"

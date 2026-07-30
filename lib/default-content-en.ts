@@ -510,6 +510,7 @@ defaultContentEn.sponsors = {
       logos: [
         {
           name: "Founding patron",
+          logoHeight: 48,
           image: {
             url: "/images/sponsors/mecene-logo-1.png",
             alt: "Founding patron logo"

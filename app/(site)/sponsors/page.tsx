@@ -1,11 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import CTAButton from "@/components/CTAButton";
 import Hero from "@/components/Hero";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getCmsContent } from "@/lib/cms";
 import type { SponsorLogo } from "@/lib/cms-types";
 import { type Locale, defaultLocale } from "@/lib/locales";
+
+type SponsorLogoWithImage = SponsorLogo & { image: NonNullable<SponsorLogo["image"]> };
 
 export async function generateSponsorsMetadata(locale: Locale = defaultLocale) {
   const { sponsors } = await getCmsContent(locale);
@@ -26,8 +29,9 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
       ? "Prairie au bord d'un lac en Suisse romande dans une lumière douce"
       : "Lakeside meadow in French-speaking Switzerland in soft morning light");
 
-  const hasLogoImage = (sponsor: SponsorLogo): sponsor is SponsorLogo & { image: SponsorLogo["image"] } =>
+  const hasLogoImage = (sponsor: SponsorLogo): sponsor is SponsorLogoWithImage =>
     Boolean(sponsor.image?.url);
+  const logoHeight = (sponsor: SponsorLogo) => Math.min(Math.max(sponsor.logoHeight ?? 48, 24), 180);
 
   return (
     <>
@@ -54,8 +58,12 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
               {section.logos.filter(hasLogoImage).length > 0 ? (
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {section.logos.filter(hasLogoImage).map((sponsor) => {
+                    const height = logoHeight(sponsor);
                     const logo = (
-                      <div className="relative h-12 w-full">
+                      <div
+                        className="relative h-[var(--sponsor-logo-height)] w-full"
+                        style={{ "--sponsor-logo-height": `${height}px` } as CSSProperties}
+                      >
                         <Image
                           src={sponsor.image.url}
                           alt={sponsor.image.alt}
@@ -73,14 +81,14 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
                         target={sponsor.newTab ? "_blank" : undefined}
                         rel={sponsor.newTab ? "noopener noreferrer" : undefined}
                         aria-label={sponsor.name}
-                        className="flex min-h-20 items-center justify-start transition opacity-90 hover:opacity-100"
+                        className="flex items-center justify-start py-4 transition opacity-90 hover:opacity-100"
                       >
                         {logo}
                       </Link>
                     ) : (
                       <div
                         key={`${section.title}-${sponsor.name}`}
-                        className="flex min-h-20 items-center justify-start"
+                        className="flex items-center justify-start py-4"
                       >
                         {logo}
                       </div>

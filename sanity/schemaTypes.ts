@@ -1,3 +1,5 @@
+import type { Rule } from "sanity";
+
 // Icon choices for value/approach items. Keep in sync with lib/icons.ts,
 // which maps these values to the actual icons on the website.
 const iconOptions = {
@@ -184,6 +186,14 @@ const sponsorLogoField = {
   fields: [
     { name: "name", title: "Name", type: "string" },
     imageField,
+    {
+      name: "logoHeight",
+      title: "Logo height (px)",
+      type: "number",
+      description: "Optional. Default is 48px. Use a larger value for detailed or wide logos.",
+      initialValue: 48,
+      validation: (Rule: Rule) => Rule.min(24).max(180)
+    },
     { name: "href", title: "Optional URL", type: "string" },
     newTabField
   ],

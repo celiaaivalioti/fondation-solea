@@ -44,6 +44,10 @@ function toSponsorLogo(logo, index, includeImage = true) {
     value.href = logo.href;
   }
 
+  if (logo.logoHeight) {
+    value.logoHeight = logo.logoHeight;
+  }
+
   if (logo.newTab) {
     value.newTab = logo.newTab;
   }

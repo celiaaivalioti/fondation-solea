@@ -208,7 +208,8 @@ export type SupportContent = {
 
 export type SponsorLogo = {
   name: string;
-  image: CmsImage;
+  image?: CmsImage | null;
+  logoHeight?: number;
   href?: string;
   newTab?: boolean;
 };
