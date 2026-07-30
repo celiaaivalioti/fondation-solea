@@ -319,7 +319,7 @@ export const defaultContent: CmsContent = {
         {
           title: "Méditation et sophrologie",
           image: {
-            url: "/images/therapies/meditation-sophrologie.png",
+            url: "/images/therapies/meditation-sophrologie.webp",
             alt: ""
           },
           text:
@@ -327,55 +327,55 @@ export const defaultContent: CmsContent = {
         },
         {
           title: "Hypnose et visualisation",
-          image: { url: "/images/therapies/hypnose-visualisation.png", alt: "" },
+          image: { url: "/images/therapies/hypnose-visualisation.webp", alt: "" },
           text:
             "L’hypnose est utilisée en traitement adjuvant dans de nombreux centres oncologiques. Efficace sur la douleur, l’anxiété, la fatigue, les nausées et les bouffées de chaleur."
         },
         {
           title: "Yoga, Qi Gong et Tai Chi",
-          image: { url: "/images/therapies/yoga-qi-gong-tai-chi.png", alt: "" },
+          image: { url: "/images/therapies/yoga-qi-gong-tai-chi.webp", alt: "" },
           text:
             "Des méta-analyses portant sur des centaines de patients démontrent des améliorations significatives de la fatigue, du sommeil, de la dépression et de la qualité de vie globale."
         },
         {
           title: "Nutrition, naturopathie, phytothérapie et activité physique adaptée",
-          image: { url: "/images/therapies/nutrition-naturopathie.png", alt: "" },
+          image: { url: "/images/therapies/nutrition-naturopathie.webp", alt: "" },
           text:
             "Conseils nutritionnels, plantes et compléments pour aider à réduire les effets secondaires des traitements - toujours en coordination avec l’équipe médicale."
         },
         {
           title: "Acupuncture et auriculothérapie",
-          image: { url: "/images/therapies/acupuncture-auriculotherapie.png", alt: "" },
+          image: { url: "/images/therapies/acupuncture-auriculotherapie.webp", alt: "" },
           text:
             "Notamment reconnue pour réduire les nausées et vomissements liés à la chimiothérapie, atténuer la fatigue et soulager les douleurs neuropathiques."
         },
         {
           title: "Art-thérapie",
-          image: { url: "/images/therapies/art-therapie.png", alt: "" },
+          image: { url: "/images/therapies/art-therapie.webp", alt: "" },
           text:
             "Reconnue par l’OMS pour limiter les effets secondaires des traitements (somnolence, nausées, essoufflement), l’art-thérapie agit également sur l’anxiété et l’image de soi."
         },
         {
           title: "Sonothérapie (bols tibétains, diapasons)",
-          image: { url: "/images/therapies/sonotherapie.png", alt: "" },
+          image: { url: "/images/therapies/sonotherapie.webp", alt: "" },
           text:
             "Des études en oncologie montrent une réduction de l’anxiété, du stress mental et de l’agitation. Maintien des capacités cognitives chez les patients sous chimiothérapie."
         },
         {
           title: "Massages et shiatsu",
-          image: { url: "/images/therapies/massages-shiatsu.png", alt: "" },
+          image: { url: "/images/therapies/massages-shiatsu.webp", alt: "" },
           text:
             "Des techniques corporelles douces pour soulager les tensions, améliorer la circulation et procurer un sentiment de bien-être physique immédiat."
         },
         {
           title: "Equicoaching",
-          image: { url: "/images/therapies/equicoaching.png", alt: "" },
+          image: { url: "/images/therapies/equicoaching.webp", alt: "" },
           text:
             "Le contact avec les chevaux favorise l’expression émotionnelle, la reprise de confiance et la lutte contre la dépression - qui touche près de 50 % des patients cancéreux."
         },
         {
           title: "Échanges avec des personnes en rémission",
-          image: { url: "/images/therapies/echanges-remission.png", alt: "" }
+          image: { url: "/images/therapies/echanges-remission.webp", alt: "" }
         }
       ]
     },

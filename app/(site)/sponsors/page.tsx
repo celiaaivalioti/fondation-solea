@@ -26,7 +26,7 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
         eyebrow={locale === "fr" ? "Sponsors" : "Sponsors"}
         title={sponsors.title}
         text={sponsors.intro}
-        image="/images/sponsors/hero-swiss-lakeside-meadow.png"
+        image="/images/sponsors/hero-swiss-lakeside-meadow.webp"
         imageAlt={
           locale === "fr"
             ? "Prairie au bord d'un lac en Suisse romande dans une lumière douce"
