@@ -91,8 +91,8 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
       </section>
 
       <section className="px-5 py-20 sm:px-8 lg:py-24">
-        <ScrollReveal className="mx-auto flex max-w-[1400px] flex-col items-start gap-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="max-w-2xl font-display text-[clamp(1.8rem,3.2vw,3rem)] font-light leading-[1.12] text-bark text-balance">
+        <ScrollReveal className="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
+          <p className="font-display text-[clamp(1.8rem,3.2vw,3rem)] font-light leading-[1.12] text-bark text-balance">
             {locale === "fr"
               ? "Vous souhaitez, vous aussi, faire grandir Solea ?"
               : "Would you also like to help Solea grow?"}
