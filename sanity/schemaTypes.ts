@@ -216,7 +216,15 @@ const sponsorSectionField = {
   type: "object",
   fields: [
     { name: "title", title: "Title", type: "string" },
-    { name: "logos", title: "Logos", type: "array", of: [{ type: "sponsorLogo" }] }
+    {
+      name: "logos",
+      title: "Logos",
+      type: "array",
+      of: [{ type: "sponsorLogo" }],
+      options: {
+        modal: { type: "dialog", width: 1 }
+      }
+    }
   ],
   preview: {
     select: { title: "title", logos: "logos" },
