@@ -90,7 +90,7 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
         </div>
       </section>
 
-      <section className="px-5 py-20 sm:px-8 lg:py-24">
+      <section className="bg-parchment px-5 py-20 sm:px-8 lg:py-24">
         <ScrollReveal className="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
           <p className="font-display text-[clamp(1.8rem,3.2vw,3rem)] font-light leading-[1.12] text-bark text-balance">
             {locale === "fr"
