@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CTAButton from "@/components/CTAButton";
-import RichText from "@/components/RichText";
+import Hero from "@/components/Hero";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getCmsContent } from "@/lib/cms";
 import { type Locale, defaultLocale } from "@/lib/locales";
@@ -21,29 +21,20 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
   const { sponsors } = await getCmsContent(locale);
 
   return (
-    <div className="relative isolate overflow-hidden">
-      <section className="px-5 pb-16 pt-32 sm:px-8 lg:pb-20 lg:pt-40">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-24 top-0 h-96 w-96 rounded-full bg-gradient-to-br from-fern/18 to-transparent blur-3xl"
-        />
-        <div className="relative mx-auto max-w-[1400px]">
-          <div className="max-w-5xl">
-            <p className="mb-6 text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
-              {locale === "fr" ? "Sponsors" : "Sponsors"}
-            </p>
-            <h1 className="font-display text-[clamp(2.4rem,6vw,5.5rem)] font-light leading-[1.02] text-bark text-balance">
-              {sponsors.title}
-            </h1>
-            <RichText
-              text={sponsors.intro}
-              className="mt-10 max-w-[74ch]"
-              gapClassName="gap-6"
-              paragraphClassName="text-[1.12rem] leading-[1.75] text-bark/76 text-pretty"
-            />
-          </div>
-        </div>
-      </section>
+    <>
+      <Hero
+        eyebrow={locale === "fr" ? "Sponsors" : "Sponsors"}
+        title={sponsors.title}
+        text={sponsors.intro}
+        image="/images/sponsors/hero-swiss-lakeside-meadow.png"
+        imageAlt={
+          locale === "fr"
+            ? "Prairie au bord d'un lac en Suisse romande dans une lumière douce"
+            : "Lakeside meadow in French-speaking Switzerland in soft morning light"
+        }
+        imageClassName="object-cover object-[50%_center]"
+        action={<></>}
+      />
 
       <section className="bg-ivory/65 px-5 py-20 sm:px-8 lg:py-24">
         <div className="mx-auto grid max-w-[1400px] gap-16">
@@ -111,6 +102,6 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
           </CTAButton>
         </ScrollReveal>
       </section>
-    </div>
+    </>
   );
 }
