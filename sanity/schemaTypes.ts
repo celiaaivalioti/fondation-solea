@@ -901,6 +901,7 @@ const sponsorsPageFields = [
   { name: "metadataTitle", title: "Metadata title", type: "string" },
   { name: "title", title: "Title", type: "string" },
   { name: "intro", title: "Intro", type: "text", rows: 8 },
+  { ...imageField, name: "heroImage", title: "Hero image" },
   { name: "sections", title: "Sponsor sections", type: "array", of: [{ type: "sponsorSection" }] },
   { ...ctaField, name: "cta", title: "Call to action" }
 ];

@@ -24,7 +24,8 @@ function toSanityImage(image) {
   return {
     _type: "image",
     localUrl: image.url,
-    alt: image.alt
+    alt: image.alt,
+    ...(image.className ? { className: image.className } : {})
   };
 }
 
@@ -79,12 +80,14 @@ await client
     metadataTitle: sponsors.metadataTitle,
     title: sponsors.title,
     intro: sponsors.intro,
+    heroImage: toSanityImage(sponsors.heroImage),
     sections: sponsors.sections.map((section, index) => toSponsorSection(section, index, true)),
     cta: toCta(sponsors.cta),
     en: {
       metadataTitle: sponsorsEn.metadataTitle,
       title: sponsorsEn.title,
       intro: sponsorsEn.intro,
+      heroImage: toSanityImage(sponsorsEn.heroImage),
       sections: sponsorsEn.sections.map((section, index) => toSponsorSection(section, index, false)),
       cta: toCta(sponsorsEn.cta)
     }

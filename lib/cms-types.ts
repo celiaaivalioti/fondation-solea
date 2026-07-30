@@ -222,6 +222,7 @@ export type SponsorsContent = {
   metadataTitle: string;
   title: string;
   intro: string;
+  heroImage: CmsImage;
   sections: SponsorSection[];
   cta: Cta;
 };

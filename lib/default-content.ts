@@ -502,6 +502,11 @@ export const defaultContent: CmsContent = {
     title: "Grâce à eux, Solea grandit !",
     intro:
       "La Fondation Solea est née d'une conviction profonde : accompagner les personnes confrontées au cancer dans toutes les dimensions de leur être, à travers la création d'un séjour d’accompagnement intégratif unique en Suisse romande.\n\nCette ambition ne pourrait devenir réalité sans l'engagement de celles et ceux qui ont choisi de nous faire confiance.\n\nNous exprimons notre profonde gratitude à nos partenaires, mécènes, fondations, entreprises et donateurs qui partagent notre vision et contribuent, chacun à leur manière, à faire grandir ce projet d'utilité publique.\n\nGrâce à leur soutien, nous construisons un lieu où chaque personne pourra retrouver des ressources, reprendre une place active dans son parcours de soins et envisager l'avenir avec davantage de confiance et de sérénité.\n\nMerci de rendre cette mission possible.",
+    heroImage: {
+      url: "/images/sponsors/hero-swiss-lakeside-meadow.webp",
+      alt: "Prairie au bord d'un lac en Suisse romande dans une lumière douce",
+      className: "object-cover object-[50%_center]"
+    },
     sections: [
       {
         title: "Partenaires institutionnels",
