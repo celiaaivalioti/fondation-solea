@@ -50,7 +50,7 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {section.logos.map((sponsor) => {
                     const logo = (
-                      <div className="relative h-20 w-full">
+                      <div className="relative h-12 w-full">
                         <Image
                           src={sponsor.image.url}
                           alt={sponsor.image.alt}
@@ -68,14 +68,14 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
                         target={sponsor.newTab ? "_blank" : undefined}
                         rel={sponsor.newTab ? "noopener noreferrer" : undefined}
                         aria-label={sponsor.name}
-                        className="flex min-h-36 items-center justify-center rounded-[1.25rem] border border-moss/12 bg-paper/80 p-8 shadow-rim transition hover:-translate-y-0.5 hover:border-moss/24 hover:bg-paper"
+                        className="flex min-h-20 items-center justify-start transition opacity-90 hover:opacity-100"
                       >
                         {logo}
                       </Link>
                     ) : (
                       <div
                         key={`${section.title}-${sponsor.name}`}
-                        className="flex min-h-36 items-center justify-center rounded-[1.25rem] border border-moss/12 bg-paper/80 p-8 shadow-rim"
+                        className="flex min-h-20 items-center justify-start"
                       >
                         {logo}
                       </div>
