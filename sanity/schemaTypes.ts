@@ -194,8 +194,16 @@ const sponsorLogoField = {
       initialValue: 48,
       validation: (Rule: Rule) => Rule.min(24).max(180)
     },
-    { name: "href", title: "Optional URL", type: "string" },
-    newTabField
+    {
+      name: "href",
+      title: "Logo link",
+      type: "string",
+      description: "Optional. Add a URL or internal path to make this logo clickable."
+    },
+    {
+      ...newTabField,
+      title: "Open logo link in a new tab"
+    }
   ],
   preview: {
     select: { title: "name", media: "image" }
