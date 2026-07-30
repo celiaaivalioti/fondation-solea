@@ -58,6 +58,7 @@ const documents = [
   doc("retreatPage", "retreatPage", defaultContent.retreat),
   doc("seminarsPage", "seminarsPage", defaultContent.seminars),
   doc("supportPage", "supportPage", defaultContent.support),
+  doc("sponsorsPage", "sponsorsPage", defaultContent.sponsors),
   doc("registrationPage", "registrationPage", defaultContent.registration),
   doc("contactPage", "contactPage", defaultContent.contact)
 ];

@@ -490,6 +490,39 @@ defaultContentEn.support = {
   }
 };
 
+defaultContentEn.sponsors = {
+  metadataTitle: "Sponsors",
+  title: "Thanks to them, Solea is growing!",
+  intro:
+    "The Solea Foundation was born from a deep conviction: to support people facing cancer in every dimension of their being, through the creation of a unique integrative support stay in French-speaking Switzerland.\n\nThis ambition could not become reality without the commitment of those who have chosen to place their trust in us.\n\nWe express our deep gratitude to our partners, patrons, foundations, companies and donors who share our vision and contribute, each in their own way, to helping this public-interest project grow.\n\nThanks to their support, we are building a place where each person can reconnect with resources, regain an active role in their care journey and look to the future with greater confidence and serenity.\n\nThank you for making this mission possible.",
+  sections: [
+    {
+      title: "Institutional partners",
+      logos: []
+    },
+    {
+      title: "Patrons",
+      logos: [
+        {
+          name: "Founding patron",
+          image: {
+            url: "/images/sponsors/mecene-logo-1.png",
+            alt: "Founding patron logo"
+          }
+        }
+      ]
+    },
+    {
+      title: "Scientific partners",
+      logos: []
+    }
+  ],
+  cta: {
+    label: "Contact us",
+    href: "/contact"
+  }
+};
+
 defaultContentEn.registration = {
   metadataTitle: "Pre-register",
   eyebrow: "Request",

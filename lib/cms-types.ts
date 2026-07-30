@@ -206,6 +206,26 @@ export type SupportContent = {
   };
 };
 
+export type SponsorLogo = {
+  name: string;
+  image: CmsImage;
+  href?: string;
+  newTab?: boolean;
+};
+
+export type SponsorSection = {
+  title: string;
+  logos: SponsorLogo[];
+};
+
+export type SponsorsContent = {
+  metadataTitle: string;
+  title: string;
+  intro: string;
+  sections: SponsorSection[];
+  cta: Cta;
+};
+
 export type FormPageContent = {
   metadataTitle: string;
   eyebrow: string;
@@ -261,6 +281,7 @@ export type CmsContent = {
   retreat: RetreatContent;
   seminars: SeminarsContent;
   support: SupportContent;
+  sponsors: SponsorsContent;
   registration: FormPageContent;
   contact: FormPageContent;
   privacy: PrivacyContent;

@@ -497,6 +497,38 @@ export const defaultContent: CmsContent = {
       quote: "« Le temps que vous avez consacré à parcourir notre site est déjà un don. Merci. »"
     }
   },
+  sponsors: {
+    metadataTitle: "Sponsors",
+    title: "Grâce à eux, Solea grandit !",
+    intro:
+      "La Fondation Solea est née d'une conviction profonde : accompagner les personnes confrontées au cancer dans toutes les dimensions de leur être, à travers la création d'un séjour d’accompagnement intégratif unique en Suisse romande.\n\nCette ambition ne pourrait devenir réalité sans l'engagement de celles et ceux qui ont choisi de nous faire confiance.\n\nNous exprimons notre profonde gratitude à nos partenaires, mécènes, fondations, entreprises et donateurs qui partagent notre vision et contribuent, chacun à leur manière, à faire grandir ce projet d'utilité publique.\n\nGrâce à leur soutien, nous construisons un lieu où chaque personne pourra retrouver des ressources, reprendre une place active dans son parcours de soins et envisager l'avenir avec davantage de confiance et de sérénité.\n\nMerci de rendre cette mission possible.",
+    sections: [
+      {
+        title: "Partenaires institutionnels",
+        logos: []
+      },
+      {
+        title: "Mécènes",
+        logos: [
+          {
+            name: "Mécène fondateur",
+            image: {
+              url: "/images/sponsors/mecene-logo-1.png",
+              alt: "Logo du mécène fondateur"
+            }
+          }
+        ]
+      },
+      {
+        title: "Partenaires scientifiques",
+        logos: []
+      }
+    ],
+    cta: {
+      label: "Contactez-nous",
+      href: "/contact"
+    }
+  },
   registration: {
     metadataTitle: "S’inscrire à l’expérience de 5 jours",
     eyebrow: "Demande",

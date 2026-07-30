@@ -177,6 +177,38 @@ const personField = {
   }
 };
 
+const sponsorLogoField = {
+  name: "sponsorLogo",
+  title: "Sponsor logo",
+  type: "object",
+  fields: [
+    { name: "name", title: "Name", type: "string" },
+    imageField,
+    { name: "href", title: "Optional URL", type: "string" },
+    newTabField
+  ],
+  preview: {
+    select: { title: "name", media: "image" }
+  }
+};
+
+const sponsorSectionField = {
+  name: "sponsorSection",
+  title: "Sponsor section",
+  type: "object",
+  fields: [
+    { name: "title", title: "Title", type: "string" },
+    { name: "logos", title: "Logos", type: "array", of: [{ type: "sponsorLogo" }] }
+  ],
+  preview: {
+    select: { title: "title", logos: "logos" },
+    prepare: (value: { title?: string; logos?: unknown[] }) => ({
+      title: value.title || "Sponsor section",
+      subtitle: `${value.logos?.length ?? 0} logo${value.logos?.length === 1 ? "" : "s"}`
+    })
+  }
+};
+
 // One toggleable form field: relabel, show/hide, make optional/required.
 // The set of fields itself is fixed in code (lib/form-config.ts); the Studio
 // only edits these three attributes of each known field.
@@ -221,6 +253,8 @@ const objects = [
   textSectionField,
   checklistField,
   personField,
+  sponsorLogoField,
+  sponsorSectionField,
   formFieldType
 ];
 
@@ -863,6 +897,25 @@ const supportPage = {
   ...singletonPreview("Nous soutenir")
 };
 
+const sponsorsPageFields = [
+  { name: "metadataTitle", title: "Metadata title", type: "string" },
+  { name: "title", title: "Title", type: "string" },
+  { name: "intro", title: "Intro", type: "text", rows: 8 },
+  { name: "sections", title: "Sponsor sections", type: "array", of: [{ type: "sponsorSection" }] },
+  { ...ctaField, name: "cta", title: "Call to action" }
+];
+
+const sponsorsPage = {
+  name: "sponsorsPage",
+  title: "Sponsors",
+  type: "document",
+  fields: [
+    ...sponsorsPageFields,
+    englishTranslationField(sponsorsPageFields)
+  ],
+  ...singletonPreview("Sponsors")
+};
+
 const formPageFields = [
   { name: "metadataTitle", title: "Metadata title", type: "string" },
   { name: "eyebrow", title: "Eyebrow", type: "string" },
@@ -1113,6 +1166,7 @@ export const schemaTypes = [
   retreatPage,
   seminarsPage,
   supportPage,
+  sponsorsPage,
   registrationPage,
   contactPage,
   privacyPage,

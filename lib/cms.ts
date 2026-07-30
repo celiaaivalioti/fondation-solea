@@ -36,6 +36,10 @@ const contentQuery = `{
     ...,
     hero{..., image${imageProjection}}
   },
+  "sponsors": *[_type == "sponsorsPage"][0]{
+    ...,
+    sections[]{..., logos[]{..., image${imageProjection}}}
+  },
   "registration": *[_type == "registrationPage"][0],
   "contact": *[_type == "contactPage"][0],
   "privacy": *[_type == "privacyPage"][0],

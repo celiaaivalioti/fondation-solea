@@ -23,6 +23,7 @@ const documents = [
   ["retreatPage", "retreatPage", defaultContentEn.retreat],
   ["seminarsPage", "seminarsPage", defaultContentEn.seminars],
   ["supportPage", "supportPage", defaultContentEn.support],
+  ["sponsorsPage", "sponsorsPage", defaultContentEn.sponsors],
   ["registrationPage", "registrationPage", defaultContentEn.registration],
   ["contactPage", "contactPage", defaultContentEn.contact],
   ["privacyPage", "privacyPage", defaultContentEn.privacy],
