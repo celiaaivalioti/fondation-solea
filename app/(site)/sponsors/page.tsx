@@ -4,6 +4,7 @@ import CTAButton from "@/components/CTAButton";
 import Hero from "@/components/Hero";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getCmsContent } from "@/lib/cms";
+import type { SponsorLogo } from "@/lib/cms-types";
 import { type Locale, defaultLocale } from "@/lib/locales";
 
 export async function generateSponsorsMetadata(locale: Locale = defaultLocale) {
@@ -19,6 +20,14 @@ export const generateMetadata = () => generateSponsorsMetadata();
 
 export default async function SponsorsPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
   const { sponsors } = await getCmsContent(locale);
+  const heroAlt =
+    sponsors.heroImage.alt ||
+    (locale === "fr"
+      ? "Prairie au bord d'un lac en Suisse romande dans une lumière douce"
+      : "Lakeside meadow in French-speaking Switzerland in soft morning light");
+
+  const hasLogoImage = (sponsor: SponsorLogo): sponsor is SponsorLogo & { image: SponsorLogo["image"] } =>
+    Boolean(sponsor.image?.url);
 
   return (
     <>
@@ -27,7 +36,7 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
         title={sponsors.title}
         text={sponsors.intro}
         image={sponsors.heroImage.url}
-        imageAlt={sponsors.heroImage.alt}
+        imageAlt={heroAlt}
         imageClassName={sponsors.heroImage.className}
         action={<></>}
       />
@@ -42,9 +51,9 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
                 </h2>
               </div>
 
-              {section.logos.length > 0 ? (
+              {section.logos.filter(hasLogoImage).length > 0 ? (
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {section.logos.map((sponsor) => {
+                  {section.logos.filter(hasLogoImage).map((sponsor) => {
                     const logo = (
                       <div className="relative h-12 w-full">
                         <Image
