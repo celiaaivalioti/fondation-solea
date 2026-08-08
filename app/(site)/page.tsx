@@ -3,6 +3,7 @@ import CTAButton from "@/components/CTAButton";
 import ScrollReveal from "@/components/ScrollReveal";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { isCtaVisible } from "@/lib/cta";
 import { type Locale, defaultLocale } from "@/lib/locales";
 
 export async function generateHomeMetadata(locale: Locale = defaultLocale) {
@@ -31,8 +32,10 @@ export default async function Home({ locale = defaultLocale }: { locale?: Locale
         imageClassName={home.hero.image.className}
         primaryHref={home.hero.primary?.href}
         primaryLabel={home.hero.primary?.label}
+        primaryVisible={isCtaVisible(home.hero.primary)}
         secondaryHref={home.hero.secondary?.href}
         secondaryLabel={home.hero.secondary?.label}
+        secondaryVisible={isCtaVisible(home.hero.secondary)}
       />
 
       {/* Manifesto section - title, description, two passages, CTA */}
@@ -58,7 +61,7 @@ export default async function Home({ locale = defaultLocale }: { locale?: Locale
             />
           </div>
 
-          {home.manifesto.cta && (
+          {isCtaVisible(home.manifesto.cta) && (
             <div className="mt-12 flex justify-start">
               <CTAButton href={home.manifesto.cta.href} variant={home.manifesto.cta.variant ?? "primary"} newTab={home.manifesto.cta.newTab}>
                 {home.manifesto.cta.label}

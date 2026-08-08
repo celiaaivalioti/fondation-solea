@@ -5,6 +5,7 @@ import Section from "@/components/Section";
 import ScrollReveal from "@/components/ScrollReveal";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { isCtaVisible } from "@/lib/cta";
 import { type Locale, defaultLocale } from "@/lib/locales";
 
 export async function generateSeminarsMetadata(locale: Locale = defaultLocale) {
@@ -32,10 +33,13 @@ export default async function SeminarsPage({ locale = defaultLocale }: { locale?
         imageClassName={seminars.hero.image.className}
         primaryHref={seminars.hero.primary?.href}
         primaryLabel={seminars.hero.primary?.label}
+        primaryVisible={isCtaVisible(seminars.hero.primary)}
         secondaryHref={seminars.hero.secondary?.href}
         secondaryLabel={seminars.hero.secondary?.label}
+        secondaryVisible={isCtaVisible(seminars.hero.secondary)}
         tertiaryHref={seminars.hero.tertiary?.href}
         tertiaryLabel={seminars.hero.tertiary?.label}
+        tertiaryVisible={isCtaVisible(seminars.hero.tertiary)}
       />
       <Section
         tone="parchment"
@@ -66,7 +70,7 @@ export default async function SeminarsPage({ locale = defaultLocale }: { locale?
                   className="mt-4"
                   paragraphClassName="text-[1rem] leading-[1.75] text-bark/70 text-pretty"
                 />
-                {resource.href && (
+                {resource.href && resource.showButton !== false && (
                   <div className="mt-6">
                     <CTAButton href={resource.href} variant="secondary" newTab={resource.newTab}>
                       {locale === "fr" ? "Découvrir" : "Discover"}

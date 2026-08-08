@@ -13,10 +13,13 @@ type HeroProps = {
   quoteAttribution?: string;
   primaryHref?: string;
   primaryLabel?: string;
+  primaryVisible?: boolean;
   secondaryHref?: string;
   secondaryLabel?: string;
+  secondaryVisible?: boolean;
   tertiaryHref?: string;
   tertiaryLabel?: string;
+  tertiaryVisible?: boolean;
   action?: React.ReactNode;
   imageClassName?: string;
   /**
@@ -98,10 +101,13 @@ export default function Hero({
   quoteAttribution,
   primaryHref = "/inscription",
   primaryLabel = "S'inscrire",
+  primaryVisible = true,
   secondaryHref = "/qui-sommes-nous",
   secondaryLabel = "Découvrir",
+  secondaryVisible = true,
   tertiaryHref,
   tertiaryLabel,
+  tertiaryVisible = true,
   action,
   imageClassName,
   layout = "split"
@@ -165,16 +171,20 @@ export default function Hero({
             )}
             {action ?? (
               <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-                <CTAButton href={primaryHref}>
-                  {primaryLabel}
-                </CTAButton>
-                <CTAButton
-                  href={secondaryHref}
-                  variant="paper"
-                >
-                  {secondaryLabel}
-                </CTAButton>
-                {tertiaryHref && tertiaryLabel && (
+                {primaryVisible && (
+                  <CTAButton href={primaryHref}>
+                    {primaryLabel}
+                  </CTAButton>
+                )}
+                {secondaryVisible && (
+                  <CTAButton
+                    href={secondaryHref}
+                    variant="paper"
+                  >
+                    {secondaryLabel}
+                  </CTAButton>
+                )}
+                {tertiaryVisible && tertiaryHref && tertiaryLabel && (
                   <CTAButton
                     href={tertiaryHref}
                     variant="paperGhost"
@@ -232,13 +242,17 @@ export default function Hero({
           )}
           {action ?? (
             <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-              <CTAButton href={primaryHref}>
-                {primaryLabel}
-              </CTAButton>
-              <CTAButton href={secondaryHref} variant="secondary">
-                {secondaryLabel}
-              </CTAButton>
-              {tertiaryHref && tertiaryLabel && (
+              {primaryVisible && (
+                <CTAButton href={primaryHref}>
+                  {primaryLabel}
+                </CTAButton>
+              )}
+              {secondaryVisible && (
+                <CTAButton href={secondaryHref} variant="secondary">
+                  {secondaryLabel}
+                </CTAButton>
+              )}
+              {tertiaryVisible && tertiaryHref && tertiaryLabel && (
                 <CTAButton href={tertiaryHref} variant="ghost">
                   {tertiaryLabel}
                 </CTAButton>

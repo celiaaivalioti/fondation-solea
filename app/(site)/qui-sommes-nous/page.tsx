@@ -6,6 +6,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import Section from "@/components/Section";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { isCtaVisible } from "@/lib/cta";
 import { getSectionIcon } from "@/lib/icons";
 import { linkifyNames } from "@/lib/linkify-names";
 import { type Locale, defaultLocale } from "@/lib/locales";
@@ -37,8 +38,10 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
         imageClassName={about.hero.image.className}
         primaryHref={about.hero.primary?.href}
         primaryLabel={about.hero.primary?.label}
+        primaryVisible={isCtaVisible(about.hero.primary)}
         secondaryHref={about.hero.secondary?.href}
         secondaryLabel={about.hero.secondary?.label}
+        secondaryVisible={isCtaVisible(about.hero.secondary)}
       />
 
       <section className="relative bg-parchment px-5 py-16 text-bark sm:px-8 lg:py-20 lg:pb-28">
@@ -273,7 +276,7 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
                   <p key={paragraph} className="whitespace-pre-line">{paragraph}</p>
                 ))}
               </div>
-              {founder.cta && (
+              {isCtaVisible(founder.cta) && (
                 <div className="mt-8">
                   <CTAButton href={founder.cta.href} variant={founder.cta.variant ?? "secondary"} newTab={founder.cta.newTab}>
                     {founder.cta.label}

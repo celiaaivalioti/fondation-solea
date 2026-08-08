@@ -2,6 +2,7 @@ import ContactForm from "@/components/ContactForm";
 import CTAButton from "@/components/CTAButton";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { isCtaVisible } from "@/lib/cta";
 import { type Locale, defaultLocale } from "@/lib/locales";
 
 export async function generateContactMetadata(locale: Locale = defaultLocale) {
@@ -48,12 +49,12 @@ export default async function ContactPage({ locale = defaultLocale }: { locale?:
             paragraphClassName="text-[1.15rem] leading-9 text-bark/72 sm:text-[1.25rem] sm:leading-[1.65] text-pretty"
           />
           <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-            {contact.primary && (
+            {isCtaVisible(contact.primary) && (
               <CTAButton href={primaryHref} variant={contact.primary.variant ?? "primary"} newTab={contact.primary.newTab}>
                 {contact.primary.label}
               </CTAButton>
             )}
-            {contact.secondary && (
+            {isCtaVisible(contact.secondary) && (
               <CTAButton href={contact.secondary.href} variant={contact.secondary.variant ?? "secondary"} newTab={contact.secondary.newTab}>
                 {contact.secondary.label}
               </CTAButton>

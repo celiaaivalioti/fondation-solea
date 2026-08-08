@@ -5,6 +5,7 @@ import CTAButton from "@/components/CTAButton";
 import Hero from "@/components/Hero";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getCmsContent } from "@/lib/cms";
+import { isCtaVisible } from "@/lib/cta";
 import type { SponsorLogo } from "@/lib/cms-types";
 import { type Locale, defaultLocale } from "@/lib/locales";
 
@@ -110,9 +111,11 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
               ? "Vous souhaitez, vous aussi, faire grandir Solea ?"
               : "Would you also like to help Solea grow?"}
           </p>
-          <CTAButton href={sponsors.cta.href} variant={sponsors.cta.variant ?? "primary"} newTab={sponsors.cta.newTab}>
-            {sponsors.cta.label}
-          </CTAButton>
+          {isCtaVisible(sponsors.cta) && (
+            <CTAButton href={sponsors.cta.href} variant={sponsors.cta.variant ?? "primary"} newTab={sponsors.cta.newTab}>
+              {sponsors.cta.label}
+            </CTAButton>
+          )}
         </ScrollReveal>
       </section>
     </>

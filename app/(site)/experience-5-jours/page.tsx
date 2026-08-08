@@ -7,6 +7,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import TherapyCard from "@/components/TherapyCard";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
+import { isCtaVisible } from "@/lib/cta";
 import { getSectionIcon } from "@/lib/icons";
 import { type Locale, defaultLocale } from "@/lib/locales";
 
@@ -35,8 +36,10 @@ export default async function RetreatPage({ locale = defaultLocale }: { locale?:
         imageClassName={retreat.hero.image.className}
         primaryHref={retreat.hero.primary?.href}
         primaryLabel={retreat.hero.primary?.label}
+        primaryVisible={isCtaVisible(retreat.hero.primary)}
         secondaryHref={retreat.hero.secondary?.href}
         secondaryLabel={retreat.hero.secondary?.label}
+        secondaryVisible={isCtaVisible(retreat.hero.secondary)}
       />
       <section className="px-5 py-16 sm:px-8 lg:py-20">
         <div className="mx-auto max-w-4xl">
@@ -143,11 +146,13 @@ export default async function RetreatPage({ locale = defaultLocale }: { locale?:
               </div>
             ))}
           </div>
-          <div className="mt-4">
-            <CTAButton href={retreat.place.cta.href} variant={retreat.place.cta.variant ?? "primary"} newTab={retreat.place.cta.newTab}>
-              {retreat.place.cta.label}
-            </CTAButton>
-          </div>
+          {isCtaVisible(retreat.place.cta) && (
+            <div className="mt-4">
+              <CTAButton href={retreat.place.cta.href} variant={retreat.place.cta.variant ?? "primary"} newTab={retreat.place.cta.newTab}>
+                {retreat.place.cta.label}
+              </CTAButton>
+            </div>
+          )}
         </ScrollReveal>
       </Section>
     </>

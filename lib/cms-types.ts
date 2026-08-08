@@ -9,6 +9,8 @@ export type Cta = {
   href: string;
   variant?: "primary" | "secondary" | "paper" | "ghost" | "paperGhost";
   newTab?: boolean;
+  show?: boolean;
+  visible?: boolean;
 };
 
 export type HeroContent = {
@@ -183,6 +185,7 @@ export type SeminarsContent = {
       text: string;
       href?: string;
       newTab?: boolean;
+      showButton?: boolean;
     }>;
   };
 };

@@ -55,6 +55,14 @@ function isRecord(value: unknown): value is UnknownRecord {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
+function isCtaRecord(value: unknown): value is UnknownRecord {
+  return isRecord(value) && typeof value.label === "string" && typeof value.href === "string";
+}
+
+function hasCtaOverride(value: UnknownRecord): boolean {
+  return ["label", "href", "variant", "newTab", "visible", "show"].some((key) => key in value);
+}
+
 function normalizeImage(value: unknown): unknown {
   if (!isRecord(value)) {
     return value;
@@ -111,6 +119,10 @@ function mergeContent<T>(fallback: T, override: unknown, preserveArrayFallback =
 
   if (isRecord(fallback) && isRecord(override)) {
     const merged: UnknownRecord = { ...fallback };
+    const ctaOverrideHasNoHref =
+      isCtaRecord(fallback) &&
+      hasCtaOverride(override) &&
+      (!("href" in override) || override.href === "");
 
     for (const [key, value] of Object.entries(override)) {
       if (value === null || value === undefined || value === "") {
@@ -118,6 +130,11 @@ function mergeContent<T>(fallback: T, override: unknown, preserveArrayFallback =
       }
 
       merged[key] = mergeContent((fallback as UnknownRecord)[key], value, preserveArrayFallback);
+    }
+
+    if (ctaOverrideHasNoHref) {
+      merged.href = "";
+      merged.visible = false;
     }
 
     return merged as T;

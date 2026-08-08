@@ -49,6 +49,14 @@ const newTabField = {
   initialValue: false
 };
 
+const showButtonField = {
+  name: "visible",
+  title: "Display this button",
+  type: "boolean",
+  initialValue: true,
+  description: "Turn this off to hide the button on the website."
+};
+
 const linkField = {
   name: "link",
   title: "Link",
@@ -68,6 +76,7 @@ const ctaField = {
   title: "Call to action",
   type: "object",
   fields: [
+    showButtonField,
     { name: "label", title: "Label", type: "string" },
     { name: "href", title: "URL or path", type: "string" },
     newTabField,
@@ -830,6 +839,13 @@ const seminarsPage = {
                 { name: "title", title: "Title", type: "string" },
                 { name: "text", title: "Text", type: "text" },
                 { name: "href", title: "URL or path", type: "string" },
+                {
+                  name: "showButton",
+                  title: "Show button",
+                  type: "boolean",
+                  initialValue: true,
+                  description: "Turn this off to keep the resource but hide its button."
+                },
                 newTabField
               ]
             }
@@ -860,6 +876,13 @@ const seminarsPage = {
                   { name: "title", title: "Title", type: "string" },
                   { name: "text", title: "Text", type: "text" },
                   { name: "href", title: "URL or path", type: "string" },
+                  {
+                    name: "showButton",
+                    title: "Show button",
+                    type: "boolean",
+                    initialValue: true,
+                    description: "Turn this off to keep the resource but hide its button."
+                  },
                   newTabField
                 ]
               }
