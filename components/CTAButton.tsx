@@ -53,6 +53,7 @@ export default function CTAButton({
   return (
     <Link
       href={href}
+      prefetch={false}
       onClick={onClick}
       className={sharedClassName}
       {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}

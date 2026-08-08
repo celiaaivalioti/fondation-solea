@@ -84,6 +84,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
               <Link
                 key={option.locale}
                 href={getLanguageSwitchHref(pathname, option.locale)}
+                prefetch={false}
                 hrefLang={option.locale}
                 role="menuitem"
                 aria-current={active ? "true" : undefined}
@@ -112,6 +113,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
       <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6">
         <Link
           href={homeHref}
+          prefetch={false}
           className="group flex items-center"
           aria-label={`${site.name} - ${locale === "fr" ? "accueil" : "home"}`}
         >
@@ -137,6 +139,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={false}
                 {...newTabProps(item.newTab)}
                 aria-current={active ? "page" : undefined}
                 className={`relative ${isScrolled ? "text-[16px]" : "text-[18px]"} tracking-[0.005em] transition-all duration-500 ease-out-soft after:absolute after:bottom-[-7px] after:left-0 after:h-px after:transition-all after:duration-500 after:ease-out-soft ${
@@ -213,6 +216,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={false}
                 {...newTabProps(item.newTab)}
                 aria-current={active ? "page" : undefined}
                 className={`rounded-xl px-4 py-3.5 text-xl font-medium transition hover:bg-linen hover:text-moss ${
@@ -237,6 +241,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
                 <Link
                   key={option.locale}
                   href={getLanguageSwitchHref(pathname, option.locale)}
+                  prefetch={false}
                   hrefLang={option.locale}
                   aria-current={active ? "true" : undefined}
                   className={`rounded-xl border px-4 py-3.5 text-center text-lg font-semibold transition ${

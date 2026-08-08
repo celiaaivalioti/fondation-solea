@@ -60,7 +60,7 @@ export default function Footer({ navigation, site, locale = defaultLocale }: Foo
 
       <div className="relative mx-auto grid max-w-[1400px] gap-12 md:grid-cols-[1fr_1.5fr]">
         <div>
-          <Link href={localizeHref("/", locale)} className="group inline-flex items-center" aria-label={`${site.name} - ${locale === "fr" ? "accueil" : "home"}`}>
+          <Link href={localizeHref("/", locale)} prefetch={false} className="group inline-flex items-center" aria-label={`${site.name} - ${locale === "fr" ? "accueil" : "home"}`}>
             <Image
               src="/images/logo-solea-ink.png"
               alt={site.name}
@@ -81,6 +81,7 @@ export default function Footer({ navigation, site, locale = defaultLocale }: Foo
                 <Link
                   key={option.locale}
                   href={getLanguageSwitchHref(locale === "fr" ? "/" : "/en", option.locale)}
+                  prefetch={false}
                   hrefLang={option.locale}
                   aria-current={active ? "true" : undefined}
                   className={`inline-flex min-h-8 min-w-11 items-center justify-center rounded-full border px-3 text-[12px] font-semibold tracking-[0.12em] transition ${
@@ -98,6 +99,7 @@ export default function Footer({ navigation, site, locale = defaultLocale }: Foo
             <div className="mt-6">
               <Link
                 href={localizeHref("/nous-soutenir", locale)}
+                prefetch={false}
                 className="inline-flex min-h-14 items-center rounded-full bg-parchment px-8 py-4 text-lg font-medium text-bark transition hover:brightness-95"
               >
                 {site.donationLabel}
@@ -111,6 +113,7 @@ export default function Footer({ navigation, site, locale = defaultLocale }: Foo
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={false}
                 {...newTabProps(item.newTab)}
                 className="text-lg text-bark/75 transition hover:text-bark"
               >
@@ -126,7 +129,7 @@ export default function Footer({ navigation, site, locale = defaultLocale }: Foo
           <div className="text-lg leading-8 text-bark/75">
             <p className="mb-2 font-bold text-bark">Liens</p>
             {site.legalLinks.map((item) => (
-              <Link key={item.label} href={item.href} {...newTabProps(item.newTab)} className="block transition hover:text-bark">
+              <Link key={item.label} href={item.href} prefetch={false} {...newTabProps(item.newTab)} className="block transition hover:text-bark">
                 {item.label}
               </Link>
             ))}
