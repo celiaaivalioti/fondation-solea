@@ -250,7 +250,7 @@ function resolveContent(fallback: CmsContent, override: unknown, locale: Locale)
   const englishValues = extractEnglishOverrides(override);
 
   return localizeLinks(
-    mergeContent(mergeContent(fallback, sharedValues), englishValues, true),
+    mergeContent(mergeContent(fallback, sharedValues), englishValues),
     locale
   );
 }
