@@ -42,7 +42,10 @@ jobs:
         run: npm run lint
 
       - name: Build app
-        run: npm run build
+        # Next.js 16 Turbopack can emit standalone HTML references to client
+        # chunks that are absent from the packaged static directory. Webpack's
+        # production output keeps the server manifest and deployed assets in sync.
+        run: npm run build -- --webpack
 
       - name: Assemble standalone bundle
         run: |
