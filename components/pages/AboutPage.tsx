@@ -169,7 +169,7 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
         </div>
       </section>
 
-      <section id="conseil-de-fondation" className="relative scroll-mt-20 bg-parchment px-5 py-24 sm:px-8 lg:py-28">
+      <section id="conseil-de-fondation" className="relative scroll-mt-16 bg-parchment px-5 py-24 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-[1400px]">
           <div className="max-w-4xl">
             <div className="mb-5">

@@ -52,6 +52,23 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
     return () => window.removeEventListener("scroll", updateHeader);
   }, []);
 
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+
+    let secondFrame = 0;
+    const firstFrame = window.requestAnimationFrame(() => {
+      secondFrame = window.requestAnimationFrame(() => {
+        document.getElementById(decodeURIComponent(hash))?.scrollIntoView({ block: "start" });
+      });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
+    };
+  }, [pathname]);
+
   const languageOptions: Array<{ locale: Locale; label: string }> = [
     { locale: "fr", label: "Français" },
     { locale: "en", label: "English" }
@@ -190,18 +207,24 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
                       isAboutOpen ? "pointer-events-auto opacity-100" : "pointer-events-none invisible opacity-0"
                     }`}
                   >
-                    <div className="overflow-hidden rounded-2xl border border-moss/15 bg-paper p-2 shadow-soft">
-                      {aboutSubmenu.map((subitem) => (
-                        <Link
-                          key={subitem.href}
-                          href={subitem.href}
-                          prefetch={false}
-                          className="block rounded-xl px-4 py-3 text-[15px] font-medium leading-snug text-bark/78 transition hover:bg-linen hover:text-moss focus-visible:bg-linen focus-visible:text-moss"
-                          onClick={() => setIsAboutOpen(false)}
-                        >
-                          {subitem.label}
-                        </Link>
-                      ))}
+                    <div className="relative">
+                      <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 rounded-2xl shadow-[0_24px_72px_-18px_rgb(var(--color-brand)/0.28)] mix-blend-multiply"
+                      />
+                      <div className="relative overflow-hidden rounded-2xl bg-paper p-2">
+                        {aboutSubmenu.map((subitem) => (
+                          <Link
+                            key={subitem.href}
+                            href={subitem.href}
+                            prefetch={false}
+                            className="block rounded-xl px-4 py-3 text-[15px] font-medium leading-snug text-bark/78 transition hover:bg-linen hover:text-moss focus-visible:bg-linen focus-visible:text-moss"
+                            onClick={() => setIsAboutOpen(false)}
+                          >
+                            {subitem.label}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -18,6 +18,7 @@ const iconOptions = {
     { title: "Sunrise", value: "sunrise" },
     { title: "Moon", value: "moon" },
     { title: "Flower", value: "flower" },
+    { title: "Rose", value: "rose" },
     { title: "Sprout", value: "sprout" },
     { title: "Tree", value: "tree" },
     { title: "Waves", value: "waves" },

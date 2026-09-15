@@ -125,7 +125,7 @@ export const defaultContent: CmsContent = {
         { label: "Écoute & Bienveillance", icon: "ear" },
         { label: "Non-jugement", icon: "feather" },
         { label: "Ouverture d’esprit & Curiosité", icon: "compass" },
-        { label: "Respect", icon: "handshake" },
+        { label: "Respect", icon: "rose" },
         { label: "Volonté & Détermination", icon: "mountain" }
       ]
     },

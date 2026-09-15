@@ -122,7 +122,7 @@ defaultContentEn.about = {
       { label: "Listening & Kindness", icon: "ear" },
       { label: "Non-judgement", icon: "feather" },
       { label: "Open-mindedness & Curiosity", icon: "compass" },
-      { label: "Respect", icon: "handshake" },
+      { label: "Respect", icon: "rose" },
       { label: "Willpower & Determination", icon: "mountain" }
     ]
   },
