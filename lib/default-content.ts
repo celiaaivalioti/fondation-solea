@@ -567,7 +567,7 @@ export const defaultContent: CmsContent = {
       },
       {
         title: "Formulaires de contact et d’inscription",
-        text: "Les informations transmises via nos formulaires (coordonnées et, pour l’inscription, informations relatives à votre situation) nous sont envoyées par e-mail et servent uniquement à répondre à votre demande ou à traiter votre inscription. Elles ne sont jamais vendues ni partagées avec des tiers."
+        text: "Les informations transmises via nos formulaires (coordonnées et, pour l’inscription, informations relatives à votre situation) nous sont envoyées par e-mail et servent uniquement à répondre à votre demande ou à traiter votre inscription. Elles ne sont jamais vendues. Elles sont uniquement transmises aux prestataires techniques nécessaires au fonctionnement du site et au traitement de votre demande, dans le respect de la législation applicable."
       },
       {
         title: "Mesure d’audience",
