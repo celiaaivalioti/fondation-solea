@@ -23,6 +23,10 @@ const contentQuery = `{
     committee{..., members[]{..., image${imageProjection}}},
     founders{..., people[]{..., image${imageProjection}}}
   },
+  "committee": *[_type == "committeePage"][0]{
+    ...,
+    members[]{..., image${imageProjection}}
+  },
   "retreat": *[_type == "retreatPage"][0]{
     ...,
     hero{..., image${imageProjection}},

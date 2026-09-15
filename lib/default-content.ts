@@ -27,9 +27,10 @@ export const defaultContent: CmsContent = {
   navigation: [
     { label: "Accueil", href: "/" },
     { label: "Qui sommes-nous", href: "/qui-sommes-nous" },
+    { label: "Le comité", href: "/comite-pluridisciplinaire" },
     { label: "L’expérience de 5 jours", href: "/experience-5-jours" },
     { label: "Un pôle de savoir", href: "/seminaires-ressources" },
-    { label: "Questions fréquentes", href: "/questions-frequentes" },
+    { label: "FAQ", href: "/questions-frequentes" },
     { label: "S’inscrire", href: "/inscription" },
     { label: "Contact", href: "/contact" }
   ],
@@ -156,58 +157,88 @@ export const defaultContent: CmsContent = {
       ]
     },
     committee: {
-      eyebrow: "Comité pluridisciplinaire",
-      title: "Un comité composé de médecins, thérapeutes et experts",
+      eyebrow: "Gouvernance",
+      title: "Le Conseil de Fondation",
+      intro:
+        "Le Conseil de Fondation constitue l’organe suprême de Solea. Il est composé de cinq membres.\n\nIl assure la direction stratégique de la Fondation, définit ses orientations et fixe ses objectifs.\n\nIl prête une attention particulière à l’équilibre à court, moyen et long terme, entre les objectifs poursuivis et les moyens d’action et supervise la mise en œuvre des décisions prises.\n\nIl veille également à la bonne gestion de la Fondation et à ce que ses activités soient conformes à son but d’utilité publique, à ses principes de gouvernance et aux engagements pris envers ses partenaires et donateurs.",
       members: [
         {
-          name: "Marie-Estelle Gaignard",
-          role: "Scientific Fellow in Medical Oncology, MD-PhD candidate",
+          id: "alexandre-bodmer",
+          name: "Dr Alexandre Bodmer",
+          role: "Médecin oncologue, Président du Conseil de Fondation",
           image: {
-            url: "/images/committee-marie-estelle.jpeg",
-            alt: "Portrait de Marie-Estelle Gaignard"
+            url: "/images/board-alexandre-bodmer.png",
+            alt: "Portrait du Dr Alexandre Bodmer"
           },
-          quote:
-            "Solea incarne la rencontre entre médecines conventionnelle et complémentaire, au service d’une approche intégrative approfondie."
+          paragraphs: [
+            "Fort de plus de 25 ans d’expérience en oncologie médicale, le Dr Alexandre Bodmer est une figure reconnue de la cancérologie en Suisse romande. Il exerce à l’Hôpital de La Tour et intervient comme consultant aux Hôpitaux universitaires de Genève (HUG), après avoir notamment dirigé le Centre du sein des HUG.",
+            "Pionnier dans le développement d’une oncologie intégrative et engagé de longue date en faveur de la qualité de vie des patients, il défend une vision de la prise en charge qui considère la personne dans sa globalité.",
+            "Son parcours s’étend également aux sphères publique et philanthropique. Maire de Cologny et membre du Conseil de fondation de la Fondation Martin Bodmer, il dispose d’une solide expérience en matière de gouvernance et de responsabilité institutionnelle.",
+            "À la présidence du Conseil de Fondation de Solea, il met son expertise médicale, sa connaissance approfondie du système de santé et son expérience de la gouvernance au service d’une initiative fondée sur l’exigence, l’humanité et la complémentarité des approches."
+          ]
         },
         {
-          name: "Marie-Laure Amram",
-          role: "Médecin responsable, Centre d’Oncologie Onex",
+          id: "marie-france-provot-ivanov",
+          name: "Marie-France Provot-Ivanov",
+          role: "Co-fondatrice et Vice-présidente du Conseil de Fondation",
           image: {
-            url: "/images/committee-marie-laure-amram.webp",
-            alt: "Portrait de Marie-Laure Amram"
+            url: "/images/board-marie-france-provot-ivanov.png",
+            alt: "Portrait de Marie-France Provot-Ivanov"
           },
-          quote:
-            "En associant les avancées les plus récentes en oncologie à des thérapies complémentaires adaptées, nous favorisons un véritable processus de guérison."
+          paragraphs: [
+            "Avocate de formation, Marie-France Provot-Ivanov dispose de 25 ans d’expérience juridique acquise dans les secteurs privé et public.",
+            "Après avoir débuté sa carrière d’avocate en France, elle a poursuivi son parcours professionnel en Suisse, d’abord comme juriste dans le domaine bancaire puis dans le secteur public en qualité de conseillère auprès de la direction.",
+            "Son parcours témoigne de sa capacité à s’adapter à des environnements variés, à gérer des enjeux complexes, à traiter des dossiers transversaux et à collaborer avec des interlocuteurs issus de secteurs très différents.",
+            "Son parcours académique démontre également un intérêt de longue date pour le domaine médical, à travers des travaux consacrés à la responsabilité juridique du médecin.",
+            "En tant que Vice-présidente du Conseil de fondation, elle contribue au pilotage stratégique de Solea, à son développement et veille à inscrire l’initiative dans un cadre rigoureux, pérenne et cohérent avec sa mission d’intérêt public."
+          ]
         },
         {
-          name: "Frédéric Ris",
-          role: "Professeur de chirurgie, Vice-directeur du Centre du Cancer des HUG",
+          id: "marie-estelle-gaignard",
+          name: "Dre Marie-Estelle Gaignard",
+          role: "Oncologue, chercheuse et spécialiste en oncologie intégrative",
           image: {
-            url: "/images/committee-frederic-ris.png",
-            alt: "Portrait de Frédéric Ris"
+            url: "/images/board-marie-estelle-gaignard.png",
+            alt: "Portrait de la Dre Marie-Estelle Gaignard"
           },
-          quote:
-            "Solea offrira aux patients un cadre unique, une écoute attentive et un accès à des connaissances essentielles."
+          paragraphs: [
+            "Médecin au Service d’oncologie des Hôpitaux universitaires de Genève (HUG), la Dre Marie-Estelle Gaignard s’est spécialisée dans le développement d’une approche intégrative de l’oncologie, à la croisée de la médecine conventionnelle, des approches complémentaires et de la recherche scientifique.",
+            "Engagée de longue date dans le développement de la médecine intégrative en Suisse, elle a notamment participé à la co-création du réseau suisse de médecine intégrative et contribue activement à son développement.",
+            "Référente en oncologie au Centre de médecine intégrative des HUG, elle mène des travaux de recherche consacrés notamment aux effets de la méditation de pleine conscience sur les mécanismes biologiques associés au cancer.",
+            "Son parcours lui confère une expertise rare à l’interface entre pratique clinique, recherche et médecine intégrative.",
+            "Au sein du comité médical de Solea, elle contribue à garantir une approche rigoureuse, fondée sur les connaissances scientifiques disponibles, et à assurer la pertinence et la complémentarité des approches proposées aux patients."
+          ]
         },
         {
-          name: "M. Laura Nasi",
-          role: "MD, Integrative & Lifestyle Oncology, Mind-Body Medicine",
+          id: "nicolas-severin-muller",
+          name: "Nicolas Séverin Müller",
+          role: "Trésorier",
           image: {
-            url: "/images/committee-laura-nasi.png",
-            alt: "Portrait de M. Laura Nasi"
+            url: "/images/board-nicolas-severin-muller.png",
+            alt: "Portrait de Nicolas Séverin Müller"
           },
-          quote:
-            "Un environnement adapté et une équipe engagée : voilà ce qui permet de soigner une personne dans sa globalité, et non uniquement une maladie."
+          paragraphs: [
+            "Nicolas Séverin Müller possède un parcours rare à la croisée de la santé, de la finance et du pilotage institutionnel.",
+            "Il a passé plus de douze ans au sein de l’État de Genève, notamment à l’Office cantonal de la statistique puis à la Direction générale de la santé, où il a travaillé sur des projets liés à la santé publique, au financement du système de santé, à l’économie de la santé, à la planification sanitaire et à la santé numérique.",
+            "Il est actuellement Directeur adjoint des finances, en charge du pôle recettes aux Hôpitaux universitaires de Genève (HUG).",
+            "Son expérience des institutions publiques, du système de santé suisse et genevois et des enjeux financiers lui apporte une vision particulièrement complète de la gouvernance et du pilotage.",
+            "En tant que Trésorier de Solea, il veille à la rigueur financière de la Fondation et à une gestion responsable des ressources qui lui sont confiées."
+          ]
         },
         {
-          name: "Sabra Kigouk",
-          role: "Ligue genevoise contre le cancer, infirmière spécialisée et médiatrice familiale",
+          id: "kian-rieben",
+          name: "Kian Rieben",
+          role: "Délégué au développement et à l’innovation",
           image: {
-            url: "/images/committee-sabra-kigouk.webp",
-            alt: "Portrait de Sabra Kigouk"
+            url: "/images/board-kian-rieben.png",
+            alt: "Portrait de Kian Rieben"
           },
-          quote:
-            "Je me réjouis des collaborations futures entre Solea et la Ligue contre le cancer, convaincue que les patients en seront les premiers bénéficiaires."
+          paragraphs: [
+            "Entrepreneur et spécialiste de la transformation numérique et organisationnelle, Kian Rieben a consacré une grande partie de son parcours à la création et au développement de projets innovants.",
+            "Entre 2009 et 2012, il cofonde deux sociétés spécialisées dans les technologies digitales, qu’il dirige pendant plusieurs années. Il y développe une expertise reconnue dans la conception de projets numériques, l’innovation et l’accompagnement des organisations dans leur transformation.",
+            "Son parcours l’a également conduit à travailler dans le secteur public, notamment au sein de l’Office cantonal des systèmes d’information (OCSIN) de l’État de Genève. Au service de l’Office Cantonal de la Santé et du Programme Santé Numérique, il a participé à l’élaboration de la stratégie cantonale du numérique en santé. Il intervient aujourd’hui comme consultant auprès des Hôpitaux universitaires de Genève (HUG), où il accompagne un projet de transformation numérique de la gestion administrative des patients.",
+            "À travers son expérience entrepreneuriale, digitale et institutionnelle, Kian Rieben apporte à Solea une capacité à transformer des idées en projets concrets, à faire dialoguer des expertises diverses et à construire des solutions innovantes au service des bénéficiaires."
+          ]
         }
       ]
     },
@@ -252,6 +283,97 @@ export const defaultContent: CmsContent = {
         }
       ]
     }
+  },
+  committee: {
+    metadataTitle: "Le comité pluridisciplinaire",
+    eyebrow: "Une expertise médicale, scientifique et humaine",
+    title: "Le comité pluridisciplinaire",
+    intro:
+      "Le comité pluridisciplinaire (CP), actuellement composé de cinq membres, constitue l’instance de référence de Solea pour les questions médicales et thérapeutiques liées au programme d’accompagnement.\n\nIl réunit des médecins et des professionnels disposant d’expertises complémentaires en oncologie, recherche clinique, médecine intégrative et accompagnement des patients. Sa composition vise à garantir une approche à la fois médicale, scientifique et multidisciplinaire.\n\nSon rôle consiste à participer activement à la **conception, l’évaluation et l’amélioration continue** du programme afin d’en assurer la cohérence, la qualité et la pertinence.\n\nLe CP collabore étroitement avec le Conseil de Fondation et la Direction.",
+    sectionEyebrow: "Comité pluridisciplinaire",
+    sectionTitle: "Un comité composé de médecins, thérapeutes et experts",
+    members: [
+      {
+        id: "frederic-ris",
+        name: "Prof. Frédéric Ris",
+        role: "Chirurgien, spécialiste en chirurgie colorectale",
+        image: {
+          url: "/images/committee-frederic-ris.png",
+          alt: "Portrait du Prof. Frédéric Ris"
+        },
+        quote:
+          "Solea offrira aux patients un cadre unique, une écoute attentive et un accès à des connaissances essentielles.",
+        paragraphs: [
+          "Professeur de chirurgie aux Hôpitaux universitaires de Genève (HUG), le Prof. Frédéric Ris est spécialiste de chirurgie colorectale et de chirurgie viscérale. Directeur adjoint du Centre des cancers des HUG et co-responsable du Centre du cancer colorectal, il est reconnu pour son expertise en chirurgie colorectale mini-invasive et dans la prise en charge des cancers complexes.",
+          "Également engagé dans l’innovation et la recherche en chirurgie, il a été élu en 2025 Président de la European Society of Coloproctology (ESCP), devenant le premier médecin suisse à occuper cette fonction.",
+          "Il apporte à Solea une expertise chirurgicale de haut niveau et une vision résolument multidisciplinaire de la prise en charge du cancer."
+        ]
+      },
+      {
+        id: "marie-laure-amram",
+        name: "Dre Marie-Laure Amram",
+        role: "Médecin responsable Centre d’Oncologie Onex",
+        image: {
+          url: "/images/committee-marie-laure-amram.png",
+          alt: "Portrait de la Dre Marie-Laure Amram"
+        },
+        quote:
+          "En associant les avancées les plus récentes en oncologie à des thérapies complémentaires adaptées, nous favorisons un véritable processus de guérison.",
+        paragraphs: [
+          "Spécialiste FMH en oncologie médicale et en médecine interne générale, la Dre Marie-Laure Amram a consacré une grande partie de son parcours aux Hôpitaux universitaires de Genève (HUG), où elle a notamment été cheffe de clinique puis médecin associée. Elle exerce aujourd’hui comme consultante aux HUG et comme responsable du Centre d’Oncologie Onex.",
+          "Son expertise couvre notamment les cancers digestifs, urologiques et du sein. Très impliquée dans la formation médicale et la recherche clinique, elle a notamment participé à plusieurs études de la SAKK et à la mise en place de structures spécialisées en oncologie aux HUG.",
+          "Elle apporte à Solea une solide expérience clinique, académique et multidisciplinaire, ainsi qu’une attention particulière aux dimensions de la qualité de vie et de la santé sexuelle en oncologie."
+        ]
+      },
+      {
+        id: "thibaud-koessler",
+        name: "Dr Thibaud Kössler",
+        role: "Responsable de l’Unité des tumeurs digestives des HUG, MD/PhD",
+        image: {
+          url: "/images/committee-thibaud-koessler.png",
+          alt: "Portrait du Dr Thibaud Kössler"
+        },
+        quote:
+          "Je soutiens la vision de Solea, qui place l’humain au cœur des soins. Une approche intégrative, en complément des traitements médicaux, permet d’accompagner chaque patient dans sa globalité.",
+        paragraphs: [
+          "Médecin adjoint au Service d’oncologie des HUG et responsable du Programme des tumeurs digestives, le Dr Thibaud Kössler est spécialiste des cancers digestifs et notamment du cancer colorectal. Diplômé de l’Université de Genève, il a complété sa formation par un doctorat en sciences à l’Université de Cambridge et une spécialisation en oncologie médicale aux HUG.",
+          "Très actif dans la recherche clinique, il est investigateur principal de nombreux essais et préside la task force dédiée aux tumeurs colorectales de l’European Organisation for Research and Treatment of Cancer (EORTC). Il a également été nommé au comité scientifique du Groupe Suisse de Recherche Clinique sur le Cancer.",
+          "Il apporte à Solea une expertise pointue en oncologie, une culture de la médecine fondée sur les preuves et une expérience internationale de la recherche clinique."
+        ]
+      },
+      {
+        id: "laura-nasi",
+        name: "Dre Laura Nasi",
+        role: "Oncologue, spécialiste en oncologie intégrative et médecine corps-esprit",
+        image: {
+          url: "/images/committee-laura-nasi.png",
+          alt: "Portrait de la Dre Laura Nasi"
+        },
+        quote:
+          "Un environnement adapté et une équipe engagée : voilà ce qui permet de soigner une personne dans sa globalité, et non uniquement une maladie.",
+        paragraphs: [
+          "Médecin oncologue formée en médecine interne et en oncologie clinique, notamment au Memorial Sloan Kettering Cancer Center à New York, la Dre Laura Nasi possède plus de 15 ans d’expérience en oncologie et en recherche clinique. Son parcours l’a notamment conduite à travailler en Suisse au sein de l’International Breast Cancer Study Group et de Debiopharm, où elle a dirigé des activités de recherche et d’évaluation en oncologie.",
+          "Formée également en médecine corps-esprit à Harvard, elle s’est consacrée au développement de l’oncologie intégrative, qu’elle pratique et enseigne aujourd’hui.",
+          "Fondatrice de plusieurs initiatives dans ce domaine, elle apporte à Solea une expertise internationale dans l’intégration des dimensions médicales, psychologiques, comportementales et corps-esprit dans l’accompagnement des personnes touchées par le cancer."
+        ]
+      },
+      {
+        id: "olivia-braillard",
+        name: "Dre Olivia Braillard",
+        role: "Médecin interniste, spécialiste de l’éducation thérapeutique",
+        image: {
+          url: "/images/committee-olivia-braillard.png",
+          alt: "Portrait de la Dre Olivia Braillard"
+        },
+        quote:
+          "Solea incarne la rencontre entre médecines conventionnelle et complémentaire, au service d’une approche intégrative approfondie.",
+        paragraphs: [
+          "Médecin spécialiste en médecine interne générale, la Dre Olivia Braillard exerce depuis 2010 au Service de médecine de premier recours des HUG, où elle est aujourd’hui médecin adjointe et responsable de l’Unité de consultation ambulatoire de médecine interne générale.",
+          "Son parcours s’est progressivement orienté vers une approche plus globale de la personne, notamment à travers l’éducation thérapeutique du patient (ETP) et une réflexion sur la place du vécu et du récit dans la relation de soins. Elle contribue notamment aux activités du Centre d’éducation thérapeutique du patient des HUG.",
+          "Elle apporte à Solea une expertise précieuse dans l’accompagnement du patient comme acteur de sa santé, ainsi qu’une approche profondément centrée sur la personne."
+        ]
+      }
+    ]
   },
   retreat: {
     metadataTitle: "L’expérience de 5 jours",

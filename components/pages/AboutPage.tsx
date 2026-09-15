@@ -1,5 +1,6 @@
 import Image from "next/image";
 import CheckList from "@/components/CheckList";
+import CommitteeDirectory from "@/components/CommitteeDirectory";
 import CTAButton from "@/components/CTAButton";
 import Hero from "@/components/Hero";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -171,7 +172,8 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
 
       <section id="conseil-de-fondation" className="relative scroll-mt-16 bg-parchment px-5 py-24 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-[1400px]">
-          <div className="max-w-4xl">
+          <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+            <div className="max-w-4xl">
             <div className="mb-5">
               <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
                 {about.committee.eyebrow}
@@ -180,46 +182,19 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
             <h2 className="font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-[1.1] text-bark text-balance">
               {about.committee.title}
             </h2>
+            </div>
+            <RichText
+              text={about.committee.intro}
+              paragraphClassName="text-[1.08rem] leading-[1.75] text-bark/74"
+            />
           </div>
 
-          <ScrollReveal className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {about.committee.members.map((member) => (
-              <article
-                key={member.name}
-                className="overflow-hidden rounded-[1.5rem] bg-paper "
-              >
-                <div className="p-6 pb-2">
-                  <div
-                    className="relative mb-2 mr-2 aspect-square overflow-hidden bg-linen"
-                    style={{
-                      boxShadow: "8px 8px 0 rgb(var(--color-brand) / 1)"
-                    }}
-                  >
-                    <Image
-                      src={member.image.url}
-                      alt={member.image.alt}
-                      fill
-                      className="object-cover object-top"
-                      sizes="(min-width: 1280px) 18vw, (min-width: 768px) 45vw, 90vw"
-                    />
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <p className="whitespace-pre-line font-display text-[1.25rem] font-regular leading-[1.5] text-bark">
-                    “{member.quote}”
-                  </p>
-                  <div className="mt-7">
-                    <h3 className="text-lg font-semibold leading-snug text-bark">
-                      {member.name}
-                    </h3>
-                    <p className="mt-2 text-base leading-6 text-bark/56">
-                      {member.role}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            ))}
+          <ScrollReveal className="mt-14">
+            <CommitteeDirectory
+              members={about.committee.members}
+              bioLabel="Bio"
+              closeLabel={locale === "fr" ? "Fermer la biographie" : "Close biography"}
+            />
           </ScrollReveal>
         </div>
       </section>

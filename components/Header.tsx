@@ -159,7 +159,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
           />
         </Link>
         <nav
-          className="ml-auto hidden items-center justify-end gap-7 xl:flex"
+          className="ml-auto hidden items-center justify-end gap-6 xl:flex"
           aria-label="Navigation principale"
         >
           {navigation.slice(1).map((item) => {

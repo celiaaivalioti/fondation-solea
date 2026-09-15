@@ -111,6 +111,7 @@ export type AboutContent = {
   committee: {
     eyebrow: string;
     title: string;
+    intro: string;
     members: PersonCard[];
   };
   founders: {
@@ -119,6 +120,16 @@ export type AboutContent = {
     intro: string;
     people: PersonCard[];
   };
+};
+
+export type CommitteeContent = {
+  metadataTitle: string;
+  eyebrow: string;
+  title: string;
+  intro: string;
+  sectionEyebrow: string;
+  sectionTitle: string;
+  members: PersonCard[];
 };
 
 export type Therapy = {
@@ -283,6 +294,7 @@ export type CmsContent = {
   navigation: NavigationItem[];
   home: HomeContent;
   about: AboutContent;
+  committee: CommitteeContent;
   retreat: RetreatContent;
   seminars: SeminarsContent;
   support: SupportContent;

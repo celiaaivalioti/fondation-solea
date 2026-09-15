@@ -23,6 +23,7 @@ defaultContentEn.site = {
 defaultContentEn.navigation = [
   { label: "Home", href: "/" },
   { label: "About us", href: "/qui-sommes-nous" },
+  { label: "The multidisciplinary committee", href: "/comite-pluridisciplinaire" },
   { label: "The five-day experience", href: "/experience-5-jours" },
   { label: "Knowledge hub", href: "/seminaires-ressources" },
   { label: "FAQ", href: "/questions-frequentes" },
@@ -154,29 +155,70 @@ defaultContentEn.about = {
   },
   committee: {
     ...defaultContentEn.about.committee,
-    eyebrow: "Multidisciplinary committee",
-    title: "A committee of physicians, therapists and experts",
-    members: defaultContentEn.about.committee.members.map((member) => ({
-      ...member,
-      image: {
-        ...member.image,
-        alt: `Portrait of ${member.name}`
+    eyebrow: "Governance",
+    title: "The Foundation Board",
+    intro:
+      "The Foundation Board is Solea’s supreme governing body. It is composed of five members.\n\nIt provides the Foundation’s strategic direction, defines its priorities and sets its objectives.\n\nIt pays particular attention to maintaining a short-, medium- and long-term balance between the objectives pursued and the means available, and supervises the implementation of its decisions.\n\nIt also ensures the sound management of the Foundation and that its activities comply with its public-interest purpose, its governance principles and the commitments made to its partners and donors.",
+    members: [
+      {
+        ...defaultContentEn.about.committee.members[0],
+        image: { ...defaultContentEn.about.committee.members[0].image, alt: "Portrait of Dr Alexandre Bodmer" },
+        role: "Oncologist, President of the Foundation Board",
+        paragraphs: [
+          "With more than 25 years of experience in medical oncology, Dr Alexandre Bodmer is a recognised figure in cancer care in French-speaking Switzerland. He practises at Hôpital de La Tour and serves as a consultant at Geneva University Hospitals (HUG), having previously led the HUG Breast Centre.",
+          "A pioneer in the development of integrative oncology and a long-standing advocate for patients’ quality of life, he promotes a vision of care that considers the person as a whole.",
+          "His experience also extends to the public and philanthropic spheres. As Mayor of Cologny and a member of the board of the Martin Bodmer Foundation, he has solid experience in governance and institutional responsibility.",
+          "As President of Solea’s Foundation Board, he places his medical expertise, in-depth knowledge of the healthcare system and governance experience at the service of an initiative founded on rigour, humanity and complementary approaches."
+        ]
       },
-      role: member.role
-        .replace("Médecin responsable", "Medical Director")
-        .replace("Professeur de chirurgie, Vice-directeur du Centre du Cancer des HUG", "Professor of Surgery, Deputy Director of the HUG Cancer Centre")
-        .replace("Ligue genevoise contre le cancer, infirmière spécialisée et médiatrice familiale", "Geneva Cancer League, specialist nurse and family mediator"),
-      quote:
-        member.name === "Marie-Estelle Gaignard"
-          ? "Solea embodies the meeting of conventional and complementary medicine, serving an in-depth integrative approach."
-          : member.name === "Marie-Laure Amram"
-            ? "By combining the latest advances in oncology with appropriate complementary therapies, we support a genuine healing process."
-            : member.name === "Frédéric Ris"
-              ? "Solea will offer patients a unique setting, attentive listening and access to essential knowledge."
-              : member.name === "M. Laura Nasi"
-                ? "A suitable environment and a committed team: this is what makes it possible to care for a person as a whole, not only for an illness."
-                : "I look forward to future collaborations between Solea and the Cancer League, convinced that patients will be the first to benefit."
-    }))
+      {
+        ...defaultContentEn.about.committee.members[1],
+        image: { ...defaultContentEn.about.committee.members[1].image, alt: "Portrait of Marie-France Provot-Ivanov" },
+        role: "Co-founder and Vice-President of the Foundation Board",
+        paragraphs: [
+          "A lawyer by training, Marie-France Provot-Ivanov has 25 years of legal experience in the private and public sectors.",
+          "After beginning her legal career in France, she continued her professional journey in Switzerland, first as a legal counsel in banking and then in the public sector as an adviser to senior management.",
+          "Her career demonstrates her ability to adapt to varied environments, manage complex issues, handle cross-functional matters and collaborate with people from very different sectors.",
+          "Her academic background also reflects a long-standing interest in medicine, through work devoted to physicians’ legal liability.",
+          "As Vice-President of the Foundation Board, she contributes to Solea’s strategic leadership and development, ensuring that the initiative is grounded in a rigorous, sustainable framework aligned with its public-interest mission."
+        ]
+      },
+      {
+        ...defaultContentEn.about.committee.members[2],
+        image: { ...defaultContentEn.about.committee.members[2].image, alt: "Portrait of Dr Marie-Estelle Gaignard" },
+        role: "Oncologist, researcher and specialist in integrative oncology",
+        paragraphs: [
+          "A physician in the Oncology Department at Geneva University Hospitals (HUG), Dr Marie-Estelle Gaignard specialises in developing an integrative approach to oncology at the crossroads of conventional medicine, complementary approaches and scientific research.",
+          "Long involved in the development of integrative medicine in Switzerland, she helped co-create the Swiss integrative medicine network and contributes actively to its development.",
+          "As the oncology lead at the HUG Centre for Integrative Medicine, she conducts research including work on the effects of mindfulness meditation on biological mechanisms associated with cancer.",
+          "Her career gives her rare expertise at the interface of clinical practice, research and integrative medicine.",
+          "Within Solea’s medical committee, she helps guarantee a rigorous approach grounded in available scientific knowledge and ensures the relevance and complementarity of the approaches offered to patients."
+        ]
+      },
+      {
+        ...defaultContentEn.about.committee.members[3],
+        image: { ...defaultContentEn.about.committee.members[3].image, alt: "Portrait of Nicolas Séverin Müller" },
+        role: "Treasurer",
+        paragraphs: [
+          "Nicolas Séverin Müller has an uncommon background spanning healthcare, finance and institutional management.",
+          "He spent more than twelve years with the State of Geneva, notably at the Cantonal Statistical Office and then the Directorate-General for Health, working on public health, healthcare financing, health economics, healthcare planning and digital health projects.",
+          "He is currently Deputy Director of Finance, responsible for revenue at Geneva University Hospitals (HUG).",
+          "His experience of public institutions, the Swiss and Geneva healthcare systems and financial matters gives him an especially comprehensive view of governance and management.",
+          "As Solea’s Treasurer, he ensures the Foundation’s financial rigour and the responsible management of the resources entrusted to it."
+        ]
+      },
+      {
+        ...defaultContentEn.about.committee.members[4],
+        image: { ...defaultContentEn.about.committee.members[4].image, alt: "Portrait of Kian Rieben" },
+        role: "Delegate for Development and Innovation",
+        paragraphs: [
+          "An entrepreneur and specialist in digital and organisational transformation, Kian Rieben has devoted much of his career to creating and developing innovative projects.",
+          "Between 2009 and 2012, he co-founded two companies specialising in digital technologies, which he led for several years. There he developed recognised expertise in digital project design, innovation and supporting organisations through transformation.",
+          "His career also led him to the public sector, notably the State of Geneva’s Cantonal Office for Information Systems. Working with the Cantonal Health Office and the Digital Health Programme, he helped develop the cantonal digital health strategy. He now consults for Geneva University Hospitals (HUG), supporting a digital transformation project for patient administration.",
+          "Through his entrepreneurial, digital and institutional experience, Kian Rieben brings Solea an ability to turn ideas into concrete projects, connect diverse expertise and build innovative solutions for beneficiaries."
+        ]
+      }
+    ]
   },
   founders: {
     ...defaultContentEn.about.founders,
@@ -219,6 +261,74 @@ defaultContentEn.about = {
           }
     )
   }
+};
+
+defaultContentEn.committee = {
+  ...defaultContentEn.committee,
+  metadataTitle: "The multidisciplinary committee",
+  eyebrow: "Medical, scientific and human expertise",
+  title: "The multidisciplinary committee",
+  intro:
+    "The Multidisciplinary Committee (MC), currently composed of five members, is Solea’s reference body for medical and therapeutic matters related to the support programme.\n\nIt brings together physicians and professionals with complementary expertise in oncology, clinical research, integrative medicine and patient support. Its composition is designed to ensure an approach that is medical, scientific and multidisciplinary.\n\nIts role is to participate actively in the **design, evaluation and continuous improvement** of the programme, ensuring its coherence, quality and relevance.\n\nThe MC works closely with the Foundation Board and the Executive Team.",
+  sectionEyebrow: "Multidisciplinary committee",
+  sectionTitle: "A committee of physicians, therapists and experts",
+  members: [
+    {
+      ...defaultContentEn.committee.members[0],
+      role: "Surgeon, specialist in colorectal surgery",
+      image: { ...defaultContentEn.committee.members[0].image, alt: "Portrait of Prof. Frédéric Ris" },
+      quote: "Solea will offer patients a unique setting, attentive listening and access to essential knowledge.",
+      paragraphs: [
+        "Professor of Surgery at Geneva University Hospitals (HUG), Prof. Frédéric Ris specialises in colorectal and visceral surgery. Deputy Director of the HUG Cancer Centre and co-director of the Colorectal Cancer Centre, he is recognised for his expertise in minimally invasive colorectal surgery and the treatment of complex cancers.",
+        "Also committed to innovation and surgical research, he was elected President of the European Society of Coloproctology (ESCP) in 2025, becoming the first Swiss physician to hold this position.",
+        "He brings Solea high-level surgical expertise and a resolutely multidisciplinary vision of cancer care."
+      ]
+    },
+    {
+      ...defaultContentEn.committee.members[1],
+      role: "Medical Director, Centre d’Oncologie Onex",
+      image: { ...defaultContentEn.committee.members[1].image, alt: "Portrait of Dr Marie-Laure Amram" },
+      quote: "By combining the latest advances in oncology with appropriate complementary therapies, we support a genuine healing process.",
+      paragraphs: [
+        "A specialist in medical oncology and general internal medicine, Dr Marie-Laure Amram has spent much of her career at Geneva University Hospitals (HUG), where she served as senior resident and then associate physician. She now works as a consultant at HUG and as head of the Centre d’Oncologie Onex.",
+        "Her expertise includes digestive, urological and breast cancers. Closely involved in medical education and clinical research, she has taken part in several SAKK studies and helped establish specialised oncology structures at HUG.",
+        "She brings Solea solid clinical, academic and multidisciplinary experience, together with particular attention to quality of life and sexual health in oncology."
+      ]
+    },
+    {
+      ...defaultContentEn.committee.members[2],
+      role: "Head of the HUG Digestive Tumours Unit, MD/PhD",
+      image: { ...defaultContentEn.committee.members[2].image, alt: "Portrait of Dr Thibaud Kössler" },
+      quote: "I support Solea’s vision, which places people at the heart of care. An integrative approach alongside medical treatment makes it possible to support each patient as a whole.",
+      paragraphs: [
+        "An attending physician in the HUG Oncology Department and head of the Digestive Tumours Programme, Dr Thibaud Kössler specialises in digestive cancers, particularly colorectal cancer. A graduate of the University of Geneva, he completed a PhD at the University of Cambridge and specialised in medical oncology at HUG.",
+        "Highly active in clinical research, he is the principal investigator of numerous trials and chairs the European Organisation for Research and Treatment of Cancer (EORTC) colorectal tumour task force. He has also been appointed to the scientific committee of the Swiss Group for Clinical Cancer Research.",
+        "He brings Solea advanced oncology expertise, a culture of evidence-based medicine and international experience in clinical research."
+      ]
+    },
+    {
+      ...defaultContentEn.committee.members[3],
+      role: "Oncologist, specialist in integrative oncology and mind-body medicine",
+      image: { ...defaultContentEn.committee.members[3].image, alt: "Portrait of Dr Laura Nasi" },
+      quote: "A suitable environment and a committed team: this is what makes it possible to care for a person as a whole, not only for an illness.",
+      paragraphs: [
+        "An oncologist trained in internal medicine and clinical oncology, notably at Memorial Sloan Kettering Cancer Center in New York, Dr Laura Nasi has more than 15 years of experience in oncology and clinical research. Her career brought her to Switzerland to work with the International Breast Cancer Study Group and Debiopharm, where she led oncology research and evaluation activities.",
+        "Also trained in mind-body medicine at Harvard, she has devoted herself to developing integrative oncology, which she now practises and teaches.",
+        "As the founder of several initiatives in this field, she brings Solea international expertise in integrating the medical, psychological, behavioural and mind-body dimensions of support for people affected by cancer."
+      ]
+    },
+    {
+      ...defaultContentEn.committee.members[4],
+      role: "Internist, specialist in therapeutic patient education",
+      image: { ...defaultContentEn.committee.members[4].image, alt: "Portrait of Dr Olivia Braillard" },
+      quote: "Solea embodies the meeting of conventional and complementary medicine, serving an in-depth integrative approach.",
+      paragraphs: [
+        "A specialist in general internal medicine, Dr Olivia Braillard has worked since 2010 in the HUG Primary Care Department, where she is now an attending physician and head of the General Internal Medicine Outpatient Consultation Unit.",
+        "Her career has progressively moved towards a more holistic approach to the person, notably through therapeutic patient education and reflection on the place of lived experience and narrative in the care relationship. She contributes in particular to the work of the HUG Therapeutic Patient Education Centre.",
+        "She brings Solea valuable expertise in supporting patients as active participants in their health, along with an approach deeply centred on the person."
+      ]
+    }
+  ]
 };
 
 defaultContentEn.retreat = {

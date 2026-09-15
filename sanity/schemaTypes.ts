@@ -524,6 +524,7 @@ const aboutPage = {
       fields: [
         { name: "eyebrow", title: "Eyebrow", type: "string" },
         { name: "title", title: "Title", type: "string" },
+        { name: "intro", title: "Introduction", type: "text", rows: 9 },
         { name: "members", title: "Members", type: "array", of: [{ type: "person" }] }
       ]
     },
@@ -620,6 +621,7 @@ const aboutPage = {
         fields: [
           { name: "eyebrow", title: "Eyebrow", type: "string" },
           { name: "title", title: "Title", type: "string" },
+          { name: "intro", title: "Introduction", type: "text", rows: 9 },
           { name: "members", title: "Members", type: "array", of: [{ type: "person" }] }
         ]
       },
@@ -637,6 +639,38 @@ const aboutPage = {
     ])
   ],
   ...singletonPreview("Qui sommes-nous")
+};
+
+const committeePageFields = [
+  { name: "metadataTitle", title: "Metadata title", type: "string" },
+  { name: "eyebrow", title: "Introduction eyebrow", type: "string" },
+  { name: "title", title: "Introduction title", type: "string" },
+  {
+    name: "intro",
+    title: "Introduction",
+    type: "text",
+    rows: 10,
+    description: "Laissez une ligne vide entre les paragraphes. Entourez un passage de ** pour le mettre en gras."
+  },
+  { name: "sectionEyebrow", title: "Committee eyebrow", type: "string" },
+  { name: "sectionTitle", title: "Committee title", type: "string" },
+  {
+    name: "members",
+    title: "Committee members",
+    type: "array",
+    of: [{ type: "person" }]
+  }
+];
+
+const committeePage = {
+  name: "committeePage",
+  title: "Le comité pluridisciplinaire",
+  type: "document",
+  fields: [
+    ...committeePageFields,
+    englishTranslationField(committeePageFields)
+  ],
+  ...singletonPreview("Le comité pluridisciplinaire")
 };
 
 const retreatPage = {
@@ -1214,6 +1248,7 @@ export const schemaTypes = [
   navigation,
   homePage,
   aboutPage,
+  committeePage,
   retreatPage,
   seminarsPage,
   supportPage,
