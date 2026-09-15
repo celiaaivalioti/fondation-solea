@@ -1,4 +1,4 @@
-import SeminarsPage, { generateSeminarsMetadata } from "@/app/(site)/seminaires-ressources/page";
+import SeminarsPage, { generateSeminarsMetadata } from "@/components/pages/SeminarsPage";
 
 export const generateMetadata = () => generateSeminarsMetadata("en");
 

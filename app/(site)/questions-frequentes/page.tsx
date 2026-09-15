@@ -1,44 +1,7 @@
-import Accordion from "@/components/Accordion";
-import { getCmsContent } from "@/lib/cms";
-import { type Locale, defaultLocale } from "@/lib/locales";
+import FaqPage, { generateFaqMetadata } from "@/components/pages/FaqPage";
 
-export async function generateFaqMetadata(locale: Locale = defaultLocale) {
-  const { faq } = await getCmsContent(locale);
+export const generateMetadata = () => generateFaqMetadata("fr");
 
-  return {
-    title: faq.metadataTitle,
-    description: faq.title
-  };
-}
-
-export const generateMetadata = () => generateFaqMetadata();
-
-export default async function FAQPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
-  const { faq } = await getCmsContent(locale);
-
-  return (
-    <div className="relative isolate overflow-hidden px-5 py-12 sm:px-8 lg:py-16">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-gradient-to-br from-fern/20 to-transparent blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-24 bottom-12 h-72 w-72 rounded-full bg-gradient-to-br from-cream/40 to-transparent blur-3xl"
-      />
-
-      <div className="mx-auto w-full max-w-[1000px] relative z-10">
-        <div className="mb-12 sm:mb-16">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss mb-6">
-            {faq.eyebrow}
-          </p>
-          <h1 className="font-display text-[clamp(1.75rem,3vw,2.75rem)] font-light leading-[1.1] text-bark text-balance">
-            {faq.title}
-          </h1>
-        </div>
-
-        <Accordion items={faq.items} />
-      </div>
-    </div>
-  );
+export default function FrenchFaqPage() {
+  return <FaqPage locale="fr" />;
 }

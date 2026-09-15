@@ -1,4 +1,4 @@
-import AboutPage, { generateAboutMetadata } from "@/app/(site)/qui-sommes-nous/page";
+import AboutPage, { generateAboutMetadata } from "@/components/pages/AboutPage";
 
 export const generateMetadata = () => generateAboutMetadata("en");
 

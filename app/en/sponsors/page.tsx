@@ -1,4 +1,4 @@
-import SponsorsPage, { generateSponsorsMetadata } from "@/app/(site)/sponsors/page";
+import SponsorsPage, { generateSponsorsMetadata } from "@/components/pages/SponsorsPage";
 
 export const generateMetadata = () => generateSponsorsMetadata("en");
 

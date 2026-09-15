@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { defaultContent } from "./default-content";
 import { defaultContentEn } from "./default-content-en";
 import { hasSanityConfig, sanityClient } from "./sanity";
@@ -255,7 +256,7 @@ function resolveContent(fallback: CmsContent, override: unknown, locale: Locale)
   );
 }
 
-export async function getCmsContent(locale: Locale = defaultLocale): Promise<CmsContent> {
+async function loadCmsContent(locale: Locale): Promise<CmsContent> {
   const fallback = locale === "en" ? defaultContentEn : defaultContent;
 
   if (!hasSanityConfig || !sanityClient) {
@@ -272,5 +273,11 @@ export async function getCmsContent(locale: Locale = defaultLocale): Promise<Cms
     return localizeLinks(fallback, locale);
   }
 }
+
+// Metadata, layouts and pages frequently request the same locale during one
+// render. React's request cache keeps that to one CMS read and one merge pass.
+export const getCmsContent = cache(
+  (locale: Locale = defaultLocale) => loadCmsContent(locale)
+);
 
 export type { CmsContent };

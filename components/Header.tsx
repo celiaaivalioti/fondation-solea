@@ -19,6 +19,7 @@ type HeaderProps = {
 export default function Header({ navigation, site, locale = defaultLocale }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const homeHref = localizeHref("/", locale);
@@ -26,6 +27,18 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
   const normalizedHomeHref = homeHref.replace(/\/$/, "") || "/";
   const isHome = normalizedPathname === normalizedHomeHref;
   const isOverlay = isHome && !isScrolled;
+  const aboutHref = localizeHref("/qui-sommes-nous", locale);
+  const aboutSubmenu = locale === "fr"
+    ? [
+        { label: "Notre histoire", href: `${aboutHref}#notre-histoire` },
+        { label: "Ce qui nous anime", href: `${aboutHref}#ce-qui-nous-anime` },
+        { label: "Conseil de Fondation", href: `${aboutHref}#conseil-de-fondation` }
+      ]
+    : [
+        { label: "Our story", href: `${aboutHref}#notre-histoire` },
+        { label: "What drives us", href: `${aboutHref}#ce-qui-nous-anime` },
+        { label: "Foundation Board", href: `${aboutHref}#conseil-de-fondation` }
+      ];
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -134,6 +147,66 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
         >
           {navigation.slice(1).map((item) => {
             const active = isActive(item.href);
+            const hasAboutSubmenu = item.href === aboutHref;
+
+            if (hasAboutSubmenu) {
+              return (
+                <div
+                  key={item.href}
+                  className="relative"
+                  onMouseEnter={() => setIsAboutOpen(true)}
+                  onMouseLeave={() => setIsAboutOpen(false)}
+                  onFocusCapture={() => setIsAboutOpen(true)}
+                  onBlurCapture={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                      setIsAboutOpen(false);
+                    }
+                  }}
+                >
+                  <Link
+                    href={item.href}
+                    prefetch={false}
+                    {...newTabProps(item.newTab)}
+                    aria-current={active ? "page" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={isAboutOpen}
+                    onClick={() => setIsAboutOpen(false)}
+                    className={`relative inline-flex items-center gap-1.5 ${isScrolled ? "text-[16px]" : "text-[18px]"} tracking-[0.005em] transition-all duration-500 ease-out-soft after:absolute after:bottom-[-7px] after:left-0 after:h-px after:transition-all after:duration-500 after:ease-out-soft ${
+                      isOverlay
+                        ? `after:bg-paper hover:text-paper ${active ? "font-semibold text-paper after:w-full" : "text-paper/85 after:w-0"}`
+                        : `after:bg-moss hover:text-moss ${active ? "font-semibold text-moss after:w-full" : "text-bark/74 after:w-0"}`
+                    }`}
+                  >
+                    {item.label}
+                    <ChevronDown
+                      aria-hidden="true"
+                      strokeWidth={1.7}
+                      className={`h-4 w-4 transition-transform duration-300 ${isAboutOpen ? "rotate-180" : ""}`}
+                    />
+                  </Link>
+
+                  <div
+                    className={`absolute left-1/2 top-full w-64 -translate-x-1/2 pt-4 transition-all duration-300 ease-out-soft ${
+                      isAboutOpen ? "pointer-events-auto opacity-100" : "pointer-events-none invisible opacity-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden rounded-2xl border border-moss/15 bg-paper p-2 shadow-soft">
+                      {aboutSubmenu.map((subitem) => (
+                        <Link
+                          key={subitem.href}
+                          href={subitem.href}
+                          prefetch={false}
+                          className="block rounded-xl px-4 py-3 text-[15px] font-medium leading-snug text-bark/78 transition hover:bg-linen hover:text-moss focus-visible:bg-linen focus-visible:text-moss"
+                          onClick={() => setIsAboutOpen(false)}
+                        >
+                          {subitem.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
 
             return (
               <Link
@@ -211,6 +284,40 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
         >
           {navigation.map((item) => {
             const active = isActive(item.href);
+            const hasAboutSubmenu = item.href === aboutHref;
+
+            if (hasAboutSubmenu) {
+              return (
+                <div key={item.href}>
+                  <Link
+                    href={item.href}
+                    prefetch={false}
+                    {...newTabProps(item.newTab)}
+                    aria-current={active ? "page" : undefined}
+                    className={`flex items-center justify-between rounded-xl px-4 py-3.5 text-xl font-medium transition hover:bg-linen hover:text-moss ${
+                      active ? "bg-linen text-moss" : "text-bark/82"
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.label}
+                    <ChevronDown aria-hidden="true" strokeWidth={1.7} className="h-5 w-5" />
+                  </Link>
+                  <div className="ml-6 mt-1 grid gap-1 border-l border-moss/20 pl-3">
+                    {aboutSubmenu.map((subitem) => (
+                      <Link
+                        key={subitem.href}
+                        href={subitem.href}
+                        prefetch={false}
+                        className="rounded-xl px-4 py-2.5 text-base font-medium text-bark/68 transition hover:bg-linen hover:text-moss"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {subitem.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
 
             return (
               <Link

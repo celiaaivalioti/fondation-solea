@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import CTAButton from "./CTAButton";
+import PageGlow from "./PageGlow";
 import ParallaxBackground from "./ParallaxBackground";
 
 type HeroProps = {
@@ -202,15 +203,7 @@ export default function Hero({
 
   return (
     <section className="relative isolate flex items-center overflow-hidden px-5 pb-8 pt-8 sm:px-8 lg:min-h-[calc(100vh-6rem)] lg:pb-10 lg:pt-10">
-      {/* Decorative organic shape, very subtle */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-gradient-to-br from-fern/20 to-transparent blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-24 bottom-12 h-72 w-72 rounded-full bg-gradient-to-br from-cream/40 to-transparent blur-3xl"
-      />
+      <PageGlow />
 
       <div className="mx-auto grid w-full max-w-[1400px] items-center gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
         <div className="relative z-10 max-w-2xl">

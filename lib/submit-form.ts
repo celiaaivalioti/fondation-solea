@@ -21,7 +21,7 @@ export async function submitForm(
   });
 
   try {
-    const response = await fetch("/api/forms", {
+    const response = await fetch("/api/forms/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

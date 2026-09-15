@@ -1,4 +1,4 @@
-import RetreatPage, { generateRetreatMetadata } from "@/app/(site)/experience-5-jours/page";
+import RetreatPage, { generateRetreatMetadata } from "@/components/pages/RetreatPage";
 
 export const generateMetadata = () => generateRetreatMetadata("en");
 

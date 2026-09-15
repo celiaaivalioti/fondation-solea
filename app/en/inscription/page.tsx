@@ -1,4 +1,4 @@
-import RegistrationPage, { generateRegistrationMetadata } from "@/app/(site)/inscription/page";
+import RegistrationPage, { generateRegistrationMetadata } from "@/components/pages/RegistrationPage";
 
 export const generateMetadata = () => generateRegistrationMetadata("en");
 

@@ -1,7 +1,7 @@
-import Home, { generateHomeMetadata } from "@/app/(site)/page";
+import HomePage, { generateHomeMetadata } from "@/components/pages/HomePage";
 
 export const generateMetadata = () => generateHomeMetadata("en");
 
 export default function EnglishHome() {
-  return <Home locale="en" />;
+  return <HomePage locale="en" />;
 }

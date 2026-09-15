@@ -1,4 +1,4 @@
-import PrivacyPage, { generatePrivacyMetadata } from "@/app/(site)/confidentialite/page";
+import PrivacyPage, { generatePrivacyMetadata } from "@/components/pages/PrivacyPage";
 
 export const generateMetadata = () => generatePrivacyMetadata("en");
 

@@ -1,4 +1,4 @@
-import SupportPage, { generateSupportMetadata } from "@/app/(site)/nous-soutenir/page";
+import SupportPage, { generateSupportMetadata } from "@/components/pages/SupportPage";
 
 export const generateMetadata = () => generateSupportMetadata("en");
 

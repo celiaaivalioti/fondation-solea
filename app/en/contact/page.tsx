@@ -1,4 +1,4 @@
-import ContactPage, { generateContactMetadata } from "@/app/(site)/contact/page";
+import ContactPage, { generateContactMetadata } from "@/components/pages/ContactPage";
 
 export const generateMetadata = () => generateContactMetadata("en");
 

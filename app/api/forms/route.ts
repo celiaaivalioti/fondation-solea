@@ -2,6 +2,14 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { getCmsContent } from "@/lib/cms";
 import { buildContactFields, buildRegistrationFields } from "@/lib/form-config";
+import {
+  FormRequestError,
+  getClientIp,
+  hasAllowedOrigin,
+  isPlainRecord,
+  normalizeFormValue,
+  readLimitedJson
+} from "@/lib/form-security";
 import { isLocale, type Locale } from "@/lib/locales";
 
 export const runtime = "nodejs";
@@ -31,28 +39,36 @@ async function resolveForm(kind: FormKind, locale: Locale) {
 // fine here — the site runs as a single Node process.
 const RATE_LIMIT = 5;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
-const submissionLog = new Map<string, number[]>();
+const MAX_RATE_LIMIT_KEYS = 10_000;
+const submissionLog = new Map<string, { count: number; resetAt: number }>();
+let lastRateLimitCleanup = 0;
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
-  const recent = (submissionLog.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
-
-  if (recent.length >= RATE_LIMIT) {
-    submissionLog.set(ip, recent);
-    return true;
-  }
-
-  recent.push(now);
-  submissionLog.set(ip, recent);
-
-  if (submissionLog.size > 10_000) {
-    submissionLog.forEach((times, key) => {
-      if (times.every((t) => now - t >= RATE_WINDOW_MS)) {
+  if (now - lastRateLimitCleanup >= RATE_WINDOW_MS) {
+    submissionLog.forEach((entry, key) => {
+      if (entry.resetAt <= now) {
         submissionLog.delete(key);
       }
     });
+    lastRateLimitCleanup = now;
   }
 
+  const current = submissionLog.get(ip);
+  if (current && current.resetAt > now) {
+    if (current.count >= RATE_LIMIT) {
+      return true;
+    }
+
+    current.count += 1;
+    return false;
+  }
+
+  if (!current && submissionLog.size >= MAX_RATE_LIMIT_KEYS) {
+    return true;
+  }
+
+  submissionLog.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
   return false;
 }
 
@@ -61,57 +77,75 @@ function isRateLimited(ip: string): boolean {
 // form keeps its values), so a fast legitimate user just clicks again.
 const MIN_FILL_TIME_MS = 3000;
 
+const json = (body: Record<string, unknown>, status = 200, extraHeaders?: HeadersInit) =>
+  NextResponse.json(body, {
+    status,
+    headers: {
+      "Cache-Control": "no-store",
+      ...extraHeaders
+    }
+  });
+
 export async function POST(request: Request) {
-  let payload: {
-    kind?: string;
-    locale?: unknown;
-    values?: Record<string, unknown>;
-    website?: string;
-    elapsedMs?: unknown;
-  };
+  if (!hasAllowedOrigin(request)) {
+    return json({ error: "forbidden" }, 403);
+  }
+
+  let payload: Record<string, unknown>;
 
   try {
-    payload = await request.json();
-  } catch {
-    return NextResponse.json({ error: "invalid request" }, { status: 400 });
+    const parsed = await readLimitedJson(request);
+    if (!isPlainRecord(parsed)) {
+      return json({ error: "invalid request" }, 400);
+    }
+    payload = parsed;
+  } catch (error) {
+    const status = error instanceof FormRequestError ? error.status : 400;
+    return json({ error: error instanceof Error ? error.message : "invalid request" }, status);
   }
 
   // Honeypot: real visitors never fill this hidden field.
   if (payload.website) {
-    return NextResponse.json({ ok: true });
+    return json({ ok: true });
   }
 
-  const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0].trim();
+  const ip = getClientIp(request);
   if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "too many requests" }, { status: 429 });
+    return json({ error: "too many requests" }, 429, { "Retry-After": "600" });
   }
 
   if (typeof payload.elapsedMs !== "number" || payload.elapsedMs < MIN_FILL_TIME_MS) {
-    return NextResponse.json({ error: "too fast" }, { status: 400 });
+    return json({ error: "too fast" }, 400);
   }
 
   if (
     (payload.kind !== "contact" && payload.kind !== "inscription") ||
-    typeof payload.values !== "object" ||
-    payload.values === null
+    !isPlainRecord(payload.values)
   ) {
-    return NextResponse.json({ error: "invalid request" }, { status: 400 });
+    return json({ error: "invalid request" }, 400);
   }
 
   const locale = typeof payload.locale === "string" && isLocale(payload.locale) ? payload.locale : "fr";
   const form = await resolveForm(payload.kind, locale);
 
   const values: Record<string, string> = {};
-  for (const [name] of form.fields) {
-    const value = payload.values[name];
-    if (typeof value === "string" && value.trim() !== "") {
-      values[name] = value.trim().slice(0, 5000);
+  try {
+    for (const [name] of form.fields) {
+      const value = normalizeFormValue(name, payload.values[name]);
+      if (value) {
+        values[name] = value;
+      }
     }
+  } catch (error) {
+    return json(
+      { error: error instanceof Error ? error.message : "invalid fields" },
+      error instanceof FormRequestError ? error.status : 400
+    );
   }
 
   for (const name of form.required) {
     if (!values[name]) {
-      return NextResponse.json({ error: "missing fields" }, { status: 400 });
+      return json({ error: "missing fields" }, 400);
     }
   }
 
@@ -124,7 +158,7 @@ export async function POST(request: Request) {
 
   if (!smtpHost || !smtpUser || !smtpPassword) {
     console.error("Form submission received but SMTP is not configured (SMTP_HOST/SMTP_USER/SMTP_PASSWORD).");
-    return NextResponse.json({ error: "mail not configured" }, { status: 500 });
+    return json({ error: "mail not configured" }, 500);
   }
 
   const transporter = nodemailer.createTransport({
@@ -144,12 +178,14 @@ export async function POST(request: Request) {
       to: recipient,
       replyTo: values.email,
       subject: form.subject,
-      text: `${lines.join("\n")}\n\n—\nEnvoyé depuis le formulaire du site fondation-solea.ch`
+      text: `${lines.join("\n")}\n\n—\nEnvoyé depuis le formulaire du site fondation-solea.ch`,
+      disableFileAccess: true,
+      disableUrlAccess: true
     });
   } catch (error) {
     console.error("Form email failed to send:", error);
-    return NextResponse.json({ error: "send failed" }, { status: 500 });
+    return json({ error: "send failed" }, 500);
   }
 
-  return NextResponse.json({ ok: true });
+  return json({ ok: true });
 }
