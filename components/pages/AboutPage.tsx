@@ -109,7 +109,7 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
         <ScrollReveal className="grid gap-8 sm:grid-cols-2">
           {about.principles.items.map((principle, index) => (
             <article key={principle.title} className="grid content-start gap-3">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-paper text-3xl font-semibold text-moss">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-paper text-2xl font-semibold text-moss">
                 {index + 1}
               </div>
               <div>
