@@ -16,17 +16,45 @@ export const singletons = [
 
 const singletonIds = new Set(singletons.map((item) => item.id));
 
-export const structure: StructureResolver = (S) =>
-  S.list()
+const studioMenuOrder = [
+  "siteSettings",
+  "navigation",
+  "homePage",
+  "aboutPage",
+  "committeePage",
+  "retreatPage",
+  "seminarsPage",
+  "faqPage",
+  "registrationPage",
+  "contactPage",
+  "supportPage",
+  "sponsorsPage",
+  "privacyPage",
+  "registrationForm",
+  "contactForm"
+];
+
+export const structure: StructureResolver = (S) => {
+  const defaultItems = new Map(
+    S.documentTypeListItems().map((item) => [item.getId() ?? "", item])
+  );
+  const singletonTitles = new Map(singletons.map(({ id, title }) => [id, title]));
+
+  return S.list()
     .title("Content")
-    .items([
-      // Every other document type keeps the default list behaviour.
-      ...S.documentTypeListItems().filter((item) => !singletonIds.has(item.getId() ?? "")),
-      // The two forms open directly to their single document.
-      ...singletons.map(({ id, title }) =>
-        S.listItem()
-          .id(id)
-          .title(title)
-          .child(S.document().schemaType(id).documentId(id))
-      )
-    ]);
+    .items(
+      studioMenuOrder.flatMap((id) => {
+        if (singletonIds.has(id)) {
+          return [
+            S.listItem()
+              .id(id)
+              .title(singletonTitles.get(id) ?? id)
+              .child(S.document().schemaType(id).documentId(id))
+          ];
+        }
+
+        const item = defaultItems.get(id);
+        return item ? [item] : [];
+      })
+    );
+};

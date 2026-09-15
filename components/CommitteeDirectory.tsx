@@ -67,7 +67,7 @@ export default function CommitteeDirectory({ members, bioLabel, closeLabel }: Co
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {members.map((member) => (
           <article key={member.id ?? member.name} className="flex flex-col rounded-[1.5rem] bg-paper px-6 py-5">
-            <div className="relative mb-6 mr-2 aspect-square overflow-hidden bg-linen shadow-[8px_8px_0_rgb(var(--color-brand)/1)]">
+            <div className="relative mb-6 mr-2 aspect-square overflow-hidden rounded-lg bg-linen shadow-[8px_8px_0_rgb(var(--color-brand)/1)]">
               <Image
                 src={member.image.url}
                 alt={member.image.alt}
@@ -129,7 +129,7 @@ export default function CommitteeDirectory({ members, bioLabel, closeLabel }: Co
 
             <div className="grid gap-10 lg:grid-cols-[minmax(240px,0.52fr)_minmax(0,1.48fr)] lg:gap-14">
               <div className="max-w-[20rem] pr-2 pt-10 lg:pt-0">
-                <div className="relative mr-2 aspect-square overflow-hidden bg-linen shadow-[8px_8px_0_rgb(var(--color-brand)/1)]">
+                <div className="relative mr-2 aspect-square overflow-hidden rounded-lg bg-linen shadow-[8px_8px_0_rgb(var(--color-brand)/1)]">
                   <Image
                     src={selectedMember.image.url}
                     alt={selectedMember.image.alt}
