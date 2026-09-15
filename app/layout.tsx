@@ -47,7 +47,7 @@ export default async function RootLayout({
   const analyticsEnabled = Boolean(gaId && /^[A-Za-z0-9-]+$/.test(gaId));
 
   return (
-    <html lang={locale} data-scroll-behavior="smooth">
+    <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${figtree.variable} min-h-screen antialiased`}>
         {children}
         <BackToTop />
