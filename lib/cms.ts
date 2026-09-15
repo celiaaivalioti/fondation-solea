@@ -268,7 +268,7 @@ async function loadCmsContent(locale: Locale): Promise<CmsContent> {
   }
 
   try {
-    const sanityContent = await sanityClient.fetch(contentQuery);
+    const sanityContent = await sanityClient.fetch(contentQuery, {}, { cache: "no-store" });
     const normalized = normalizeSanityValue(sanityContent);
 
     return resolveContent(fallback, normalized, locale);

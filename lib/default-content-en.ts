@@ -23,7 +23,7 @@ defaultContentEn.site = {
 defaultContentEn.navigation = [
   { label: "Home", href: "/" },
   { label: "About us", href: "/qui-sommes-nous" },
-  { label: "The multidisciplinary committee", href: "/comite-pluridisciplinaire" },
+  { label: "The committee", href: "/comite-pluridisciplinaire" },
   { label: "The five-day experience", href: "/experience-5-jours" },
   { label: "Knowledge hub", href: "/seminaires-ressources" },
   { label: "FAQ", href: "/questions-frequentes" },
