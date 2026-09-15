@@ -215,7 +215,7 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
               {founder.image && (
                 <div className="mb-8 max-w-64">
                   <div
-                    className="relative mb-2 mr-2 aspect-square overflow-hidden rounded-lg bg-linen"
+                    className="relative mb-2 mr-2 aspect-square overflow-hidden bg-linen"
                     style={{
                       boxShadow: "8px 8px 0 rgb(var(--color-brand) / 1)"
                     }}
