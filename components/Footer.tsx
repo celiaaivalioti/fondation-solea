@@ -11,6 +11,8 @@ type FooterProps = {
   locale?: Locale;
 };
 
+const iconButtonClassName = "flex h-9 w-9 items-center justify-center rounded-full border border-bark/25 transition hover:border-bark hover:bg-bark hover:text-fern";
+
 const socialIcons: Record<string, ReactElement> = {
   linkedin: (
     <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4v11h-4v-11Zm6 0h3.84v1.5h.05c.54-.96 1.86-1.97 3.83-1.97 4.1 0 4.86 2.7 4.86 6.21v5.26h-4v-4.66c0-1.11-.02-2.54-1.55-2.54-1.55 0-1.79 1.21-1.79 2.46v4.74H9v-11Z" />
@@ -125,6 +127,13 @@ export default function Footer({ navigation, site, locale = defaultLocale }: Foo
             <p className="mb-2 font-bold text-bark">Contact</p>
             <p>{site.email}</p>
             <p>{site.phone}</p>
+            <Link
+              href={localizeHref("/contact", locale)}
+              prefetch={false}
+              className="mt-4 inline-flex min-h-9 items-center justify-center rounded-full border border-bark/25 px-4 py-2 text-center text-base leading-snug transition hover:border-bark hover:bg-bark hover:text-fern"
+            >
+              {locale === "fr" ? "Formulaire de contact" : "Contact form"}
+            </Link>
           </div>
           <div className="text-lg leading-8 text-bark/75">
             <p className="mb-2 font-bold text-bark">Liens</p>
@@ -151,7 +160,7 @@ export default function Footer({ navigation, site, locale = defaultLocale }: Foo
                   href={item.href}
                   {...newTabProps(item.newTab)}
                   aria-label={item.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-bark/25 transition hover:border-bark hover:bg-bark hover:text-fern"
+                  className={iconButtonClassName}
                 >
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
                     {socialIcons[item.platform] ?? fallbackIcon}

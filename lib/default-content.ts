@@ -33,8 +33,7 @@ export const defaultContent: CmsContent = {
     { label: "Un pôle de savoir", href: "/seminaires-ressources" },
     { label: "Entreprises", href: "/entreprises" },
     { label: "FAQ", href: "/questions-frequentes" },
-    { label: "S’inscrire", href: "/inscription" },
-    { label: "Contact", href: "/contact" }
+    { label: "S’inscrire", href: "/inscription" }
   ],
   home: {
     metadataTitle: "Accueil",

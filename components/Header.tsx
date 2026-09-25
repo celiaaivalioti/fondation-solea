@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import type { NavigationItem, SiteSettings } from "@/lib/cms-types";
-import { type Locale, defaultLocale, getLanguageSwitchHref, localizeHref } from "@/lib/locales";
+import { type Locale, defaultLocale, localizeHref } from "@/lib/locales";
 import { newTabProps } from "@/lib/links";
 import CTAButton from "./CTAButton";
 
@@ -18,7 +18,6 @@ type HeaderProps = {
 
 export default function Header({ navigation, site, locale = defaultLocale }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
@@ -70,69 +69,6 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
       window.cancelAnimationFrame(secondFrame);
     };
   }, [pathname]);
-
-  const languageOptions: Array<{ locale: Locale; label: string }> = [
-    { locale: "fr", label: "Français" },
-    { locale: "en", label: "English" }
-  ];
-
-  const languageSwitcher = (
-    <div
-      className="relative"
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) {
-          setIsLanguageOpen(false);
-        }
-      }}
-    >
-      <button
-        type="button"
-        aria-expanded={isLanguageOpen}
-        aria-haspopup="menu"
-        className={`inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-sm font-semibold uppercase tracking-[0.12em] transition-all duration-500 ease-out-soft ${
-          isOverlay
-            ? "border-paper/35 text-paper hover:border-paper hover:bg-paper/10"
-            : "border-moss/25 text-moss hover:border-moss hover:bg-linen"
-        }`}
-        onClick={() => setIsLanguageOpen((value) => !value)}
-      >
-        {locale}
-        <ChevronDown
-          aria-hidden="true"
-          strokeWidth={1.8}
-          className={`h-4 w-4 transition-transform ${isLanguageOpen ? "rotate-180" : ""}`}
-        />
-      </button>
-
-      {isLanguageOpen && (
-        <div
-          role="menu"
-          className="absolute right-0 z-[70] mt-2 min-w-36 overflow-hidden rounded-2xl border border-moss/15 bg-paper p-1.5 shadow-soft"
-        >
-          {languageOptions.map((option) => {
-            const active = option.locale === locale;
-
-            return (
-              <Link
-                key={option.locale}
-                href={getLanguageSwitchHref(pathname, option.locale)}
-                prefetch={false}
-                hrefLang={option.locale}
-                role="menuitem"
-                aria-current={active ? "true" : undefined}
-                className={`block rounded-xl px-4 py-3 text-sm font-semibold transition ${
-                  active ? "bg-linen text-moss" : "text-bark/78 hover:bg-linen hover:text-moss"
-                }`}
-                onClick={() => setIsLanguageOpen(false)}
-              >
-                {option.label}
-              </Link>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
 
   return (
     <header
@@ -260,7 +196,6 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
               {site.donationLabel}
             </CTAButton>
           )}
-          {languageSwitcher}
           <button
             className={`inline-flex items-center gap-2 rounded-full border font-medium transition-all duration-500 ease-out-soft xl:hidden ${
               isScrolled ? "min-h-10 px-5 py-2.5 text-base" : "min-h-12 px-6 py-3 text-lg"
@@ -365,29 +300,6 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
               {site.donationLabel}
             </CTAButton>
           )}
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            {languageOptions.map((option) => {
-              const active = option.locale === locale;
-
-              return (
-                <Link
-                  key={option.locale}
-                  href={getLanguageSwitchHref(pathname, option.locale)}
-                  prefetch={false}
-                  hrefLang={option.locale}
-                  aria-current={active ? "true" : undefined}
-                  className={`rounded-xl border px-4 py-3.5 text-center text-lg font-semibold transition ${
-                    active
-                      ? "border-moss bg-linen text-moss"
-                      : "border-moss/20 text-bark/78 hover:border-moss hover:bg-linen hover:text-moss"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {option.locale.toUpperCase()}
-                </Link>
-              );
-            })}
-          </div>
         </nav>
       )}
     </header>

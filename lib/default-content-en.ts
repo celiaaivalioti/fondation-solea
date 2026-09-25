@@ -31,8 +31,7 @@ defaultContentEn.navigation = [
   { label: "Knowledge hub", href: "/seminaires-ressources" },
   { label: "Businesses", href: "/entreprises" },
   { label: "FAQ", href: "/questions-frequentes" },
-  { label: "Apply", href: "/inscription" },
-  { label: "Contact", href: "/contact" }
+  { label: "Apply", href: "/inscription" }
 ];
 
 defaultContentEn.home = {
