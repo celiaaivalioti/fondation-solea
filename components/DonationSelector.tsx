@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import Link from "next/link";
+import CTAButton from "@/components/CTAButton";
 import { localizeHref } from "@/lib/locales";
 import { Check, Users } from "lucide-react";
 import type { Locale } from "@/lib/locales";
@@ -248,9 +248,9 @@ export default function DonationSelector({ locale }: { locale: Locale }) {
             {buttonLabel}
           </button>
           {isCompany && (
-            <Link href={localizeHref("/contact", locale)} className="inline-flex min-h-16 items-center justify-center rounded-full border border-moss bg-paper px-8 py-4 text-center font-semibold text-bark transition-colors hover:bg-paper/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bark">
+            <CTAButton href={localizeHref("/contact", locale)} variant="secondary">
               {isFrench ? "Prendre rendez-vous avec Solea" : "Arrange a meeting with Solea"}
-            </Link>
+            </CTAButton>
           )}
         </div>
       </div>
