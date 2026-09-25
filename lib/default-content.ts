@@ -31,6 +31,7 @@ export const defaultContent: CmsContent = {
     { label: "Le comité", href: "/comite-pluridisciplinaire" },
     { label: "L’expérience de 5 jours", href: "/experience-5-jours" },
     { label: "Un pôle de savoir", href: "/seminaires-ressources" },
+    { label: "Entreprises", href: "/entreprises" },
     { label: "FAQ", href: "/questions-frequentes" },
     { label: "S’inscrire", href: "/inscription" },
     { label: "Contact", href: "/contact" }

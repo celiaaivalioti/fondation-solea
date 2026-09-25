@@ -9,9 +9,10 @@ type CommitteeDirectoryProps = {
   members: PersonCard[];
   bioLabel: string;
   closeLabel: string;
+  emphasizeBiography?: boolean;
 };
 
-export default function CommitteeDirectory({ members, bioLabel, closeLabel }: CommitteeDirectoryProps) {
+export default function CommitteeDirectory({ members, bioLabel, closeLabel, emphasizeBiography = true }: CommitteeDirectoryProps) {
   const [selectedMember, setSelectedMember] = useState<PersonCard | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -168,7 +169,9 @@ export default function CommitteeDirectory({ members, bioLabel, closeLabel }: Co
                     <p key={paragraph} className="whitespace-pre-line">
                       {paragraph.split(/(\*\*.*?\*\*)/g).map((part, index) =>
                         part.startsWith("**") && part.endsWith("**")
-                          ? <strong key={index}>{part.slice(2, -2)}</strong>
+                          ? emphasizeBiography
+                            ? <strong key={index}>{part.slice(2, -2)}</strong>
+                            : part.slice(2, -2)
                           : part
                       )}
                     </p>

@@ -221,6 +221,7 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
           <ScrollReveal className="mt-14">
             <CommitteeDirectory
               members={about.direction.members}
+              emphasizeBiography={false}
               bioLabel="Bio"
               closeLabel={locale === "fr" ? "Fermer la biographie" : "Close biography"}
             />

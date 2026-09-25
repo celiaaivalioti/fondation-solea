@@ -26,7 +26,7 @@ export const businessContent: BusinessContent = {
     items: [
       { title: "Soutien financier", text: "Financer un projet, un séjour ou contribuer au fonctionnement de la Fondation.", icon: "coins" },
       { title: "Mobilisation des équipes", text: "Organiser des campagnes internes, des événements ou du bénévolat de compétences.", icon: "users" },
-      { title: "Mise à disposition de compétences", text: "Partager votre expertise : marketing, communication, RH, juridique…", icon: "briefcase" },
+      { title: "Mise à disposition de compétences", text: "Partager votre expertise (marketing, communication, RH, juridique…).", icon: "briefcase" },
       { title: "Dons en nature", text: "Mettre à disposition des biens, des services ou des lieux.", icon: "heartHandshake" }
     ]
   },
@@ -40,7 +40,7 @@ export const businessContent: BusinessContent = {
     ]
   },
   impact: {
-    eyebrow: "Nos objectifs d’impact",
+    eyebrow: "Un impact mesurable",
     title: "Un impact qui va au-delà des participants",
     items: [
       { value: "100", text: "personnes accompagnées chaque année" },
@@ -57,7 +57,7 @@ export const businessContent: BusinessContent = {
     contactLabel: "Prendre rendez-vous"
   },
   partnersEyebrow: "Ils nous soutiennent déjà",
-  partnersIntro: "Des partenaires engagés à nos côtés."
+  partnersIntro: "Des entreprises et fondations engagées à nos côtés."
 };
 
 export const businessContentEn: BusinessContent = {

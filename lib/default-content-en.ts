@@ -29,6 +29,7 @@ defaultContentEn.navigation = [
   { label: "The committee", href: "/comite-pluridisciplinaire" },
   { label: "The five-day experience", href: "/experience-5-jours" },
   { label: "Knowledge hub", href: "/seminaires-ressources" },
+  { label: "Businesses", href: "/entreprises" },
   { label: "FAQ", href: "/questions-frequentes" },
   { label: "Apply", href: "/inscription" },
   { label: "Contact", href: "/contact" }
