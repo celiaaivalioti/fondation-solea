@@ -1,3 +1,4 @@
+import { businessContent } from "./business-content";
 import type { CmsContent } from "./cms-types";
 import { defaultContactForm, defaultRegistrationForm } from "./form-config";
 
@@ -15,7 +16,7 @@ export const defaultContent: CmsContent = {
     showDonationCta: true,
     donationLabel: "Faire un don",
     legalLinks: [
-      { label: "Mentions légales", href: "#" },
+      { label: "Mentions légales", href: "/mentions-legales" },
       { label: "Confidentialité", href: "#" }
     ],
     socialLinks: [
@@ -55,6 +56,9 @@ export const defaultContent: CmsContent = {
     },
     manifesto: {
       title: "Construire son chemin, ensemble",
+      portraitImage: { url: "/images/board-alexandre-bodmer.png", alt: "Portrait du Dr Alexandre Bodmer" },
+      portraitAlternativeText: "Portrait du Dr Alexandre Bodmer",
+      quoteAttribution: "Dr Alexandre Bodmer\nPrésident du Conseil de Fondation\nMédecin oncologue FMH",
       quote:
         "“Dans le parcours d’un cancer, il existe un moment précis où tout bascule.\nPas médicalement. Humainement.\nC’est le moment où la personne se sent seule, dépossédée, réduite à un protocole”.",
       paragraphs: [
@@ -238,6 +242,41 @@ export const defaultContent: CmsContent = {
             "Entre 2009 et 2012, il cofonde deux sociétés spécialisées dans les technologies digitales, qu’il dirige pendant plusieurs années. Il y développe une expertise reconnue dans la conception de projets numériques, l’innovation et l’accompagnement des organisations dans leur transformation.",
             "Son parcours l’a également conduit à travailler dans le secteur public, notamment au sein de l’Office cantonal des systèmes d’information (OCSIN) de l’État de Genève. Au service de l’Office Cantonal de la Santé et du Programme Santé Numérique, il a participé à l’élaboration de la stratégie cantonale du numérique en santé. Il intervient aujourd’hui comme consultant auprès des Hôpitaux universitaires de Genève (HUG), où il accompagne un projet de transformation numérique de la gestion administrative des patients.",
             "À travers son expérience entrepreneuriale, digitale et institutionnelle, Kian Rieben apporte à Solea une capacité à transformer des idées en projets concrets, à faire dialoguer des expertises diverses et à construire des solutions innovantes au service des bénéficiaires."
+          ]
+        }
+      ]
+    },
+    direction: {
+      eyebrow: "Une équipe engagée",
+      title: "La Direction",
+      intro: "La Direction donne vie aux ambitions de Solea. Elle mobilise les talents, les partenaires et les moyens nécessaires pour construire un accompagnement exigeant et profondément humain pour les personnes touchées par le cancer.",
+      members: [
+        {
+          id: "direction-samy-zayani",
+          name: "Samy Zayani",
+          role: "Co-fondateur et Directeur",
+          image: {
+            url: "/images/founder-samy-zayani.jpeg",
+            alt: "Portrait de Samy Zayani"
+          },
+          paragraphs: [
+            "**Ingénieur diplômé de l’EPFL, Samy Zayani a construit une carrière internationale dans le développement d’entreprises et la conduite de projets complexes.** Après une première expérience aux Nations Unies, il rejoint Procter & Gamble avant d’occuper des fonctions de direction au sein d’entreprises internationales.",
+            "**Membre de comités exécutifs d’entreprises comptant plus de 1'000 collaborateurs, il a dirigé des équipes internationales, contribué au développement d’organisations de grande envergure et siégé à de nombreux conseils d’administration à travers le monde.**\nIl a ainsi développé une expertise particulière dans la transformation d’une vision en projets concrets, la mobilisation de talents et de partenaires, et la construction d’organisations capables de faire grandir durablement une initiative.",
+            "Il a passé sa carrière à transformer des idées en organisations, à fédérer des talents et à faire grandir des projets complexes. Il met aujourd’hui cette expérience au service de Solea, avec l’ambition de donner vie à un modèle d’accompagnement innovant, exigeant et profondément humain pour les personnes touchées par le cancer."
+          ]
+        },
+        {
+          id: "direction-claire-menetrier",
+          name: "Claire Ménetrier",
+          role: "Directrice adjointe, Opérations & Développement",
+          image: {
+            url: "",
+            alt: "Portrait de Claire Ménetrier"
+          },
+          paragraphs: [
+            "**Forte de près de 20 ans d’expérience en marketing, innovation et management**, notamment chez Procter & Gamble, Claire Ménetrier a piloté le développement de marques internationales parmi les plus emblématiques de leur catégorie, dans des environnements complexes et fortement concurrentiels.",
+            "Au cours de son parcours chez P&G, elle a notamment exercé des **responsabilités internationales en marketing, innovation et développement durable**, en travaillant à la transformation de marques, de produits et d’organisations à grande échelle. Son expérience lui a appris à passer de la vision à l’action : **définir les priorités, mobiliser des équipes pluridisciplinaires et multiculturelles, fédérer des parties prenantes et conduire des projets jusqu’à leur réalisation.**",
+            "Son leadership, sa capacité à créer des dynamiques collectives et sa forte culture de l’exécution sont aujourd’hui au service de Solea. En tant que Directrice adjointe, Opérations & Développement, elle contribue à transformer les ambitions de la Fondation en réalisations concrètes et à construire les moyens humains et opérationnels nécessaires à son développement dans la durée."
           ]
         }
       ]
@@ -571,12 +610,13 @@ export const defaultContent: CmsContent = {
       ]
     },
     resources: {
-      eyebrow: "Ressources",
-      title: "Ressources utiles",
-      intro: "Une sélection de supports pourra être publiée ici.",
+      eyebrow: "Pour aller plus loin",
+      title: "Les ressources recommandées par notre comité",
+      intro: "Notre comité pluridisciplinaire sélectionne des ressources permettant d’approfondir certains sujets abordés chez Solea. Articles, livres, podcasts, conférences ou outils pratiques : cette bibliothèque rassemble des contenus pour les personnes touchées par le cancer, leurs proches et les professionnels qui les accompagnent.",
       items: []
     }
   },
+  business: businessContent,
   support: {
     metadataTitle: "Nous soutenir",
     hero: {
@@ -596,10 +636,12 @@ export const defaultContent: CmsContent = {
       submitLabel: "Envoyer"
     },
     cause: {
-      eyebrow: "La cause",
-      title: "Pourquoi donner ?",
+      eyebrow: "Votre impact",
+      title: "Votre don nous aide à…",
       paragraphs: [
-        "Chaque année en Suisse, pas loin de 50’000 personnes reçoivent un diagnostic de cancer. Beaucoup traversent cette épreuve seules, perdues entre les traitements, sans accès aux ressources pour reprendre le contrôle. Solea veut changer cela."
+        "Préparer le lieu : Créer un lieu ressourçant et adapté, hors de l’hôpital et du quotidien.",
+        "Organiser le programme : Mobiliser des professionnels qualifiés et préparer les séjours dans les meilleures conditions.",
+        "Garantir la gratuité : Permettre aux participants de bénéficier du séjour sans que le coût soit un obstacle."
       ]
     },
     help: {
@@ -676,6 +718,11 @@ export const defaultContent: CmsContent = {
       href: "/inscription",
       variant: "secondary"
     }
+  },
+  legal: {
+    metadataTitle: "Mentions légales",
+    title: "Mentions légales",
+    sections: []
   },
   privacy: {
     metadataTitle: "Politique de confidentialité",

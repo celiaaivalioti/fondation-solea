@@ -32,12 +32,14 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
     ? [
         { label: "Notre histoire", href: `${aboutHref}#notre-histoire` },
         { label: "Ce qui nous anime", href: `${aboutHref}#ce-qui-nous-anime` },
-        { label: "Conseil de Fondation", href: `${aboutHref}#conseil-de-fondation` }
+        { label: "Conseil de Fondation", href: `${aboutHref}#conseil-de-fondation` },
+        { label: "La Direction", href: `${aboutHref}#direction` }
       ]
     : [
         { label: "Our story", href: `${aboutHref}#notre-histoire` },
         { label: "What drives us", href: `${aboutHref}#ce-qui-nous-anime` },
-        { label: "Foundation Board", href: `${aboutHref}#conseil-de-fondation` }
+        { label: "Foundation Board", href: `${aboutHref}#conseil-de-fondation` },
+        { label: "Leadership", href: `${aboutHref}#direction` }
       ];
 
   const isActive = (href: string) =>

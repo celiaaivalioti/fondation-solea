@@ -1,3 +1,4 @@
+import { businessContent, businessContentEn } from "../lib/business-content";
 import type { Rule } from "sanity";
 
 // Icon choices for value/approach items. Keep in sync with lib/icons.ts,
@@ -403,6 +404,29 @@ const navigation = {
   }
 };
 
+const manifestoField = {
+  ...textSectionField,
+  name: "manifesto",
+  title: "Manifesto section",
+  fields: [
+    ...textSectionField.fields,
+    {
+      ...imageField,
+      name: "portraitImage",
+      title: "Portrait image",
+      fields: imageField.fields.filter((field) => field.name !== "alt")
+    },
+    { name: "portraitAlternativeText", title: "Portrait alternative text", type: "string" },
+    {
+      name: "quoteAttribution",
+      title: "Quote attribution",
+      type: "text",
+      rows: 3,
+      description: "Enter the name on the first line, followed by the roles on separate lines."
+    }
+  ]
+};
+
 const homePage = {
   name: "homePage",
   title: "Accueil",
@@ -410,11 +434,11 @@ const homePage = {
   fields: [
     { name: "metadataTitle", title: "Metadata title", type: "string" },
     heroField,
-    { ...textSectionField, name: "manifesto", title: "Manifesto section" },
+    manifestoField,
     englishTranslationField([
       { name: "metadataTitle", title: "Metadata title", type: "string" },
       heroField,
-      { ...textSectionField, name: "manifesto", title: "Manifesto section" }
+      manifestoField
     ])
   ],
   ...singletonPreview("Accueil")
@@ -529,6 +553,17 @@ const aboutPage = {
       ]
     },
     {
+      name: "direction",
+      title: "La Direction",
+      type: "object",
+      fields: [
+        { name: "eyebrow", title: "Eyebrow", type: "string" },
+        { name: "title", title: "Title", type: "string" },
+        { name: "intro", title: "Introduction", type: "text", rows: 9 },
+        { name: "members", title: "Members", type: "array", of: [{ type: "person" }] }
+      ]
+    },
+    {
       name: "founders",
       title: "Founders",
       type: "object",
@@ -617,6 +652,17 @@ const aboutPage = {
       {
         name: "committee",
         title: "Committee",
+        type: "object",
+        fields: [
+          { name: "eyebrow", title: "Eyebrow", type: "string" },
+          { name: "title", title: "Title", type: "string" },
+          { name: "intro", title: "Introduction", type: "text", rows: 9 },
+          { name: "members", title: "Members", type: "array", of: [{ type: "person" }] }
+        ]
+      },
+      {
+        name: "direction",
+        title: "La Direction",
         type: "object",
         fields: [
           { name: "eyebrow", title: "Eyebrow", type: "string" },
@@ -847,6 +893,40 @@ const retreatPage = {
   ...singletonPreview("L'expérience de 5 jours")
 };
 
+const resourceFields = [
+  { name: "title", title: "Titre", type: "string", validation: (rule: Rule) => rule.required() },
+  { name: "category", title: "Type de ressource", type: "string", initialValue: "article", options: { list: [
+    { title: "Article", value: "article" }, { title: "Livre", value: "book" },
+    { title: "Podcast", value: "podcast" }, { title: "Conférence", value: "conference" },
+    { title: "Outil pratique / guide", value: "guide" }
+  ] } },
+  imageField,
+  { name: "source", title: "Auteur, publication, date ou épisode", type: "string" },
+  { name: "text", title: "Description", type: "text" },
+  { name: "href", title: "Lien vers la ressource", type: "string" },
+  { name: "file", title: "Document à télécharger (optionnel)", type: "file", options: { accept: "application/pdf" } },
+  { name: "linkLabel", title: "Texte du lien (optionnel)", type: "string" },
+  { name: "showButton", title: "Afficher le lien", type: "boolean", initialValue: true },
+  newTabField,
+  { name: "recommender", title: "Recommandé par (optionnel)", type: "object", fields: [
+    { name: "name", title: "Nom", type: "string" },
+    { name: "role", title: "Fonction", type: "string" },
+    imageField
+  ] }
+];
+
+const resourcesField = {
+  name: "resources", title: "Bibliothèque de ressources recommandées", type: "object",
+  fields: [
+    { name: "eyebrow", title: "Eyebrow", type: "string" },
+    { name: "title", title: "Title", type: "string" },
+    { name: "intro", title: "Introduction", type: "text" },
+    { name: "items", title: "Ressources", type: "array", of: [{ type: "object", fields: resourceFields,
+      preview: { select: { title: "title", subtitle: "category", media: "image" } }
+    }] }
+  ]
+};
+
 const seminarsPage = {
   name: "seminarsPage",
   title: "Un pôle de savoir",
@@ -855,76 +935,12 @@ const seminarsPage = {
     { name: "metadataTitle", title: "Metadata title", type: "string" },
     heroField,
     { ...checklistField, name: "themes", title: "Themes" },
-    {
-      name: "resources",
-      title: "Resources",
-      type: "object",
-      fields: [
-        { name: "eyebrow", title: "Eyebrow", type: "string" },
-        { name: "title", title: "Title", type: "string" },
-        { name: "intro", title: "Intro", type: "text" },
-        {
-          name: "items",
-          title: "Resources",
-          type: "array",
-          of: [
-            {
-              type: "object",
-                          fields: [
-                { name: "title", title: "Title", type: "string" },
-                { name: "text", title: "Text", type: "text" },
-                { name: "href", title: "URL or path", type: "string" },
-                {
-                  name: "showButton",
-                  title: "Show button",
-                  type: "boolean",
-                  initialValue: true,
-                  description: "Turn this off to keep the resource but hide its button."
-                },
-                newTabField
-              ]
-            }
-          ]
-        }
-      ]
-    },
+    resourcesField,
     englishTranslationField([
       { name: "metadataTitle", title: "Metadata title", type: "string" },
       heroField,
       { ...checklistField, name: "themes", title: "Themes" },
-      {
-        name: "resources",
-        title: "Resources",
-        type: "object",
-        fields: [
-          { name: "eyebrow", title: "Eyebrow", type: "string" },
-          { name: "title", title: "Title", type: "string" },
-          { name: "intro", title: "Intro", type: "text" },
-          {
-            name: "items",
-            title: "Resources",
-            type: "array",
-            of: [
-              {
-                type: "object",
-                fields: [
-                  { name: "title", title: "Title", type: "string" },
-                  { name: "text", title: "Text", type: "text" },
-                  { name: "href", title: "URL or path", type: "string" },
-                  {
-                    name: "showButton",
-                    title: "Show button",
-                    type: "boolean",
-                    initialValue: true,
-                    description: "Turn this off to keep the resource but hide its button."
-                  },
-                  newTabField
-                ]
-              }
-            ]
-          }
-        ]
-      }
+      resourcesField
     ])
   ],
   ...singletonPreview("Un pôle de savoir")
@@ -979,6 +995,73 @@ const supportPage = {
     ])
   ],
   ...singletonPreview("Nous soutenir")
+};
+
+const businessItemFields = [
+  { name: "title", title: "Title", type: "string" },
+  { name: "text", title: "Text", type: "text" },
+  { name: "icon", title: "Icon", type: "string", options: { list: ["heart", "users", "leaf", "handshake", "coins", "briefcase", "heartHandshake"] } }
+];
+
+const businessSection = (name: string, title: string, fields: object[]) => ({
+  name, title, type: "object",
+  fields: [
+    { name: "eyebrow", title: "Eyebrow", type: "string" },
+    { name: "title", title: "Title", type: "string" },
+    { name: "items", title: "Items", type: "array", of: [{ type: "object", fields }] }
+  ]
+});
+
+const businessPageFields = [
+  { name: "metadataTitle", title: "Metadata title", type: "string" },
+  heroField,
+  { name: "contactLabel", title: "Contact button label", type: "string" },
+  { name: "dossierLabel", title: "Partnership brochure button label", type: "string" },
+  { name: "dossier", title: "Dossier partenariat (PDF)", type: "file", options: { accept: "application/pdf" }, description: "Optional. The download buttons appear after a PDF is added." },
+  businessSection("benefits", "Pourquoi s’engager ?", businessItemFields),
+  businessSection("engagement", "Formes d’engagement", businessItemFields),
+  businessSection("projects", "Projets prioritaires", [
+    { name: "title", title: "Title", type: "string" },
+    { name: "text", title: "Text", type: "text" },
+    imageField,
+    { name: "objective", title: "Objectif de financement", type: "string" },
+    { name: "status", title: "Statut", type: "string" },
+    { name: "impact", title: "Impact visé", type: "text" }
+  ]),
+  businessSection("impact", "Objectifs d’impact", [
+    { name: "value", title: "Chiffre ou titre", type: "string" },
+    { name: "text", title: "Description", type: "text" }
+  ]),
+  { name: "closing", title: "Bloc de contact", type: "object", fields: [
+    { name: "eyebrow", title: "Eyebrow", type: "string" },
+    { name: "title", title: "Title", type: "string" },
+    { name: "text", title: "Text", type: "text" },
+    imageField,
+    { name: "contactLabel", title: "Contact button label", type: "string" }
+  ] },
+  { name: "partnersEyebrow", title: "Titre des partenaires", type: "string", description: "Logos are managed on the Sponsors page." },
+  { name: "partnersIntro", title: "Introduction des partenaires", type: "text" }
+];
+
+// Populate the new singleton with the same editable content as the public page.
+function businessInitialValue(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map((item, index) => ({ ...(businessInitialValue(item) as object), _key: `item-${index}` }));
+  }
+  if (!value || typeof value !== "object") return value;
+  return Object.fromEntries(Object.entries(value).map(([key, item]) => [
+    key === "url" ? "localUrl" : key,
+    businessInitialValue(item)
+  ]));
+}
+
+const businessPage = {
+  name: "businessPage",
+  title: "Entreprises",
+  type: "document",
+  initialValue: () => businessInitialValue({ ...businessContent, en: businessContentEn }),
+  fields: [...businessPageFields, englishTranslationField(businessPageFields)],
+  ...singletonPreview("Entreprises")
 };
 
 const sponsorsPageFields = [
@@ -1069,6 +1152,18 @@ const privacyPage = {
     ])
   ],
   ...singletonPreview("Politique de confidentialité")
+};
+
+const legalPage = {
+  ...privacyPage,
+  name: "legalPage",
+  title: "Mentions légales",
+  initialValue: {
+    metadataTitle: "Mentions légales",
+    title: "Mentions légales",
+    sections: []
+  },
+  ...singletonPreview("Mentions légales")
 };
 
 const faqPage = {
@@ -1253,9 +1348,11 @@ export const schemaTypes = [
   seminarsPage,
   supportPage,
   sponsorsPage,
+  businessPage,
   registrationPage,
   contactPage,
   privacyPage,
+  legalPage,
   faqPage,
   registrationForm,
   contactForm

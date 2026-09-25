@@ -199,6 +199,35 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
         </div>
       </section>
 
+      <section id="direction" className="relative scroll-mt-28 bg-ivory/65 lg:scroll-mt-32 px-5 py-24 sm:px-8 lg:py-28">
+        <div className="mx-auto max-w-[1400px]">
+          <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+            <div className="max-w-4xl">
+            <div className="mb-5">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
+                {about.direction.eyebrow}
+              </p>
+            </div>
+            <h2 className="font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-[1.1] text-bark text-balance">
+              {about.direction.title}
+            </h2>
+            </div>
+            <RichText
+              text={about.direction.intro}
+              paragraphClassName="text-[1.08rem] leading-[1.75] text-bark/74"
+            />
+          </div>
+
+          <ScrollReveal className="mt-14">
+            <CommitteeDirectory
+              members={about.direction.members}
+              bioLabel="Bio"
+              closeLabel={locale === "fr" ? "Fermer la biographie" : "Close biography"}
+            />
+          </ScrollReveal>
+        </div>
+      </section>
+
       <Section
         tone="linen"
         eyebrow={about.founders.eyebrow}

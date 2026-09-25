@@ -59,7 +59,11 @@ export type TextSection = {
 export type HomeContent = {
   metadataTitle: string;
   hero: HeroContent;
-  manifesto: TextSection;
+  manifesto: TextSection & {
+    portraitImage?: CmsImage;
+    portraitAlternativeText?: string;
+    quoteAttribution?: string;
+  };
 };
 
 export type ValueItem = {
@@ -109,6 +113,12 @@ export type AboutContent = {
     items: PrincipleItem[];
   };
   committee: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    members: PersonCard[];
+  };
+  direction: {
     eyebrow: string;
     title: string;
     intro: string;
@@ -178,6 +188,20 @@ export type RetreatContent = {
   };
 };
 
+export type RecommendedResource = {
+  title: string;
+  text: string;
+  category?: "article" | "book" | "podcast" | "conference" | "guide";
+  source?: string;
+  image?: CmsImage;
+  href?: string;
+  fileUrl?: string;
+  linkLabel?: string;
+  newTab?: boolean;
+  showButton?: boolean;
+  recommender?: { name?: string; role?: string; image?: CmsImage };
+};
+
 export type SeminarsContent = {
   metadataTitle: string;
   hero: HeroContent;
@@ -191,13 +215,7 @@ export type SeminarsContent = {
     eyebrow: string;
     title: string;
     intro?: string;
-    items: Array<{
-      title: string;
-      text: string;
-      href?: string;
-      newTab?: boolean;
-      showButton?: boolean;
-    }>;
+    items: RecommendedResource[];
   };
 };
 
@@ -289,6 +307,21 @@ export type FaqContent = {
   items: FaqItem[];
 };
 
+export type BusinessContent = {
+  metadataTitle: string;
+  hero: HeroContent;
+  contactLabel: string;
+  dossierLabel: string;
+  dossierUrl?: string;
+  benefits: { eyebrow: string; title: string; items: Array<{ title: string; text: string; icon: string }> };
+  engagement: { eyebrow: string; title: string; items: Array<{ title: string; text: string; icon: string }> };
+  projects: { eyebrow: string; title: string; items: Array<{ title: string; text: string; image: CmsImage; objective: string; status: string; impact: string }> };
+  impact: { eyebrow: string; title: string; items: Array<{ value: string; text: string }> };
+  closing: { eyebrow: string; title: string; text: string; image: CmsImage; contactLabel: string };
+  partnersEyebrow: string;
+  partnersIntro: string;
+};
+
 export type CmsContent = {
   site: SiteSettings;
   navigation: NavigationItem[];
@@ -298,10 +331,12 @@ export type CmsContent = {
   retreat: RetreatContent;
   seminars: SeminarsContent;
   support: SupportContent;
+  business: BusinessContent;
   sponsors: SponsorsContent;
   registration: FormPageContent;
   contact: FormPageContent;
   privacy: PrivacyContent;
+  legal: PrivacyContent;
   faq: FaqContent;
   registrationForm: RegistrationFormConfig;
   contactForm: ContactFormConfig;

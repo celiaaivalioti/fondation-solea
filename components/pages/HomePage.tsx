@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Hero from "@/components/Hero";
 import CTAButton from "@/components/CTAButton";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -15,6 +16,9 @@ export async function generateHomeMetadata(locale: Locale = defaultLocale) {
 
 export default async function HomePage({ locale = defaultLocale }: { locale?: Locale } = {}) {
   const { home } = await getCmsContent(locale);
+  const { portraitImage, portraitAlternativeText, quoteAttribution } = home.manifesto;
+  const attributionLines = quoteAttribution?.split("\n").filter((line) => line.trim());
+  const hasPortraitAttribution = Boolean(portraitImage?.url || attributionLines?.length);
 
   return (
     <>
@@ -34,7 +38,7 @@ export default async function HomePage({ locale = defaultLocale }: { locale?: Lo
         secondaryVisible={isCtaVisible(home.hero.secondary)}
       />
 
-      {/* Manifesto section - title, description, two passages, CTA */}
+      {/* Manifesto section */}
       <section className="px-5 py-16 sm:px-8 lg:py-20">
         <ScrollReveal className="mx-auto max-w-4xl">
           <div className="group">
@@ -45,9 +49,32 @@ export default async function HomePage({ locale = defaultLocale }: { locale?: Lo
 
           <div className="mt-8 grid gap-6">
             {home.manifesto.quote && (
-              <blockquote className="whitespace-pre-line font-display text-[clamp(1.25rem,2.1vw,1.55rem)] font-light leading-[1.5] text-bark text-pretty">
-                {home.manifesto.quote}
-              </blockquote>
+              <figure className={hasPortraitAttribution ? "grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-12" : undefined}>
+                <blockquote className="whitespace-pre-line font-display text-[clamp(1.25rem,2.1vw,1.55rem)] font-light leading-[1.5] text-bark text-pretty">
+                  {home.manifesto.quote}
+                </blockquote>
+                {hasPortraitAttribution && (
+                  <figcaption className="grid justify-items-start gap-5">
+                    {portraitImage?.url && (
+                      <div className="relative aspect-square w-48 overflow-hidden rounded-[1.25rem] bg-linen lg:w-56">
+                        <Image
+                          src={portraitImage.url}
+                          alt={portraitAlternativeText ?? portraitImage.alt ?? ""}
+                          fill
+                          className="object-cover object-top"
+                          sizes="(min-width: 1024px) 224px, 192px"
+                        />
+                      </div>
+                    )}
+                    {attributionLines && attributionLines.length > 0 && (
+                      <div className="text-sm leading-relaxed text-bark/70">
+                        <p className="mb-1 text-base font-semibold text-bark">{attributionLines[0]}</p>
+                        {attributionLines.slice(1).map((line, index) => <p key={index}>{line}</p>)}
+                      </div>
+                    )}
+                  </figcaption>
+                )}
+              </figure>
             )}
 
             <RichText

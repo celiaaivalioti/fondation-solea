@@ -1,9 +1,12 @@
+import { businessContentEn } from "./business-content";
 import type { CmsContent } from "./cms-types";
 import { defaultContent } from "./default-content";
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
 export const defaultContentEn: CmsContent = clone(defaultContent);
+
+defaultContentEn.business = businessContentEn;
 
 defaultContentEn.site = {
   ...defaultContentEn.site,
@@ -15,7 +18,7 @@ defaultContentEn.site = {
   footerTagline: "Building your path, together",
   donationLabel: "Donate",
   legalLinks: [
-    { label: "Legal notice", href: "#" },
+    { label: "Legal notice", href: "/mentions-legales" },
     { label: "Privacy", href: "/confidentialite" }
   ]
 };
@@ -53,6 +56,9 @@ defaultContentEn.home = {
   },
   manifesto: {
     title: "Building your path, together",
+    portraitImage: { url: "/images/board-alexandre-bodmer.png", alt: "Portrait of Dr Alexandre Bodmer" },
+    portraitAlternativeText: "Portrait of Dr Alexandre Bodmer",
+    quoteAttribution: "Dr Alexandre Bodmer\nPresident of the Foundation Board\nFMH specialist in medical oncology",
     quote:
       "“In the journey through cancer, there is a precise moment when everything shifts.\nNot medically. Humanly.\nIt is the moment when a person feels alone, dispossessed, reduced to a protocol.”",
     paragraphs: [
@@ -216,6 +222,41 @@ defaultContentEn.about = {
           "Between 2009 and 2012, he co-founded two companies specialising in digital technologies, which he led for several years. There he developed recognised expertise in digital project design, innovation and supporting organisations through transformation.",
           "His career also led him to the public sector, notably the State of Geneva’s Cantonal Office for Information Systems. Working with the Cantonal Health Office and the Digital Health Programme, he helped develop the cantonal digital health strategy. He now consults for Geneva University Hospitals (HUG), supporting a digital transformation project for patient administration.",
           "Through his entrepreneurial, digital and institutional experience, Kian Rieben brings Solea an ability to turn ideas into concrete projects, connect diverse expertise and build innovative solutions for beneficiaries."
+        ]
+      }
+    ]
+  },
+  direction: {
+    eyebrow: "A committed team",
+    title: "Leadership",
+    intro: "The leadership team brings Solea’s ambitions to life. It brings together the talent, partners and resources needed to build thoughtful, deeply human support for people affected by cancer.",
+    members: [
+      {
+        id: "direction-samy-zayani",
+        name: "Samy Zayani",
+        role: "Co-founder and Director",
+        image: {
+          url: "/images/founder-samy-zayani.jpeg",
+          alt: "Portrait of Samy Zayani"
+        },
+        paragraphs: [
+          "**An engineering graduate of EPFL, Samy Zayani has built an international career in business development and leading complex projects.** After an initial experience at the United Nations, he joined Procter & Gamble before taking on leadership roles in international companies.",
+          "**As a member of executive committees in companies with more than 1,000 employees, he has led international teams, contributed to the development of large organisations and served on numerous boards around the world.**\nHe has developed particular expertise in turning a vision into concrete projects, bringing together talent and partners, and building organisations that can support an initiative’s sustainable growth.",
+          "He has spent his career turning ideas into organisations, bringing talent together and growing complex projects. He now puts this experience at the service of Solea, with the ambition of bringing to life an innovative, rigorous and deeply human model of support for people affected by cancer."
+        ]
+      },
+      {
+        id: "direction-claire-menetrier",
+        name: "Claire Ménetrier",
+        role: "Deputy Director, Operations & Development",
+        image: {
+          url: "",
+          alt: "Portrait of Claire Ménetrier"
+        },
+        paragraphs: [
+          "**With nearly 20 years of experience in marketing, innovation and management**, notably at Procter & Gamble, Claire Ménetrier has led the development of some of the most iconic international brands in their categories, in complex and highly competitive environments.",
+          "During her career at P&G, she held **international responsibilities in marketing, innovation and sustainability**, working on the transformation of brands, products and organisations at scale. Her experience taught her to move from vision to action: **setting priorities, mobilising multidisciplinary and multicultural teams, bringing stakeholders together and seeing projects through to completion.**",
+          "Her leadership, her ability to build collective momentum and her strong focus on execution now serve Solea. As Deputy Director, Operations & Development, she helps turn the Foundation’s ambitions into tangible achievements and build the human and operational resources needed for its long-term development."
         ]
       }
     ]
@@ -552,9 +593,9 @@ defaultContentEn.seminars = {
     ]
   },
   resources: {
-    eyebrow: "Resources",
-    title: "Useful resources",
-    intro: "A selection of materials may be published here.",
+    eyebrow: "Explore further",
+    title: "Resources recommended by our committee",
+    intro: "Our multidisciplinary committee selects resources to explore topics discussed at Solea in greater depth. Articles, books, podcasts, talks and practical tools for people affected by cancer, their loved ones and the professionals supporting them.",
     items: []
   }
 };
@@ -576,10 +617,12 @@ defaultContentEn.support = {
     submitLabel: "Send"
   },
   cause: {
-    eyebrow: "The cause",
-    title: "Why give?",
+    eyebrow: "Your impact",
+    title: "Your donation helps us…",
     paragraphs: [
-      "Every year in Switzerland, close to 50,000 people receive a cancer diagnosis. Many go through this ordeal alone, lost among treatments and without access to the resources they need to regain control. Solea wants to change that."
+      "Prepare the place: Create a restorative, welcoming place away from hospitals and everyday life.",
+      "Organise the programme: Bring together qualified professionals and prepare stays in the best possible conditions.",
+      "Keep stays free: Enable participants to benefit from the stay without cost being a barrier."
     ]
   },
   help: {
@@ -659,6 +702,12 @@ defaultContentEn.contact = {
     href: "/inscription",
     variant: "secondary"
   }
+};
+
+defaultContentEn.legal = {
+  metadataTitle: "Legal notice",
+  title: "Legal notice",
+  sections: []
 };
 
 defaultContentEn.privacy = {

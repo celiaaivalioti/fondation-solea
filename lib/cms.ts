@@ -10,17 +10,22 @@ const imageProjection = `{
   "url": coalesce(asset->url, url, localUrl)
 }`;
 
+const resourceProjection = `{..., items[]{..., image${imageProjection}, "fileUrl": file.asset->url, recommender{..., image${imageProjection}}}}`;
+
 const contentQuery = `{
   "site": *[_type == "siteSettings"][0],
   "navigation": *[_type == "navigation"][0].items[],
   "home": *[_type == "homePage"][0]{
     ...,
-    hero{..., image${imageProjection}}
+    hero{..., image${imageProjection}},
+    manifesto{..., portraitImage${imageProjection}},
+    en{..., manifesto{..., portraitImage${imageProjection}}}
   },
   "about": *[_type == "aboutPage"][0]{
     ...,
     hero{..., image${imageProjection}},
     committee{..., members[]{..., image${imageProjection}}},
+    direction{..., members[]{..., image${imageProjection}}},
     founders{..., people[]{..., image${imageProjection}}}
   },
   "committee": *[_type == "committeePage"][0]{
@@ -35,7 +40,17 @@ const contentQuery = `{
   },
   "seminars": *[_type == "seminarsPage"][0]{
     ...,
-    hero{..., image${imageProjection}}
+    hero{..., image${imageProjection}},
+    resources${resourceProjection},
+    en{..., resources${resourceProjection}}
+  },
+  "business": *[_type == "businessPage" && _id == "businessPage"][0]{
+    ...,
+    "dossierUrl": dossier.asset->url,
+    hero{..., image${imageProjection}},
+    projects{..., items[]{..., image${imageProjection}}},
+    closing{..., image${imageProjection}},
+    en{..., "dossierUrl": dossier.asset->url, hero{..., image${imageProjection}}, projects{..., items[]{..., image${imageProjection}}}, closing{..., image${imageProjection}}}
   },
   "support": *[_type == "supportPage"][0]{
     ...,
@@ -49,6 +64,7 @@ const contentQuery = `{
   "registration": *[_type == "registrationPage"][0],
   "contact": *[_type == "contactPage"][0],
   "privacy": *[_type == "privacyPage"][0],
+  "legal": *[_type == "legalPage" && _id == "legalPage"][0],
   "faq": *[_type == "faqPage"][0],
   "registrationForm": *[_type == "registrationForm"][0],
   "contactForm": *[_type == "contactForm"][0]
@@ -150,6 +166,9 @@ function mergeContent<T>(fallback: T, override: unknown, preserveArrayFallback =
 
 const sharedStringKeys = new Set([
   "url",
+  "dossierUrl",
+  "fileUrl",
+  "category",
   "localUrl",
   "className",
   "href",

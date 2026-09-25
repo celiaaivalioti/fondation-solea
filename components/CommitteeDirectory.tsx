@@ -68,13 +68,19 @@ export default function CommitteeDirectory({ members, bioLabel, closeLabel }: Co
         {members.map((member) => (
           <article key={member.id ?? member.name} className="flex flex-col rounded-[1.5rem] bg-paper px-6 py-5">
             <div className="relative mb-6 mr-2 aspect-square overflow-hidden bg-linen shadow-[8px_8px_0_rgb(var(--color-brand)/1)]">
-              <Image
-                src={member.image.url}
-                alt={member.image.alt}
-                fill
-                className="object-cover object-top"
-                sizes="(min-width: 1280px) 18vw, (min-width: 768px) 45vw, 90vw"
-              />
+              {member.image?.url ? (
+                <Image
+                  src={member.image.url}
+                  alt={member.image.alt}
+                  fill
+                  className="object-cover object-top"
+                  sizes="(min-width: 1280px) 18vw, (min-width: 768px) 45vw, 90vw"
+                />
+              ) : (
+                <span aria-hidden="true" className="absolute inset-0 flex items-center justify-center font-display text-6xl text-moss/60">
+                  {member.name.split(" ").map((part) => part[0]).join("")}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-1 flex-col pt-5">
@@ -130,14 +136,20 @@ export default function CommitteeDirectory({ members, bioLabel, closeLabel }: Co
             <div className="grid gap-10 lg:grid-cols-[minmax(240px,0.52fr)_minmax(0,1.48fr)] lg:gap-14">
               <div className="max-w-[20rem] pr-2 pt-10 lg:pt-0">
                 <div className="relative mr-2 aspect-square overflow-hidden bg-linen shadow-[8px_8px_0_rgb(var(--color-brand)/1)]">
-                  <Image
-                    src={selectedMember.image.url}
-                    alt={selectedMember.image.alt}
-                    fill
-                    className="object-cover object-top"
-                    sizes="(min-width: 1024px) 30vw, 80vw"
-                    priority
-                  />
+                  {selectedMember.image?.url ? (
+                    <Image
+                      src={selectedMember.image.url}
+                      alt={selectedMember.image.alt}
+                      fill
+                      className="object-cover object-top"
+                      sizes="(min-width: 1024px) 30vw, 80vw"
+                      priority
+                    />
+                  ) : (
+                    <span aria-hidden="true" className="absolute inset-0 flex items-center justify-center font-display text-6xl text-moss/60">
+                      {selectedMember.name.split(" ").map((part) => part[0]).join("")}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -152,7 +164,15 @@ export default function CommitteeDirectory({ members, bioLabel, closeLabel }: Co
                   {selectedMember.name}
                 </h2>
                 <div className="mt-8 grid gap-5 text-[1.16rem] leading-[1.6] text-bark/76">
-                  {selectedMember.paragraphs?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                  {selectedMember.paragraphs?.map((paragraph) => (
+                    <p key={paragraph} className="whitespace-pre-line">
+                      {paragraph.split(/(\*\*.*?\*\*)/g).map((part, index) =>
+                        part.startsWith("**") && part.endsWith("**")
+                          ? <strong key={index}>{part.slice(2, -2)}</strong>
+                          : part
+                      )}
+                    </p>
+                  ))}
                 </div>
                 {selectedMember.quote && (
                   <blockquote className="mt-8 border-l-2 border-moss/35 pl-5 font-display text-[1.25rem] font-light leading-[1.55] text-bark">

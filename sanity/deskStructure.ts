@@ -8,6 +8,8 @@ import type { StructureResolver } from "sanity/structure";
 // document (no list, no "+"), so the client cannot create duplicates that
 // would confuse the `*[_type == "..."][0]` frontend queries.
 export const singletons = [
+  { id: "businessPage", title: "Entreprises" },
+  { id: "legalPage", title: "Mentions légales" },
   { id: "committeePage", title: "Le comité pluridisciplinaire" },
   { id: "faqPage", title: "Questions fréquentes" },
   { id: "registrationForm", title: "Formulaire d'inscription" },
@@ -28,8 +30,10 @@ const studioMenuOrder = [
   "registrationPage",
   "contactPage",
   "supportPage",
+  "businessPage",
   "sponsorsPage",
   "privacyPage",
+  "legalPage",
   "registrationForm",
   "contactForm"
 ];
