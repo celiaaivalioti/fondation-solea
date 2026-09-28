@@ -1059,6 +1059,7 @@ const businessPageFields = [
       { name: "eyebrow", title: "Surtitre / Eyebrow", type: "string" },
       { name: "title", title: "Titre", type: "string" },
       { name: "intro", title: "Texte d’introduction", type: "text" },
+      { name: "showLogos", title: "Afficher les logos / Show logos", type: "boolean", initialValue: true, components: { input: VisibleByDefaultInput }, description: "Affiche ou masque tous les logos de cette section, sans masquer les textes. Appliqué aux deux langues. Chaque logo conserve aussi son propre réglage de visibilité." },
       { name: "logos", title: "Logos et liens", type: "array", of: [{ type: "sponsorLogo" }], description: "Ajoutez une image, un nom et un lien pour chaque partenaire. Faites glisser les logos pour les réordonner. Partagés avec la version anglaise." }
     ]
   }
@@ -1084,7 +1085,7 @@ const businessPage = {
   fields: [
     ...businessPageFields,
     englishTranslationField(businessPageFields.map((field) => field.name === "partners" && "fields" in field
-      ? { ...field, fields: field.fields?.filter((nested) => nested.name !== "logos") }
+      ? { ...field, fields: field.fields?.filter((nested) => nested.name !== "logos" && nested.name !== "showLogos") }
       : field))
   ],
   ...singletonPreview("Entreprises")

@@ -324,7 +324,7 @@ export type BusinessContent = SectionVisibility & {
   projects: { eyebrow: string; title: string; items: Array<{ title: string; text: string; image: CmsImage; objective: string; status: string; impact: string }> };
   impact: { eyebrow: string; title: string; items: Array<{ value: string; text: string }> };
   closing: { eyebrow: string; title: string; text: string; image: CmsImage } & BusinessButtons;
-  partners: { eyebrow: string; title?: string; intro: string; logos: SponsorLogo[] };
+  partners: { eyebrow: string; title?: string; intro: string; showLogos?: boolean; logos: SponsorLogo[] };
 };
 
 export type CmsContent = {

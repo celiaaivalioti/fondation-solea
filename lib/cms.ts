@@ -301,6 +301,7 @@ function resolveContent(fallback: CmsContent, override: unknown, locale: Locale)
       ...logo, visible: shared.sponsors.sections[index]?.logos[logoIndex]?.visible
     }))
   }));
+  localized.business.partners.showLogos = shared.business.partners.showLogos;
   localized.business.partners.logos = localizeLinks(shared.business.partners.logos, locale);
   return localized;
 }
