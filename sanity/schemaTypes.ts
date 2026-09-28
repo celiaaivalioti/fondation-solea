@@ -204,7 +204,7 @@ const sponsorLogoField = {
       type: "boolean",
       components: { input: VisibleByDefaultInput },
       initialValue: true,
-      description: "Turn off to hide this sponsor on the Sponsors and Entreprises pages without deleting it. Existing sponsors are shown by default."
+      description: "Turn off to hide this logo in this section without deleting it. Existing sponsors are shown by default."
     },
     { name: "name", title: "Name", type: "string" },
     imageField,
@@ -1052,8 +1052,16 @@ const businessPageFields = [
     { ...ctaField, name: "primary", title: "Primary button" },
     { ...ctaField, name: "secondary", title: "Secondary button", description: "Leave URL empty to use the uploaded partnership PDF. Hidden until a PDF or URL is available." }
   ] },
-  { name: "partnersEyebrow", title: "Titre des partenaires", type: "string", description: "Logos are managed on the Sponsors page." },
-  { name: "partnersIntro", title: "Introduction des partenaires", type: "text" }
+  {
+    name: "partners", title: "Ils nous soutiennent déjà", type: "object",
+    description: "Contenu de la section sur la page Entreprises. Les logos et leurs liens se modifient ici, indépendamment de la page Sponsors.",
+    fields: [
+      { name: "eyebrow", title: "Surtitre / Eyebrow", type: "string" },
+      { name: "title", title: "Titre", type: "string" },
+      { name: "intro", title: "Texte d’introduction", type: "text" },
+      { name: "logos", title: "Logos et liens", type: "array", of: [{ type: "sponsorLogo" }], description: "Ajoutez une image, un nom et un lien pour chaque partenaire. Faites glisser les logos pour les réordonner. Partagés avec la version anglaise." }
+    ]
+  }
 ];
 
 // Populate the new singleton with the same editable content as the public page.
@@ -1075,7 +1083,9 @@ const businessPage = {
   initialValue: () => businessInitialValue({ ...businessContent, en: businessContentEn }),
   fields: [
     ...businessPageFields,
-    englishTranslationField(businessPageFields)
+    englishTranslationField(businessPageFields.map((field) => field.name === "partners" && "fields" in field
+      ? { ...field, fields: field.fields?.filter((nested) => nested.name !== "logos") }
+      : field))
   ],
   ...singletonPreview("Entreprises")
 };

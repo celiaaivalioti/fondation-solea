@@ -1,6 +1,9 @@
 import VisibleSection from "@/components/VisibleSection";
 import { isSectionVisible } from "@/lib/section-visibility";
 import Image from "next/image";
+import Link from "next/link";
+import type { CSSProperties } from "react";
+import { newTabProps } from "@/lib/links";
 import { BriefcaseBusiness, Coins, Download, Handshake, Heart, HeartHandshake, Leaf, Users } from "lucide-react";
 import CTAButton from "@/components/CTAButton";
 import Hero from "@/components/Hero";
@@ -39,8 +42,8 @@ export async function generateBusinessMetadata(locale: Locale = defaultLocale) {
 }
 
 export default async function BusinessPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
-  const { business, sponsors } = await getCmsContent(locale);
-  const partners = sponsors.sections.filter((section) => section.visible !== false).flatMap((section) => section.logos).filter((partner) => partner.visible !== false && partner.image?.url);
+  const { business } = await getCmsContent(locale);
+  const partners = business.partners.logos.filter((partner) => partner.visible !== false && partner.image?.url);
 
   return <>
     <VisibleSection visible={isSectionVisible(business, "hero")}>
@@ -138,13 +141,19 @@ export default async function BusinessPage({ locale = defaultLocale }: { locale?
     </section>
     </VisibleSection>
 
-    {partners.length > 0 && <VisibleSection visible={isSectionVisible(business, "partners")}><section className="px-5 py-12 sm:px-8">
+    {(partners.length > 0 || business.partners.eyebrow || business.partners.title || business.partners.intro) && <VisibleSection visible={isSectionVisible(business, "partners")}><section className="px-5 py-12 sm:px-8">
       <div className="mx-auto max-w-6xl">
-        <h2 className="text-[13px] font-semibold uppercase tracking-[0.18em] text-moss">{business.partnersEyebrow}</h2>
-        <p className="mt-3 text-bark/70">{business.partnersIntro}</p>
-        <div className="mt-8 flex flex-wrap items-center gap-10">
-          {partners.map((partner, index) => <div key={`${partner.name}-${index}`} className="relative h-16 w-40"><Image src={partner.image!.url} alt={partner.image!.alt || partner.name} fill sizes="160px" className="object-contain" /></div>)}
-        </div>
+        {business.partners.eyebrow && <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-moss">{business.partners.eyebrow}</p>}
+        {business.partners.title && <h2 className="mt-4 font-display text-3xl font-light leading-tight text-bark">{business.partners.title}</h2>}
+        {business.partners.intro && <p className="mt-3 whitespace-pre-line text-bark/70">{business.partners.intro}</p>}
+        {partners.length > 0 && <div className="mt-8 flex flex-wrap items-center gap-10">
+          {partners.map((partner, index) => {
+            const logoStyle = { "--partner-logo-height": `${Math.min(Math.max(partner.logoHeight ?? 64, 24), 180)}px` } as CSSProperties;
+            const logo = <Image src={partner.image!.url} alt={partner.image!.alt || partner.name} fill sizes="160px" className="object-contain" />;
+            return partner.href ? <Link key={`${partner.name}-${index}`} href={partner.href} {...newTabProps(partner.newTab)} aria-label={partner.name} style={logoStyle} className="relative block h-[var(--partner-logo-height)] w-40 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-moss">{logo}</Link>
+              : <div key={`${partner.name}-${index}`} style={logoStyle} className="relative h-[var(--partner-logo-height)] w-40">{logo}</div>;
+          })}
+        </div>}
       </div>
     </section>
     </VisibleSection>}

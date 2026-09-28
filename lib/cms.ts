@@ -51,6 +51,7 @@ const contentQuery = `{
     hero{..., image${imageProjection}},
     projects{..., items[]{..., image${imageProjection}}},
     closing{..., image${imageProjection}},
+    partners{..., logos[]{..., image${imageProjection}}},
     en{..., "dossierUrl": dossier.asset->url, hero{..., image${imageProjection}}, projects{..., items[]{..., image${imageProjection}}}, closing{..., image${imageProjection}}}
   },
   "support": *[_type == "supportPage"][0]{
@@ -300,6 +301,7 @@ function resolveContent(fallback: CmsContent, override: unknown, locale: Locale)
       ...logo, visible: shared.sponsors.sections[index]?.logos[logoIndex]?.visible
     }))
   }));
+  localized.business.partners.logos = localizeLinks(shared.business.partners.logos, locale);
   return localized;
 }
 

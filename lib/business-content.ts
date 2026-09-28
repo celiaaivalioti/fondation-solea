@@ -57,8 +57,7 @@ export const businessContent: BusinessContent = {
     primary: { label: "Prendre rendez-vous", href: "/contact" },
     secondary: { label: "Télécharger notre dossier partenariat" }
   },
-  partnersEyebrow: "Ils nous soutiennent déjà",
-  partnersIntro: "Des entreprises et fondations engagées à nos côtés."
+  partners: { eyebrow: "Ils nous soutiennent déjà", title: "", intro: "Des entreprises et fondations engagées à nos côtés.", logos: [] }
 };
 
 export const businessContentEn: BusinessContent = {
@@ -89,6 +88,5 @@ export const businessContentEn: BusinessContent = {
     { value: "Lasting impact", text: "on quality of life, returning to work and team cohesion" }
   ] },
   closing: { ...businessContent.closing, eyebrow: "Let’s talk", title: "Let’s build a meaningful partnership together", text: "We would be delighted to explore the kind of commitment that best suits your company.", primary: { label: "Arrange a meeting", href: "/contact" }, secondary: { label: "Download our partnership brochure" }, image: { ...businessContent.closing.image, alt: "Nature in soft light" } },
-  partnersEyebrow: "Already supporting us",
-  partnersIntro: "Partners committed alongside us."
+  partners: { eyebrow: "Already supporting us", title: "", intro: "Partners committed alongside us.", logos: [] }
 };
