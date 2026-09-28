@@ -1070,13 +1070,6 @@ const businessPage = {
   type: "document",
   initialValue: () => businessInitialValue({ ...businessContent, en: businessContentEn }),
   fields: [
-    {
-      name: "showPartners",
-      title: "Show sponsors section",
-      type: "boolean",
-      initialValue: true,
-      description: "Show or hide the ‘Ils nous soutiennent déjà’ section on the Entreprises page in both languages. Shown by default."
-    },
     ...businessPageFields,
     englishTranslationField(businessPageFields)
   ],

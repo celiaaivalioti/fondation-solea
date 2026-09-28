@@ -311,7 +311,6 @@ export type FaqContent = SectionVisibility & {
 };
 
 export type BusinessContent = SectionVisibility & {
-  showPartners?: boolean;
   metadataTitle: string;
   hero: HeroContent;
   contactLabel: string;

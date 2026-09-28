@@ -134,7 +134,7 @@ export default async function BusinessPage({ locale = defaultLocale }: { locale?
     </section>
     </VisibleSection>
 
-    {business.showPartners !== false && partners.length > 0 && <VisibleSection visible={isSectionVisible(business, "partners")}><section className="px-5 py-12 sm:px-8">
+    {partners.length > 0 && <VisibleSection visible={isSectionVisible(business, "partners")}><section className="px-5 py-12 sm:px-8">
       <div className="mx-auto max-w-6xl">
         <h2 className="text-[13px] font-semibold uppercase tracking-[0.18em] text-moss">{business.partnersEyebrow}</h2>
         <p className="mt-3 text-bark/70">{business.partnersIntro}</p>
