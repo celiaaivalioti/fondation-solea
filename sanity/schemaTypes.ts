@@ -1,4 +1,5 @@
 import { pageSections } from "../lib/section-visibility";
+import VisibleByDefaultInput from "./VisibleByDefaultInput";
 import { businessContent, businessContentEn } from "../lib/business-content";
 import type { Rule } from "sanity";
 
@@ -56,6 +57,7 @@ const showButtonField = {
   name: "visible",
   title: "Display this button",
   type: "boolean",
+  components: { input: VisibleByDefaultInput },
   initialValue: true,
   description: "Turn this off to hide the button on the website."
 };
@@ -200,6 +202,7 @@ const sponsorLogoField = {
       name: "visible",
       title: "Show this sponsor",
       type: "boolean",
+      components: { input: VisibleByDefaultInput },
       initialValue: true,
       description: "Turn off to hide this sponsor on the Sponsors and Entreprises pages without deleting it. Existing sponsors are shown by default."
     },
@@ -234,7 +237,7 @@ const sponsorSectionField = {
   title: "Sponsor section",
   type: "object",
   fields: [
-    { name: "visible", title: "Show this sponsor group", type: "boolean", initialValue: true, description: "Hides this group and its logos on the Sponsors and Entreprises pages." },
+    { name: "visible", title: "Show this sponsor group", type: "boolean", components: { input: VisibleByDefaultInput }, initialValue: true, description: "Hides this group and its logos on the Sponsors and Entreprises pages." },
     { name: "title", title: "Title", type: "string" },
     {
       name: "logos",
@@ -1137,7 +1140,7 @@ const privacyPage = {
         {
           type: "object",
           fields: [
-            { name: "visible", title: "Show this section", type: "boolean", initialValue: true, description: "Applies to both languages. Visible by default." },
+            { name: "visible", title: "Show this section", type: "boolean", components: { input: VisibleByDefaultInput }, initialValue: true, description: "Applies to both languages. Visible by default." },
             { name: "title", title: "Title", type: "string" },
             { name: "text", title: "Text", type: "text" }
           ]
@@ -1362,7 +1365,8 @@ function withSectionVisibility<T extends { name: string; fields: unknown[] }>(sc
       description: "Show or hide each section in both French and English. Sections are visible by default; hiding preserves their content. Existing donation and sponsor switches also apply.",
       options: { collapsible: true, collapsed: false },
       fields: Object.entries(sections).map(([name, title]) => ({
-        name, title: "Afficher : " + title, type: "boolean", initialValue: true
+        name, title: "Afficher : " + title, type: "boolean", initialValue: true,
+        components: { input: VisibleByDefaultInput }
       }))
     }, ...schema.fields]
   };
