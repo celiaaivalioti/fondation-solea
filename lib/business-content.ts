@@ -6,10 +6,10 @@ export const businessContent: BusinessContent = {
     eyebrow: "Entreprises",
     title: "Le cancer ne s’arrête pas à la porte de l’entreprise. Votre soutien non plus.",
     text: "En soutenant Solea, votre entreprise contribue concrètement à offrir aux personnes touchées par le cancer un espace pour souffler, se reconnecter et avancer.",
-    image: { url: "/images/sponsors/hero-swiss-lakeside-meadow.webp", alt: "Paysage lacustre suisse entouré de montagnes" }
+    image: { url: "/images/sponsors/hero-swiss-lakeside-meadow.webp", alt: "Paysage lacustre suisse entouré de montagnes" },
+    primary: { label: "Échanger avec nous", href: "/contact" },
+    secondary: { label: "Télécharger notre dossier partenariat" }
   },
-  contactLabel: "Échanger avec nous",
-  dossierLabel: "Télécharger notre dossier partenariat",
   benefits: {
     eyebrow: "Pourquoi s’engager ?",
     title: "Un engagement porteur de sens, pour vos équipes et la société",
@@ -54,7 +54,8 @@ export const businessContent: BusinessContent = {
     title: "Construisons ensemble un partenariat qui a du sens",
     text: "Nous serions ravis d’échanger avec vous pour explorer la forme d’engagement la plus adaptée à votre entreprise.",
     image: { url: "/images/nature2.jpg", alt: "La nature dans une lumière douce" },
-    contactLabel: "Prendre rendez-vous"
+    primary: { label: "Prendre rendez-vous", href: "/contact" },
+    secondary: { label: "Télécharger notre dossier partenariat" }
   },
   partnersEyebrow: "Ils nous soutiennent déjà",
   partnersIntro: "Des entreprises et fondations engagées à nos côtés."
@@ -63,9 +64,7 @@ export const businessContent: BusinessContent = {
 export const businessContentEn: BusinessContent = {
   ...businessContent,
   metadataTitle: "Businesses",
-  hero: { ...businessContent.hero, eyebrow: "Businesses", title: "Cancer doesn’t stop at the workplace door. Neither does your support.", text: "By supporting Solea, your company helps give people affected by cancer a place to breathe, reconnect and move forward.", image: { ...businessContent.hero.image, alt: "A Swiss lakeside landscape surrounded by mountains" } },
-  contactLabel: "Talk to us",
-  dossierLabel: "Download our partnership brochure",
+  hero: { ...businessContent.hero, primary: { label: "Talk to us", href: "/contact" }, secondary: { label: "Download our partnership brochure" }, eyebrow: "Businesses", title: "Cancer doesn’t stop at the workplace door. Neither does your support.", text: "By supporting Solea, your company helps give people affected by cancer a place to breathe, reconnect and move forward.", image: { ...businessContent.hero.image, alt: "A Swiss lakeside landscape surrounded by mountains" } },
   benefits: { eyebrow: "Why get involved?", title: "A meaningful commitment for your teams and society", items: [
     { title: "A tangible impact", text: "Help improve the quality of life of people affected by cancer.", icon: "heart" },
     { title: "A shared purpose", text: "Bring your teams together around a meaningful project.", icon: "users" },
@@ -89,7 +88,7 @@ export const businessContentEn: BusinessContent = {
     { value: "+500", text: "people reached through our awareness initiatives" },
     { value: "Lasting impact", text: "on quality of life, returning to work and team cohesion" }
   ] },
-  closing: { ...businessContent.closing, eyebrow: "Let’s talk", title: "Let’s build a meaningful partnership together", text: "We would be delighted to explore the kind of commitment that best suits your company.", contactLabel: "Arrange a meeting", image: { ...businessContent.closing.image, alt: "Nature in soft light" } },
+  closing: { ...businessContent.closing, eyebrow: "Let’s talk", title: "Let’s build a meaningful partnership together", text: "We would be delighted to explore the kind of commitment that best suits your company.", primary: { label: "Arrange a meeting", href: "/contact" }, secondary: { label: "Download our partnership brochure" }, image: { ...businessContent.closing.image, alt: "Nature in soft light" } },
   partnersEyebrow: "Already supporting us",
   partnersIntro: "Partners committed alongside us."
 };

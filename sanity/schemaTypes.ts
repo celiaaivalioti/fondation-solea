@@ -1026,10 +1026,10 @@ const businessSection = (name: string, title: string, fields: object[]) => ({
 
 const businessPageFields = [
   { name: "metadataTitle", title: "Metadata title", type: "string" },
-  heroField,
-  { name: "contactLabel", title: "Contact button label", type: "string" },
-  { name: "dossierLabel", title: "Partnership brochure button label", type: "string" },
-  { name: "dossier", title: "Dossier partenariat (PDF)", type: "file", options: { accept: "application/pdf" }, description: "Optional. The download buttons appear after a PDF is added." },
+  { ...heroField, fields: heroField.fields.filter((field) => field.name !== "tertiary").map((field) => field.name === "secondary"
+    ? { ...field, description: "Leave URL empty to use the uploaded partnership PDF. Hidden until a PDF or URL is available." }
+    : field) },
+  { name: "dossier", title: "Dossier partenariat (PDF)", type: "file", options: { accept: "application/pdf" }, description: "Used by the secondary buttons in the hero and closing section when their URL is empty. The buttons stay hidden until a PDF or URL is available." },
   businessSection("benefits", "Pourquoi s’engager ?", businessItemFields),
   businessSection("engagement", "Formes d’engagement", businessItemFields),
   businessSection("projects", "Projets prioritaires", [
@@ -1049,7 +1049,8 @@ const businessPageFields = [
     { name: "title", title: "Title", type: "string" },
     { name: "text", title: "Text", type: "text" },
     imageField,
-    { name: "contactLabel", title: "Contact button label", type: "string" }
+    { ...ctaField, name: "primary", title: "Primary button" },
+    { ...ctaField, name: "secondary", title: "Secondary button", description: "Leave URL empty to use the uploaded partnership PDF. Hidden until a PDF or URL is available." }
   ] },
   { name: "partnersEyebrow", title: "Titre des partenaires", type: "string", description: "Logos are managed on the Sponsors page." },
   { name: "partnersIntro", title: "Introduction des partenaires", type: "text" }

@@ -6,7 +6,9 @@ import CTAButton from "@/components/CTAButton";
 import Hero from "@/components/Hero";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getCmsContent } from "@/lib/cms";
-import { type Locale, defaultLocale, localizeHref } from "@/lib/locales";
+import { type Locale, defaultLocale } from "@/lib/locales";
+import { isCtaVisible } from "@/lib/cta";
+import type { BusinessButtons } from "@/lib/cms-types";
 import { createPageMetadata } from "@/lib/page-metadata";
 
 const icons = { heart: Heart, users: Users, leaf: Leaf, handshake: Handshake, coins: Coins, briefcase: BriefcaseBusiness, heartHandshake: HeartHandshake };
@@ -18,11 +20,17 @@ function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) 
   </div>;
 }
 
-function DossierLink({ url, label }: { url?: string; label: string }) {
-  if (!url) return null;
-  return <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-moss/40 px-6 py-3 text-center font-medium text-bark transition-colors hover:bg-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-moss">
-    {label}<Download aria-hidden="true" className="h-4 w-4 flex-none" />
-  </a>;
+function BusinessActions({ buttons, dossierUrl }: { buttons: BusinessButtons; dossierUrl?: string }) {
+  const primary = buttons.primary;
+  const secondary = buttons.secondary;
+  const downloadUrl = secondary?.href || dossierUrl;
+  const showPrimary = isCtaVisible(primary) && Boolean(primary.href && primary.label);
+  const showSecondary = Boolean(secondary?.label && secondary.visible !== false && secondary.show !== false && downloadUrl);
+  if (!showPrimary && !showSecondary) return null;
+  return <div className="mt-8 flex flex-wrap gap-3">
+    {showPrimary && <CTAButton href={primary!.href} variant={primary!.variant ?? "primary"} newTab={primary!.newTab}>{primary!.label}</CTAButton>}
+    {showSecondary && <CTAButton href={downloadUrl} variant={secondary!.variant ?? "secondary"} newTab={secondary!.newTab ?? true} className="gap-3">{secondary!.label}<Download aria-hidden="true" className="h-4 w-4 flex-none" /></CTAButton>}
+  </div>;
 }
 
 export async function generateBusinessMetadata(locale: Locale = defaultLocale) {
@@ -32,17 +40,13 @@ export async function generateBusinessMetadata(locale: Locale = defaultLocale) {
 
 export default async function BusinessPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
   const { business, sponsors } = await getCmsContent(locale);
-  const contactHref = localizeHref("/contact", locale);
   const partners = sponsors.sections.filter((section) => section.visible !== false).flatMap((section) => section.logos).filter((partner) => partner.visible !== false && partner.image?.url);
 
   return <>
     <VisibleSection visible={isSectionVisible(business, "hero")}>
       <Hero eyebrow={business.hero.eyebrow} title={business.hero.title} text={business.hero.text}
       image={business.hero.image.url} imageAlt={business.hero.image.alt} imageClassName={business.hero.image.className}
-      action={<div className="mt-8 flex flex-wrap gap-3">
-        <CTAButton href={contactHref}>{business.contactLabel}</CTAButton>
-        <DossierLink url={business.dossierUrl} label={business.dossierLabel} />
-      </div>} /></VisibleSection>
+      action={<BusinessActions buttons={business.hero} dossierUrl={business.dossierUrl} />} /></VisibleSection>
 
     <VisibleSection visible={isSectionVisible(business, "benefits")}>
 
@@ -129,7 +133,7 @@ export default async function BusinessPage({ locale = defaultLocale }: { locale?
       <ScrollReveal className="self-center px-6 py-12 sm:px-10 lg:p-16">
         <SectionHeading eyebrow={business.closing.eyebrow} title={business.closing.title} />
         <p className="max-w-xl leading-relaxed text-bark/75">{business.closing.text}</p>
-        <div className="mt-8 flex flex-wrap gap-3"><CTAButton href={contactHref}>{business.closing.contactLabel}</CTAButton><DossierLink url={business.dossierUrl} label={business.dossierLabel} /></div>
+        <BusinessActions buttons={business.closing} dossierUrl={business.dossierUrl} />
       </ScrollReveal>
     </section>
     </VisibleSection>

@@ -310,17 +310,20 @@ export type FaqContent = SectionVisibility & {
   items: FaqItem[];
 };
 
+export type BusinessButtons = {
+  primary?: Cta;
+  secondary?: Omit<Cta, "href"> & { href?: string };
+};
+
 export type BusinessContent = SectionVisibility & {
   metadataTitle: string;
-  hero: HeroContent;
-  contactLabel: string;
-  dossierLabel: string;
+  hero: Omit<HeroContent, "primary" | "secondary"> & BusinessButtons;
   dossierUrl?: string;
   benefits: { eyebrow: string; title: string; items: Array<{ title: string; text: string; icon: string }> };
   engagement: { eyebrow: string; title: string; items: Array<{ title: string; text: string; icon: string }> };
   projects: { eyebrow: string; title: string; items: Array<{ title: string; text: string; image: CmsImage; objective: string; status: string; impact: string }> };
   impact: { eyebrow: string; title: string; items: Array<{ value: string; text: string }> };
-  closing: { eyebrow: string; title: string; text: string; image: CmsImage; contactLabel: string };
+  closing: { eyebrow: string; title: string; text: string; image: CmsImage } & BusinessButtons;
   partnersEyebrow: string;
   partnersIntro: string;
 };
