@@ -43,7 +43,7 @@ export async function generateBusinessMetadata(locale: Locale = defaultLocale) {
 
 export default async function BusinessPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
   const { business } = await getCmsContent(locale);
-  const partners = business.partners.showLogos === false ? [] : business.partners.logos.filter((partner) => partner.visible !== false && partner.image?.url);
+  const partners = business.partners.logos.filter((partner) => partner.visible !== false && partner.image?.url);
 
   return <>
     <VisibleSection visible={isSectionVisible(business, "hero")}>
