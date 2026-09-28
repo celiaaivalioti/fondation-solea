@@ -1,3 +1,4 @@
+import { pageSections } from "../lib/section-visibility";
 import { businessContent, businessContentEn } from "../lib/business-content";
 import type { Rule } from "sanity";
 
@@ -195,6 +196,13 @@ const sponsorLogoField = {
   title: "Sponsor logo",
   type: "object",
   fields: [
+    {
+      name: "visible",
+      title: "Show this sponsor",
+      type: "boolean",
+      initialValue: true,
+      description: "Turn off to hide this sponsor on the Sponsors and Entreprises pages without deleting it. Existing sponsors are shown by default."
+    },
     { name: "name", title: "Name", type: "string" },
     imageField,
     {
@@ -226,6 +234,7 @@ const sponsorSectionField = {
   title: "Sponsor section",
   type: "object",
   fields: [
+    { name: "visible", title: "Show this sponsor group", type: "boolean", initialValue: true, description: "Hides this group and its logos on the Sponsors and Entreprises pages." },
     { name: "title", title: "Title", type: "string" },
     {
       name: "logos",
@@ -1060,7 +1069,17 @@ const businessPage = {
   title: "Entreprises",
   type: "document",
   initialValue: () => businessInitialValue({ ...businessContent, en: businessContentEn }),
-  fields: [...businessPageFields, englishTranslationField(businessPageFields)],
+  fields: [
+    {
+      name: "showPartners",
+      title: "Show sponsors section",
+      type: "boolean",
+      initialValue: true,
+      description: "Show or hide the ‘Ils nous soutiennent déjà’ section on the Entreprises page in both languages. Shown by default."
+    },
+    ...businessPageFields,
+    englishTranslationField(businessPageFields)
+  ],
   ...singletonPreview("Entreprises")
 };
 
@@ -1125,6 +1144,7 @@ const privacyPage = {
         {
           type: "object",
           fields: [
+            { name: "visible", title: "Show this section", type: "boolean", initialValue: true, description: "Applies to both languages. Visible by default." },
             { name: "title", title: "Title", type: "string" },
             { name: "text", title: "Text", type: "text" }
           ]
@@ -1337,23 +1357,41 @@ const contactForm = {
   ...singletonPreview("Formulaire de contact")
 };
 
+function withSectionVisibility<T extends { name: string; fields: unknown[] }>(schema: T) {
+  const sections = pageSections[schema.name.replace(/Page$/, "")];
+  if (!sections) return schema;
+  return {
+    ...schema,
+    fields: [{
+      name: "sectionVisibility",
+      title: "Section visibility / Visibilité des sections",
+      type: "object",
+      description: "Show or hide each section in both French and English. Sections are visible by default; hiding preserves their content. Existing donation and sponsor switches also apply.",
+      options: { collapsible: true, collapsed: false },
+      fields: Object.entries(sections).map(([name, title]) => ({
+        name, title: "Afficher : " + title, type: "boolean", initialValue: true
+      }))
+    }, ...schema.fields]
+  };
+}
+
 export const schemaTypes = [
   ...objects,
   siteSettings,
   navigation,
-  homePage,
-  aboutPage,
-  committeePage,
-  retreatPage,
-  seminarsPage,
-  supportPage,
-  sponsorsPage,
-  businessPage,
-  registrationPage,
-  contactPage,
-  privacyPage,
-  legalPage,
-  faqPage,
+  withSectionVisibility(homePage),
+  withSectionVisibility(aboutPage),
+  withSectionVisibility(committeePage),
+  withSectionVisibility(retreatPage),
+  withSectionVisibility(seminarsPage),
+  withSectionVisibility(supportPage),
+  withSectionVisibility(sponsorsPage),
+  withSectionVisibility(businessPage),
+  withSectionVisibility(registrationPage),
+  withSectionVisibility(contactPage),
+  withSectionVisibility(privacyPage),
+  withSectionVisibility(legalPage),
+  withSectionVisibility(faqPage),
   registrationForm,
   contactForm
 ];

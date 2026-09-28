@@ -1,4 +1,7 @@
+import VisibleSection from "@/components/VisibleSection";
+import { isSectionVisible } from "@/lib/section-visibility";
 import Link from "next/link";
+import SocialIcon from "@/components/SocialIcon";
 import { ArrowUpRight, Heart, House, Sprout } from "lucide-react";
 import { newTabProps } from "@/lib/links";
 import { notFound } from "next/navigation";
@@ -36,7 +39,8 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
 
   return (
     <>
-      <Hero
+      <VisibleSection visible={isSectionVisible(support, "hero")}>
+        <Hero
         eyebrow={support.hero.eyebrow}
         title={support.hero.title}
         text={support.hero.text}
@@ -51,10 +55,13 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
           </p>
         }
       />
+      </VisibleSection>
 
-      <DonationSelector locale={locale} />
+      <VisibleSection visible={isSectionVisible(support, "donation")}><DonationSelector locale={locale} /></VisibleSection>
 
-      <section className="px-5 py-16 sm:px-8 lg:py-20" aria-labelledby="donation-impact-title">
+      <VisibleSection visible={isSectionVisible(support, "cause")}>
+
+        <section className="px-5 py-16 sm:px-8 lg:py-20" aria-labelledby="donation-impact-title">
         <div className="mx-auto max-w-6xl">
           <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">{support.cause.eyebrow}</p>
           <h2 id="donation-impact-title" className="mt-4 font-display text-[clamp(1.95rem,3.4vw,3.25rem)] font-light leading-tight text-bark">
@@ -79,14 +86,20 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
           </ScrollReveal>
         </div>
       </section>
+      </VisibleSection>
 
-      <Section tone="linen" eyebrow={support.help.eyebrow} title={support.help.title}>
+      <VisibleSection visible={isSectionVisible(support, "help")}>
+
+        <Section tone="linen" eyebrow={support.help.eyebrow} title={support.help.title}>
         <ScrollReveal>
           <CheckList items={support.help.items} />
         </ScrollReveal>
       </Section>
+      </VisibleSection>
 
-      <section className="relative bg-[rgb(var(--button-primary-bg)/1)] px-5 py-16 text-paper sm:px-8 lg:py-24">
+      <VisibleSection visible={isSectionVisible(support, "testimonial")}>
+
+        <section className="relative bg-[rgb(var(--button-primary-bg)/1)] px-5 py-16 text-paper sm:px-8 lg:py-24">
         <ScrollReveal className="mx-auto max-w-5xl">
           <figure className="text-center">
             <blockquote className="mx-auto max-w-2xl whitespace-pre-line font-display text-[clamp(1.35rem,2.2vw,1.65rem)] font-light leading-[1.45] text-paper">
@@ -95,10 +108,12 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
           </figure>
         </ScrollReveal>
       </section>
+      </VisibleSection>
 
       {site.socialLinks.some((link) => ["linkedin", "facebook", "instagram"].includes(link.platform)) && (
-        <section className="px-5 py-16 sm:px-8 lg:py-20" aria-labelledby="support-social-title">
-          <ScrollReveal className="mx-auto flex max-w-6xl flex-col gap-8 rounded-[1.5rem] bg-linen/65 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between">
+        <VisibleSection visible={isSectionVisible(support, "social")}>
+          <section className="px-5 py-16 sm:px-8 lg:py-20" aria-labelledby="support-social-title">
+          <ScrollReveal className="mx-auto flex max-w-6xl flex-col gap-8 rounded-[1.5rem] bg-linen/65 p-8 sm:p-12 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
             <div className="max-w-lg">
               <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">{locale === "fr" ? "Gardons le lien" : "Stay connected"}</p>
               <h2 id="support-social-title" className="mt-4 font-display text-3xl font-light leading-tight text-bark">
@@ -108,9 +123,10 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
                 {locale === "fr" ? "Découvrez les avancées de la Fondation et partagez notre engagement autour de vous." : "Discover the Foundation’s progress and share our commitment with those around you."}
               </p>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 lg:flex-nowrap">
               {site.socialLinks.filter((link) => ["linkedin", "facebook", "instagram"].includes(link.platform)).map((link) => (
                 <Link key={link.platform} href={link.href} {...newTabProps(link.newTab)} className="inline-flex min-h-12 items-center gap-3 rounded-full border border-moss/35 px-5 py-3 font-semibold text-bark transition-colors hover:bg-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-moss">
+                  <SocialIcon platform={link.platform} className="h-5 w-5 shrink-0" />
                   {{ linkedin: "LinkedIn", facebook: "Facebook", instagram: "Instagram" }[link.platform]}
                   <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                 </Link>
@@ -118,6 +134,7 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
             </div>
           </ScrollReveal>
         </section>
+        </VisibleSection>
       )}
     </>
   );

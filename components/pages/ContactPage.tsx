@@ -1,3 +1,4 @@
+import { isSectionVisible } from "@/lib/section-visibility";
 import ContactForm from "@/components/ContactForm";
 import CTAButton from "@/components/CTAButton";
 import FormPageLayout from "@/components/FormPageLayout";
@@ -37,6 +38,8 @@ export default async function ContactPage({ locale = defaultLocale }: { locale?:
 
   return (
     <FormPageLayout
+      introVisible={isSectionVisible(contact, "intro")}
+      formVisible={isSectionVisible(contact, "form")}
       eyebrow={contact.eyebrow}
       title={contact.title}
       text={contact.text}

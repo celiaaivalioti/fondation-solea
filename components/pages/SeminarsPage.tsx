@@ -1,3 +1,5 @@
+import VisibleSection from "@/components/VisibleSection";
+import { isSectionVisible } from "@/lib/section-visibility";
 import CheckList from "@/components/CheckList";
 import ResourceLibrary from "@/components/ResourceLibrary";
 import Hero from "@/components/Hero";
@@ -19,7 +21,8 @@ export default async function SeminarsPage({ locale = defaultLocale }: { locale?
 
   return (
     <>
-      <Hero
+      <VisibleSection visible={isSectionVisible(seminars, "hero")}>
+        <Hero
         eyebrow={seminars.hero.eyebrow}
         title={seminars.hero.title}
         text={seminars.hero.text}
@@ -36,7 +39,9 @@ export default async function SeminarsPage({ locale = defaultLocale }: { locale?
         tertiaryLabel={seminars.hero.tertiary?.label}
         tertiaryVisible={isCtaVisible(seminars.hero.tertiary)}
       />
-      <Section
+      </VisibleSection>
+      <VisibleSection visible={isSectionVisible(seminars, "themes")}>
+        <Section
         tone="parchment"
         className="py-28 lg:py-36"
         eyebrow={seminars.themes.eyebrow}
@@ -47,7 +52,8 @@ export default async function SeminarsPage({ locale = defaultLocale }: { locale?
           <CheckList items={seminars.themes.items} />
         </ScrollReveal>
       </Section>
-      {seminars.resources && <ResourceLibrary resources={seminars.resources} locale={locale} />}
+      </VisibleSection>
+      {seminars.resources && <VisibleSection visible={isSectionVisible(seminars, "resources")}><ResourceLibrary resources={seminars.resources} locale={locale} /></VisibleSection>}
     </>
   );
 }

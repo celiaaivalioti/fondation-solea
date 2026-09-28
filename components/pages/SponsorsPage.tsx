@@ -1,3 +1,5 @@
+import VisibleSection from "@/components/VisibleSection";
+import { isSectionVisible } from "@/lib/section-visibility";
 import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
@@ -27,12 +29,13 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
       : "Lakeside meadow in French-speaking Switzerland in soft morning light");
 
   const hasLogoImage = (sponsor: SponsorLogo): sponsor is SponsorLogoWithImage =>
-    Boolean(sponsor.image?.url);
+    sponsor.visible !== false && Boolean(sponsor.image?.url);
   const logoHeight = (sponsor: SponsorLogo) => Math.min(Math.max(sponsor.logoHeight ?? 48, 24), 180);
 
   return (
     <>
-      <Hero
+      <VisibleSection visible={isSectionVisible(sponsors, "hero")}>
+        <Hero
         eyebrow={locale === "fr" ? "Sponsors" : "Sponsors"}
         title={sponsors.title}
         text={sponsors.intro}
@@ -41,10 +44,13 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
         imageClassName={sponsors.heroImage.className}
         action={false}
       />
+      </VisibleSection>
 
-      <section className="bg-ivory/65 px-5 py-20 sm:px-8 lg:py-24">
+      <VisibleSection visible={isSectionVisible(sponsors, "sections")}>
+
+        <section className="bg-ivory/65 px-5 py-20 sm:px-8 lg:py-24">
         <div className="mx-auto grid max-w-[1400px] gap-16">
-          {sponsors.sections.map((section) => (
+          {sponsors.sections.filter((section) => section.visible !== false).map((section) => (
             <ScrollReveal key={section.title} className="grid gap-8 lg:grid-cols-[0.36fr_1fr] lg:gap-14">
               <div>
                 <h2 className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
@@ -99,8 +105,11 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
           ))}
         </div>
       </section>
+      </VisibleSection>
 
-      <section className="bg-parchment px-5 py-20 sm:px-8 lg:py-24">
+      <VisibleSection visible={isSectionVisible(sponsors, "closing")}>
+
+        <section className="bg-parchment px-5 py-20 sm:px-8 lg:py-24">
         <ScrollReveal className="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
           <p className="font-display text-[clamp(1.8rem,3.2vw,3rem)] font-light leading-[1.12] text-bark text-balance">
             {locale === "fr"
@@ -114,6 +123,7 @@ export default async function SponsorsPage({ locale = defaultLocale }: { locale?
           )}
         </ScrollReveal>
       </section>
+      </VisibleSection>
     </>
   );
 }

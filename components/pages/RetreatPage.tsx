@@ -1,3 +1,5 @@
+import VisibleSection from "@/components/VisibleSection";
+import { isSectionVisible } from "@/lib/section-visibility";
 import Image from "next/image";
 import CheckList from "@/components/CheckList";
 import CTAButton from "@/components/CTAButton";
@@ -23,7 +25,8 @@ export default async function RetreatPage({ locale = defaultLocale }: { locale?:
 
   return (
     <>
-      <Hero
+      <VisibleSection visible={isSectionVisible(retreat, "hero")}>
+        <Hero
         eyebrow={retreat.hero.eyebrow}
         title={retreat.hero.title}
         text={retreat.hero.text}
@@ -37,7 +40,9 @@ export default async function RetreatPage({ locale = defaultLocale }: { locale?:
         secondaryLabel={retreat.hero.secondary?.label}
         secondaryVisible={isCtaVisible(retreat.hero.secondary)}
       />
-      <section className="px-5 py-16 sm:px-8 lg:py-20">
+      </VisibleSection>
+      <VisibleSection visible={isSectionVisible(retreat, "immersive")}>
+        <section className="px-5 py-16 sm:px-8 lg:py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="font-display text-[clamp(2.4rem,4.6vw,3rem)] font-light leading-[1.05] text-bark">
             {retreat.immersive.title}
@@ -51,8 +56,11 @@ export default async function RetreatPage({ locale = defaultLocale }: { locale?:
           />
         </div>
       </section>
+      </VisibleSection>
 
-      <Section
+      <VisibleSection visible={isSectionVisible(retreat, "approach")}>
+
+        <Section
         eyebrow={retreat.approach.eyebrow}
         title={retreat.approach.title}
         intro={retreat.approach.intro}
@@ -80,8 +88,11 @@ export default async function RetreatPage({ locale = defaultLocale }: { locale?:
           })}
         </ScrollReveal>
       </Section>
+      </VisibleSection>
 
-      <section
+      <VisibleSection visible={isSectionVisible(retreat, "therapies")}>
+
+        <section
         id="therapies-proposees"
         className="relative scroll-mt-28 bg-ivory/65 px-5 py-24 sm:px-8 lg:scroll-mt-32 lg:py-28"
       >
@@ -113,14 +124,20 @@ export default async function RetreatPage({ locale = defaultLocale }: { locale?:
           </ScrollReveal>
         </div>
       </section>
+      </VisibleSection>
 
-      <Section tone="linen" eyebrow={retreat.program.eyebrow} title={retreat.program.title}>
+      <VisibleSection visible={isSectionVisible(retreat, "program")}>
+
+        <Section tone="linen" eyebrow={retreat.program.eyebrow} title={retreat.program.title}>
         <ScrollReveal>
           <CheckList items={retreat.program.items} />
         </ScrollReveal>
       </Section>
+      </VisibleSection>
 
-      <Section
+      <VisibleSection visible={isSectionVisible(retreat, "place")}>
+
+        <Section
         eyebrow={retreat.place.eyebrow}
         title={retreat.place.title}
         intro={retreat.place.intro}
@@ -151,6 +168,7 @@ export default async function RetreatPage({ locale = defaultLocale }: { locale?:
           )}
         </ScrollReveal>
       </Section>
+      </VisibleSection>
     </>
   );
 }

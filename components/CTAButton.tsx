@@ -27,7 +27,7 @@ export default function CTAButton({
     ghost:
       "group border border-transparent bg-transparent text-[rgb(var(--button-ghost-text)/1)] hover:border-[rgb(var(--button-ghost-border)/0.35)] hover:bg-[rgb(var(--button-ghost-bg)/0.5)]",
     paperGhost:
-      "group border border-[rgb(var(--button-paper-ghost-border)/0.4)] bg-[rgb(var(--color-overlay-neutral)/0.7)] backdrop-blur-sm text-[rgb(var(--button-paper-ghost-text)/1)] hover:border-[rgb(var(--button-paper-ghost-border)/1)] hover:bg-[rgb(var(--button-paper-ghost-bg)/1)] hover:text-[rgb(var(--button-paper-text)/1)]"
+      "group border border-[rgb(var(--button-paper-ghost-border)/0.4)] bg-transparent text-[rgb(var(--button-paper-ghost-text)/1)] hover:border-[rgb(var(--button-paper-ghost-border)/1)] hover:bg-[rgb(var(--button-paper-ghost-bg)/1)] hover:text-[rgb(var(--button-paper-text)/1)]"
   }[variant];
 
   const spacingClass =

@@ -1,3 +1,4 @@
+import type { SectionVisibility } from "./section-visibility";
 export type CmsImage = {
   url: string;
   alt: string;
@@ -56,7 +57,7 @@ export type TextSection = {
   cta?: Cta;
 };
 
-export type HomeContent = {
+export type HomeContent = SectionVisibility & {
   metadataTitle: string;
   hero: HeroContent;
   manifesto: TextSection & {
@@ -86,7 +87,7 @@ export type PersonCard = {
   cta?: Cta;
 };
 
-export type AboutContent = {
+export type AboutContent = SectionVisibility & {
   metadataTitle: string;
   hero: HeroContent;
   foundation: {
@@ -132,7 +133,7 @@ export type AboutContent = {
   };
 };
 
-export type CommitteeContent = {
+export type CommitteeContent = SectionVisibility & {
   metadataTitle: string;
   eyebrow: string;
   title: string;
@@ -158,7 +159,7 @@ export type GalleryImage = CmsImage & {
   frameClass?: string;
 };
 
-export type RetreatContent = {
+export type RetreatContent = SectionVisibility & {
   metadataTitle: string;
   hero: HeroContent;
   immersive: TextSection;
@@ -202,7 +203,7 @@ export type RecommendedResource = {
   recommender?: { name?: string; role?: string; image?: CmsImage };
 };
 
-export type SeminarsContent = {
+export type SeminarsContent = SectionVisibility & {
   metadataTitle: string;
   hero: HeroContent;
   themes: {
@@ -219,7 +220,7 @@ export type SeminarsContent = {
   };
 };
 
-export type SupportContent = {
+export type SupportContent = SectionVisibility & {
   metadataTitle: string;
   hero: HeroContent;
   donation: {
@@ -239,6 +240,7 @@ export type SupportContent = {
 };
 
 export type SponsorLogo = {
+  visible?: boolean;
   name: string;
   image?: CmsImage | null;
   logoHeight?: number;
@@ -247,11 +249,12 @@ export type SponsorLogo = {
 };
 
 export type SponsorSection = {
+  visible?: boolean;
   title: string;
   logos: SponsorLogo[];
 };
 
-export type SponsorsContent = {
+export type SponsorsContent = SectionVisibility & {
   metadataTitle: string;
   title: string;
   intro: string;
@@ -260,7 +263,7 @@ export type SponsorsContent = {
   cta: Cta;
 };
 
-export type FormPageContent = {
+export type FormPageContent = SectionVisibility & {
   metadataTitle: string;
   eyebrow: string;
   title: string;
@@ -300,14 +303,15 @@ export type FaqItem = {
   answer: string;
 };
 
-export type FaqContent = {
+export type FaqContent = SectionVisibility & {
   metadataTitle: string;
   eyebrow: string;
   title: string;
   items: FaqItem[];
 };
 
-export type BusinessContent = {
+export type BusinessContent = SectionVisibility & {
+  showPartners?: boolean;
   metadataTitle: string;
   hero: HeroContent;
   contactLabel: string;
@@ -342,11 +346,11 @@ export type CmsContent = {
   contactForm: ContactFormConfig;
 };
 
-export type PrivacyContent = {
+export type PrivacyContent = SectionVisibility & {
   metadataTitle: string;
   title: string;
   intro?: string;
-  sections: Array<{ title: string; text: string }>;
+  sections: Array<{ title: string; text: string; visible?: boolean }>;
 };
 
 export type LocalizedCmsContent = Partial<CmsContent>;

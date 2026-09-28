@@ -1,3 +1,4 @@
+import { isSectionVisible } from "@/lib/section-visibility";
 import RegistrationForm from "@/components/RegistrationForm";
 import FormPageLayout from "@/components/FormPageLayout";
 import { getCmsContent } from "@/lib/cms";
@@ -15,6 +16,8 @@ export default async function RegistrationPage({ locale = defaultLocale }: { loc
 
   return (
     <FormPageLayout
+      introVisible={isSectionVisible(registration, "intro")}
+      formVisible={isSectionVisible(registration, "form")}
       eyebrow={registration.eyebrow}
       title={registration.title}
       text={registration.text}

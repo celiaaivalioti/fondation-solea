@@ -1,3 +1,5 @@
+import VisibleSection from "@/components/VisibleSection";
+import { isSectionVisible } from "@/lib/section-visibility";
 import Image from "next/image";
 import { BriefcaseBusiness, Coins, Download, Handshake, Heart, HeartHandshake, Leaf, Users } from "lucide-react";
 import CTAButton from "@/components/CTAButton";
@@ -31,17 +33,20 @@ export async function generateBusinessMetadata(locale: Locale = defaultLocale) {
 export default async function BusinessPage({ locale = defaultLocale }: { locale?: Locale } = {}) {
   const { business, sponsors } = await getCmsContent(locale);
   const contactHref = localizeHref("/contact", locale);
-  const partners = sponsors.sections.flatMap((section) => section.logos).filter((partner) => partner.image?.url);
+  const partners = sponsors.sections.filter((section) => section.visible !== false).flatMap((section) => section.logos).filter((partner) => partner.visible !== false && partner.image?.url);
 
   return <>
-    <Hero eyebrow={business.hero.eyebrow} title={business.hero.title} text={business.hero.text}
+    <VisibleSection visible={isSectionVisible(business, "hero")}>
+      <Hero eyebrow={business.hero.eyebrow} title={business.hero.title} text={business.hero.text}
       image={business.hero.image.url} imageAlt={business.hero.image.alt} imageClassName={business.hero.image.className}
       action={<div className="mt-8 flex flex-wrap gap-3">
         <CTAButton href={contactHref}>{business.contactLabel}</CTAButton>
         <DossierLink url={business.dossierUrl} label={business.dossierLabel} />
-      </div>} />
+      </div>} /></VisibleSection>
 
-    <section className="bg-fern/35 px-5 py-16 sm:px-8 lg:py-20">
+    <VisibleSection visible={isSectionVisible(business, "benefits")}>
+
+      <section className="bg-fern/35 px-5 py-16 sm:px-8 lg:py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading {...business.benefits} />
         <ScrollReveal className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -56,8 +61,11 @@ export default async function BusinessPage({ locale = defaultLocale }: { locale?
         </ScrollReveal>
       </div>
     </section>
+    </VisibleSection>
 
-    <section className="px-5 py-16 sm:px-8 lg:py-20">
+    <VisibleSection visible={isSectionVisible(business, "engagement")}>
+
+      <section className="px-5 py-16 sm:px-8 lg:py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading {...business.engagement} />
         <ScrollReveal className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -72,8 +80,11 @@ export default async function BusinessPage({ locale = defaultLocale }: { locale?
         </ScrollReveal>
       </div>
     </section>
+    </VisibleSection>
 
-    <section className="px-5 pb-16 sm:px-8 lg:pb-20">
+    <VisibleSection visible={isSectionVisible(business, "projects")}>
+
+      <section className="px-5 pb-16 sm:px-8 lg:pb-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading {...business.projects} />
         <ScrollReveal className="grid gap-6 md:grid-cols-3">
@@ -94,8 +105,11 @@ export default async function BusinessPage({ locale = defaultLocale }: { locale?
         </ScrollReveal>
       </div>
     </section>
+    </VisibleSection>
 
-    <section className="bg-fern/40 px-5 py-16 sm:px-8 lg:py-20">
+    <VisibleSection visible={isSectionVisible(business, "impact")}>
+
+      <section className="bg-fern/40 px-5 py-16 sm:px-8 lg:py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading {...business.impact} />
         <ScrollReveal className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -106,8 +120,11 @@ export default async function BusinessPage({ locale = defaultLocale }: { locale?
         </ScrollReveal>
       </div>
     </section>
+    </VisibleSection>
 
-    <section className="grid bg-linen/55 md:grid-cols-2">
+    <VisibleSection visible={isSectionVisible(business, "closing")}>
+
+      <section className="grid bg-linen/55 md:grid-cols-2">
       <div className="relative min-h-64 md:min-h-96"><Image src={business.closing.image.url} alt={business.closing.image.alt} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" /></div>
       <ScrollReveal className="self-center px-6 py-12 sm:px-10 lg:p-16">
         <SectionHeading eyebrow={business.closing.eyebrow} title={business.closing.title} />
@@ -115,8 +132,9 @@ export default async function BusinessPage({ locale = defaultLocale }: { locale?
         <div className="mt-8 flex flex-wrap gap-3"><CTAButton href={contactHref}>{business.closing.contactLabel}</CTAButton><DossierLink url={business.dossierUrl} label={business.dossierLabel} /></div>
       </ScrollReveal>
     </section>
+    </VisibleSection>
 
-    {partners.length > 0 && <section className="px-5 py-12 sm:px-8">
+    {business.showPartners !== false && partners.length > 0 && <VisibleSection visible={isSectionVisible(business, "partners")}><section className="px-5 py-12 sm:px-8">
       <div className="mx-auto max-w-6xl">
         <h2 className="text-[13px] font-semibold uppercase tracking-[0.18em] text-moss">{business.partnersEyebrow}</h2>
         <p className="mt-3 text-bark/70">{business.partnersIntro}</p>
@@ -124,6 +142,7 @@ export default async function BusinessPage({ locale = defaultLocale }: { locale?
           {partners.map((partner, index) => <div key={`${partner.name}-${index}`} className="relative h-16 w-40"><Image src={partner.image!.url} alt={partner.image!.alt || partner.name} fill sizes="160px" className="object-contain" /></div>)}
         </div>
       </div>
-    </section>}
+    </section>
+    </VisibleSection>}
   </>;
 }

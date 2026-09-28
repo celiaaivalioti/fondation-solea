@@ -1,3 +1,5 @@
+import VisibleSection from "@/components/VisibleSection";
+import { isSectionVisible } from "@/lib/section-visibility";
 import Image from "next/image";
 import Hero from "@/components/Hero";
 import CTAButton from "@/components/CTAButton";
@@ -5,7 +7,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import RichText from "@/components/RichText";
 import { getCmsContent } from "@/lib/cms";
 import { isCtaVisible } from "@/lib/cta";
-import { type Locale, defaultLocale } from "@/lib/locales";
+import { type Locale, defaultLocale, localizeHref } from "@/lib/locales";
 import { createPageMetadata } from "@/lib/page-metadata";
 
 export async function generateHomeMetadata(locale: Locale = defaultLocale) {
@@ -15,14 +17,15 @@ export async function generateHomeMetadata(locale: Locale = defaultLocale) {
 }
 
 export default async function HomePage({ locale = defaultLocale }: { locale?: Locale } = {}) {
-  const { home } = await getCmsContent(locale);
+  const { home, site } = await getCmsContent(locale);
   const { portraitImage, portraitAlternativeText, quoteAttribution } = home.manifesto;
   const attributionLines = quoteAttribution?.split("\n").filter((line) => line.trim());
   const hasPortraitAttribution = Boolean(portraitImage?.url || attributionLines?.length);
 
   return (
     <>
-      <Hero
+      <VisibleSection visible={isSectionVisible(home, "hero")}>
+        <Hero
         layout="background"
         eyebrow={home.hero.eyebrow}
         title={home.hero.title}
@@ -36,10 +39,15 @@ export default async function HomePage({ locale = defaultLocale }: { locale?: Lo
         secondaryHref={home.hero.secondary?.href}
         secondaryLabel={home.hero.secondary?.label}
         secondaryVisible={isCtaVisible(home.hero.secondary)}
+        tertiaryHref={localizeHref("/nous-soutenir", locale)}
+        tertiaryLabel={site.donationLabel}
+        tertiaryVisible={site.showDonationCta}
       />
+      </VisibleSection>
 
       {/* Manifesto section */}
-      <section className="px-5 py-16 sm:px-8 lg:py-20">
+      <VisibleSection visible={isSectionVisible(home, "manifesto")}>
+        <section className="px-5 py-16 sm:px-8 lg:py-20">
         <ScrollReveal className="mx-auto max-w-4xl">
           <div className="group">
             <h2 className="font-display text-[clamp(2.4rem,4.6vw,3rem)] font-light leading-[1.05] text-bark">
@@ -93,6 +101,7 @@ export default async function HomePage({ locale = defaultLocale }: { locale?: Lo
           )}
         </ScrollReveal>
       </section>
+      </VisibleSection>
     </>
   );
 }

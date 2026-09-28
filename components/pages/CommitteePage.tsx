@@ -1,3 +1,5 @@
+import VisibleSection from "@/components/VisibleSection";
+import { isSectionVisible } from "@/lib/section-visibility";
 import CommitteeDirectory from "@/components/CommitteeDirectory";
 import CTAButton from "@/components/CTAButton";
 import PageGlow from "@/components/PageGlow";
@@ -36,7 +38,8 @@ export default async function CommitteePage({ locale = defaultLocale }: { locale
 
   return (
     <>
-      <section className="relative overflow-hidden bg-ivory px-5 py-20 sm:px-8 lg:py-28">
+      <VisibleSection visible={isSectionVisible(committee, "intro")}>
+        <section className="relative overflow-hidden bg-ivory px-5 py-20 sm:px-8 lg:py-28">
         <PageGlow />
         <div className="relative mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-24">
           <ScrollReveal>
@@ -57,8 +60,11 @@ export default async function CommitteePage({ locale = defaultLocale }: { locale
           </ScrollReveal>
         </div>
       </section>
+      </VisibleSection>
 
-      <section id="comite" className="scroll-mt-4 bg-parchment px-5 py-20 sm:px-8 lg:scroll-mt-8 lg:py-28">
+      <VisibleSection visible={isSectionVisible(committee, "members")}>
+
+        <section id="comite" className="scroll-mt-4 bg-parchment px-5 py-20 sm:px-8 lg:scroll-mt-8 lg:py-28">
         <div className="mx-auto max-w-[1400px]">
           <ScrollReveal className="max-w-4xl">
             <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
@@ -77,6 +83,7 @@ export default async function CommitteePage({ locale = defaultLocale }: { locale
           </ScrollReveal>
         </div>
       </section>
+      </VisibleSection>
     </>
   );
 }

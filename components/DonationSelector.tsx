@@ -16,7 +16,6 @@ const amounts: Record<DonationFrequency, number[]> = {
 };
 
 const companyAmounts = [2500, 7500, 15000, 30000];
-const companyPlaces: Record<number, number> = { 2500: 5, 7500: 10, 15000: 20, 30000: 40 };
 
 export default function DonationSelector({ locale }: { locale: Locale }) {
   const customAmountId = useId();
@@ -76,7 +75,7 @@ export default function DonationSelector({ locale }: { locale: Locale }) {
           </p>
         </div>
 
-        <div role="group" aria-label={isFrench ? "Type de donateur" : "Donor type"} className="mx-auto mt-10 grid max-w-2xl grid-cols-2 rounded-full bg-paper/70 p-1.5">
+        <div role="group" aria-label={isFrench ? "Type de donateur" : "Donor type"} className="mx-auto mt-10 grid w-fit max-w-full grid-cols-2 rounded-full bg-paper/70 p-1.5">
           {(["individual", "company"] as const).map((option) => (
             <button
               key={option}
@@ -93,7 +92,7 @@ export default function DonationSelector({ locale }: { locale: Locale }) {
         </div>
 
         {!isCompany && (
-          <div role="group" aria-label={isFrench ? "Fréquence du don" : "Donation frequency"} className="mx-auto mt-4 grid max-w-xl grid-cols-2 rounded-full bg-paper/70 p-1.5">
+          <div role="group" aria-label={isFrench ? "Fréquence du don" : "Donation frequency"} className="mx-auto mt-4 grid w-fit max-w-full grid-cols-2 rounded-full bg-paper/70 p-1.5">
             {(["once", "monthly"] as const).map((option) => {
               const active = frequency === option;
               const label = option === "once"
@@ -121,11 +120,7 @@ export default function DonationSelector({ locale }: { locale: Locale }) {
 
         {isCompany && (
           <p aria-live="polite" className="mx-auto mt-8 max-w-2xl text-center text-lg leading-relaxed text-bark/80">
-            {selectedAmount !== "custom" && companyPlaces[selectedAmount]
-              ? isFrench
-                ? `Votre entreprise finance ${companyPlaces[selectedAmount]} parcours d’accompagnement, pour la collectivité ou pour vos propres collaborateurs.`
-                : `Your company funds ${companyPlaces[selectedAmount]} support experiences for the community or your own employees.`
-              : isFrench
+            {isFrench
                 ? "Votre entreprise contribue à rendre l’expérience Solea accessible gratuitement."
                 : "Your company helps make the Solea experience freely accessible."}
           </p>
@@ -143,16 +138,11 @@ export default function DonationSelector({ locale }: { locale: Locale }) {
                 onClick={() => setSelectedAmount(amount)}
                 className={`flex min-h-32 w-[calc(50%-0.375rem)] flex-col items-center justify-center rounded-[1.5rem] px-4 py-7 transition-all duration-300 ease-out-soft ${isCompany ? "sm:w-[calc(50%-0.375rem)]" : "sm:w-[calc(33.333%-0.5rem)]"} lg:w-44 ${
                   active
-                    ? "bg-paper text-moss shadow-soft"
-                    : "bg-paper/60 text-bark hover:-translate-y-1 hover:bg-paper/80"
+                    ? "bg-paper text-bark shadow-soft"
+                    : "bg-paper/60 text-moss hover:-translate-y-1 hover:bg-paper/80"
                 }`}
               >
                 <span className="text-xl font-semibold sm:text-2xl">{formatAmount(amount)} CHF</span>
-                {isCompany && (
-                  <span className="mt-2 text-xs font-semibold uppercase tracking-widest text-bark/65">
-                    {companyPlaces[amount]} places
-                  </span>
-                )}
                 {frequency === "monthly" && (
                   <span className="mt-1 text-sm font-medium opacity-65">
                     {isFrench ? "par mois" : "per month"}
@@ -168,8 +158,8 @@ export default function DonationSelector({ locale }: { locale: Locale }) {
             onClick={() => setSelectedAmount("custom")}
             className={`flex min-h-32 w-[calc(50%-0.375rem)] items-center justify-center rounded-[1.5rem] px-4 py-7 text-2xl font-semibold transition-all duration-300 ease-out-soft ${isCompany ? "sm:w-[calc(50%-0.375rem)]" : "sm:w-[calc(33.333%-0.5rem)]"} lg:w-44 ${
               selectedAmount === "custom"
-                ? "bg-paper text-moss shadow-soft"
-                : "bg-paper/60 text-bark hover:-translate-y-1 hover:bg-paper/80"
+                ? "bg-paper text-bark shadow-soft"
+                : "bg-paper/60 text-moss hover:-translate-y-1 hover:bg-paper/80"
             }`}
           >
             {isFrench ? "Autre" : "Other"}

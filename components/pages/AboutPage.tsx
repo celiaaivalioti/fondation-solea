@@ -1,3 +1,5 @@
+import VisibleSection from "@/components/VisibleSection";
+import { isSectionVisible } from "@/lib/section-visibility";
 import Image from "next/image";
 import CheckList from "@/components/CheckList";
 import CommitteeDirectory from "@/components/CommitteeDirectory";
@@ -24,7 +26,8 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
 
   return (
     <>
-      <div id="notre-histoire" className="scroll-mt-32 lg:scroll-mt-36">
+      <VisibleSection visible={isSectionVisible(about, "hero")}>
+        <div id="notre-histoire" className="scroll-mt-32 lg:scroll-mt-36">
         <Hero
           eyebrow={about.hero.eyebrow}
           title={about.hero.title}
@@ -42,8 +45,11 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
           secondaryVisible={isCtaVisible(about.hero.secondary)}
         />
       </div>
+      </VisibleSection>
 
-      <section id="ce-qui-nous-anime" className="relative scroll-mt-28 bg-parchment px-5 py-16 text-bark sm:px-8 lg:scroll-mt-32 lg:py-20 lg:pb-28">
+      <VisibleSection visible={isSectionVisible(about, "foundation")}>
+
+        <section id="ce-qui-nous-anime" className="relative scroll-mt-28 bg-parchment px-5 py-16 text-bark sm:px-8 lg:scroll-mt-32 lg:py-20 lg:pb-28">
         <div className="mx-auto max-w-[1400px]">
           <ScrollReveal className="mx-auto max-w-2xl text-center">
             <div className="mb-5">
@@ -62,8 +68,11 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
           </ScrollReveal>
         </div>
       </section>
+      </VisibleSection>
 
-      <section className="relative bg-[rgb(var(--button-primary-bg)/1)] px-5 py-16 text-paper sm:px-8 lg:py-28">
+      <VisibleSection visible={isSectionVisible(about, "testimonials")}>
+
+        <section className="relative bg-[rgb(var(--button-primary-bg)/1)] px-5 py-16 text-paper sm:px-8 lg:py-28">
         <ScrollReveal className="mx-auto grid max-w-5xl gap-12">
           {about.testimonials.map((testimonial) => (
             <figure key={testimonial.attribution} className="text-center">
@@ -77,8 +86,11 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
           ))}
         </ScrollReveal>
       </section>
+      </VisibleSection>
 
-      <section className="relative px-5 py-24 sm:px-8 lg:py-28">
+      <VisibleSection visible={isSectionVisible(about, "mission")}>
+
+        <section className="relative px-5 py-24 sm:px-8 lg:py-28">
         <div className="mx-auto grid max-w-[1400px] gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
           <div>
             <div className="mb-5">
@@ -101,8 +113,11 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
           </ScrollReveal>
         </div>
       </section>
+      </VisibleSection>
 
-      <Section
+      <VisibleSection visible={isSectionVisible(about, "principles")}>
+
+        <Section
         tone="parchment"
         eyebrow={about.principles.eyebrow}
         title={about.principles.title}
@@ -127,8 +142,11 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
           ))}
         </ScrollReveal>
       </Section>
+      </VisibleSection>
 
-      <section className="relative bg-ivory/65 px-5 py-24 sm:px-8 lg:py-28">
+      <VisibleSection visible={isSectionVisible(about, "values")}>
+
+        <section className="relative bg-ivory/65 px-5 py-24 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-[1400px]">
           <div className="max-w-xl">
             <div className="mb-5">
@@ -169,8 +187,11 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
           </ScrollReveal>
         </div>
       </section>
+      </VisibleSection>
 
-      <section id="conseil-de-fondation" className="relative scroll-mt-16 bg-parchment px-5 py-24 sm:px-8 lg:py-28">
+      <VisibleSection visible={isSectionVisible(about, "committee")}>
+
+        <section id="conseil-de-fondation" className="relative scroll-mt-16 bg-parchment px-5 py-24 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-[1400px]">
           <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
             <div className="max-w-4xl">
@@ -198,8 +219,11 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
           </ScrollReveal>
         </div>
       </section>
+      </VisibleSection>
 
-      <section id="direction" className="relative scroll-mt-28 bg-ivory/65 lg:scroll-mt-32 px-5 py-24 sm:px-8 lg:py-28">
+      <VisibleSection visible={isSectionVisible(about, "direction")}>
+
+        <section id="direction" className="relative scroll-mt-28 bg-ivory/65 lg:scroll-mt-32 px-5 py-24 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-[1400px]">
           <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
             <div className="max-w-4xl">
@@ -228,8 +252,11 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
           </ScrollReveal>
         </div>
       </section>
+      </VisibleSection>
 
-      <Section
+      <VisibleSection visible={isSectionVisible(about, "founders")}>
+
+        <Section
         tone="linen"
         eyebrow={about.founders.eyebrow}
         title={about.founders.title}
@@ -290,6 +317,7 @@ export default async function AboutPage({ locale = defaultLocale }: { locale?: L
           ))}
         </ScrollReveal>
       </Section>
+      </VisibleSection>
     </>
   );
 }

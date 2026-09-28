@@ -25,6 +25,9 @@ const config: Config = {
         ivory: "rgb(var(--color-surface-soft) / <alpha-value>)",
         border: "rgb(var(--color-stroke) / <alpha-value>)"
       },
+      textColor: {
+        moss: "rgb(var(--color-brand-dark) / <alpha-value>)"
+      },
       boxShadow: {
         soft: "0 24px 80px rgb(var(--color-stroke) / 0.55)",
         glow: "0 36px 120px -28px rgb(var(--color-stroke) / 0.95)",

@@ -4,6 +4,7 @@ import { defaultContentEn } from "./default-content-en";
 import { hasSanityConfig, sanityClient } from "./sanity";
 import type { CmsContent } from "./cms-types";
 import { type Locale, defaultLocale, localizeHref } from "./locales";
+import { pageSections } from "./section-visibility";
 
 const imageProjection = `{
   ...,
@@ -273,10 +274,33 @@ function resolveContent(fallback: CmsContent, override: unknown, locale: Locale)
   const sharedValues = stripFrenchText(override);
   const englishValues = extractEnglishOverrides(override);
 
-  return localizeLinks(
+  const localized = localizeLinks(
     mergeContent(mergeContent(fallback, sharedValues), englishValues),
     locale
   );
+
+  // Visibility is editorial structure, shared across languages even when a
+  // translated object or array replaces its French counterpart.
+  const shared = mergeContent(fallback, override);
+  for (const key of Object.keys(pageSections) as Array<keyof Pick<CmsContent,
+    "home" | "about" | "committee" | "retreat" | "seminars" | "support" |
+    "business" | "sponsors" | "registration" | "contact" | "privacy" | "legal" | "faq"
+  >>) {
+    localized[key].sectionVisibility = shared[key].sectionVisibility;
+  }
+  for (const key of ["privacy", "legal"] as const) {
+    localized[key].sections = localized[key].sections.map((section, index) => ({
+      ...section, visible: shared[key].sections[index]?.visible
+    }));
+  }
+  localized.sponsors.sections = localized.sponsors.sections.map((section, index) => ({
+    ...section,
+    visible: shared.sponsors.sections[index]?.visible,
+    logos: section.logos.map((logo, logoIndex) => ({
+      ...logo, visible: shared.sponsors.sections[index]?.logos[logoIndex]?.visible
+    }))
+  }));
+  return localized;
 }
 
 async function loadCmsContent(locale: Locale): Promise<CmsContent> {
@@ -300,7 +324,15 @@ async function loadCmsContent(locale: Locale): Promise<CmsContent> {
 // Metadata, layouts and pages frequently request the same locale during one
 // render. React's request cache keeps that to one CMS read and one merge pass.
 export const getCmsContent = cache(
-  (locale: Locale = defaultLocale) => loadCmsContent(locale)
+  async (locale: Locale = defaultLocale) => {
+    const content = await loadCmsContent(locale);
+
+    if (process.env.NODE_ENV === "development" && process.env.PREVIEW_DONATION_BUTTONS === "true") {
+      return { ...content, site: { ...content.site, showDonationCta: true } };
+    }
+
+    return content;
+  }
 );
 
 export type { CmsContent };

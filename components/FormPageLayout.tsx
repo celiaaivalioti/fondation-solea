@@ -7,6 +7,8 @@ type FormPageLayoutProps = {
   title: string;
   text: string;
   actions?: ReactNode;
+  introVisible?: boolean;
+  formVisible?: boolean;
   generousBottomPadding?: boolean;
   children: ReactNode;
 };
@@ -16,9 +18,13 @@ export default function FormPageLayout({
   title,
   text,
   actions,
+  introVisible = true,
+  formVisible = true,
   generousBottomPadding = false,
   children
 }: FormPageLayoutProps) {
+  if (!introVisible && !formVisible) return null;
+
   const paddingClass = generousBottomPadding
     ? "pb-24 pt-12 lg:pb-32 lg:pt-10"
     : "py-12 lg:py-10";
@@ -26,8 +32,8 @@ export default function FormPageLayout({
   return (
     <section className={`relative isolate overflow-hidden px-5 sm:px-8 lg:min-h-[calc(100vh-6rem)] ${paddingClass}`}>
       <PageGlow />
-      <div className="mx-auto grid w-full max-w-[1400px] gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
-        <div className="relative z-10 max-w-2xl pt-2 lg:sticky lg:top-24 lg:self-start">
+      <div className={`mx-auto grid w-full max-w-[1400px] gap-14 ${introVisible && formVisible ? "lg:grid-cols-[1.05fr_1fr] lg:gap-20" : ""}`}>
+        {introVisible && <div className="relative z-10 max-w-2xl pt-2 lg:sticky lg:top-24 lg:self-start">
           <p className="mb-6 text-[13px] font-semibold uppercase tracking-[0.22em] text-moss">
             {eyebrow}
           </p>
@@ -40,8 +46,8 @@ export default function FormPageLayout({
             paragraphClassName="text-[1.15rem] leading-9 text-bark/72 sm:text-[1.25rem] sm:leading-[1.65] text-pretty"
           />
           {actions}
-        </div>
-        <div className="relative z-10">{children}</div>
+        </div>}
+        {formVisible && <div className="relative z-10">{children}</div>}
       </div>
     </section>
   );
