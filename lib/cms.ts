@@ -16,34 +16,38 @@ const resourceProjection = `{..., items[]{..., image${imageProjection}, "fileUrl
 const contentQuery = `{
   "site": *[_type == "siteSettings"][0],
   "navigation": *[_type == "navigation"][0].items[],
+  "en": {"navigation": *[_type == "navigation"][0].en.items[]},
   "home": *[_type == "homePage"][0]{
     ...,
     hero{..., image${imageProjection}},
     manifesto{..., portraitImage${imageProjection}},
-    en{..., manifesto{..., portraitImage${imageProjection}}}
+    en{..., hero{..., image${imageProjection}}, manifesto{..., portraitImage${imageProjection}}}
   },
   "about": *[_type == "aboutPage"][0]{
     ...,
     hero{..., image${imageProjection}},
     committee{..., members[]{..., image${imageProjection}}},
     direction{..., members[]{..., image${imageProjection}}},
-    founders{..., people[]{..., image${imageProjection}}}
+    founders{..., people[]{..., image${imageProjection}}},
+    en{..., hero{..., image${imageProjection}}, committee{..., members[]{..., image${imageProjection}}}, direction{..., members[]{..., image${imageProjection}}}, founders{..., people[]{..., image${imageProjection}}}}
   },
   "committee": *[_type == "committeePage"][0]{
     ...,
-    members[]{..., image${imageProjection}}
+    members[]{..., image${imageProjection}},
+    en{..., members[]{..., image${imageProjection}}}
   },
   "retreat": *[_type == "retreatPage"][0]{
     ...,
     hero{..., image${imageProjection}},
     therapies{..., items[]{..., image${imageProjection}}},
-    place{..., gallery[]{..., image${imageProjection}, "url": coalesce(image.asset->url, image.localUrl, image.url, localUrl, url)}}
+    place{..., gallery[]{..., image${imageProjection}, "url": coalesce(image.asset->url, image.localUrl, image.url, localUrl, url)}},
+    en{..., hero{..., image${imageProjection}}, therapies{..., items[]{..., image${imageProjection}}}, place{..., gallery[]{..., image${imageProjection}, "url": coalesce(image.asset->url, image.localUrl, image.url, localUrl, url)}}}
   },
   "seminars": *[_type == "seminarsPage"][0]{
     ...,
     hero{..., image${imageProjection}},
     resources${resourceProjection},
-    en{..., resources${resourceProjection}}
+    en{..., hero{..., image${imageProjection}}, resources${resourceProjection}}
   },
   "business": *[_type == "businessPage" && _id == "businessPage"][0]{
     ...,
@@ -56,12 +60,14 @@ const contentQuery = `{
   },
   "support": *[_type == "supportPage"][0]{
     ...,
-    hero{..., image${imageProjection}}
+    hero{..., image${imageProjection}},
+    en{..., hero{..., image${imageProjection}}}
   },
   "sponsors": *[_type == "sponsorsPage"][0]{
     ...,
     heroImage${imageProjection},
-    sections[]{..., logos[]{..., image${imageProjection}}}
+    sections[]{..., logos[]{..., image${imageProjection}}},
+    en{..., heroImage${imageProjection}, sections[]{..., logos[]{..., image${imageProjection}}}}
   },
   "registration": *[_type == "registrationPage"][0],
   "contact": *[_type == "contactPage"][0],
@@ -123,7 +129,7 @@ function normalizeSanityValue(value: unknown): unknown {
   return normalized;
 }
 
-function mergeContent<T>(fallback: T, override: unknown, preserveArrayFallback = false): T {
+function mergeContent<T>(fallback: T, override: unknown, preserveArrayFallback = false, inheritCtaHref = false): T {
   if (override === null || override === undefined) {
     return fallback;
   }
@@ -136,13 +142,14 @@ function mergeContent<T>(fallback: T, override: unknown, preserveArrayFallback =
     const length = preserveArrayFallback ? Math.max(fallback.length, override.length) : override.length;
 
     return Array.from({ length }, (_, index) =>
-      mergeContent(fallback[index], override[index], preserveArrayFallback)
+      mergeContent(fallback[index], override[index], preserveArrayFallback, inheritCtaHref)
     ) as T;
   }
 
   if (isRecord(fallback) && isRecord(override)) {
     const merged: UnknownRecord = { ...fallback };
     const ctaOverrideHasNoHref =
+      !inheritCtaHref &&
       isCtaRecord(fallback) &&
       hasCtaOverride(override) &&
       (!("href" in override) || override.href === "");
@@ -152,7 +159,7 @@ function mergeContent<T>(fallback: T, override: unknown, preserveArrayFallback =
         continue;
       }
 
-      merged[key] = mergeContent((fallback as UnknownRecord)[key], value, preserveArrayFallback);
+      merged[key] = mergeContent((fallback as UnknownRecord)[key], value, preserveArrayFallback, inheritCtaHref);
     }
 
     if (ctaOverrideHasNoHref) {
@@ -276,7 +283,9 @@ function resolveContent(fallback: CmsContent, override: unknown, locale: Locale)
   const englishValues = extractEnglishOverrides(override);
 
   const localized = localizeLinks(
-    mergeContent(mergeContent(fallback, sharedValues), englishValues),
+    // Shared settings and translations are partial overrides: a translated label
+    // without a URL must retain the button destination.
+    mergeContent(mergeContent(fallback, sharedValues, false, true), englishValues, false, true),
     locale
   );
 

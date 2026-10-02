@@ -98,7 +98,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
         </Link>
         <nav
           className="ml-auto hidden items-center justify-end gap-6 xl:flex"
-          aria-label="Navigation principale"
+          aria-label={locale === "fr" ? "Navigation principale" : "Main navigation"}
         >
           {navigation.slice(1).map((item) => {
             const active = isActive(item.href);
@@ -240,7 +240,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
         <nav
           id="mobile-menu"
           className="mx-auto mt-4 grid max-w-[1400px] gap-1 rounded-2xl border border-moss/15 bg-paper p-3 shadow-soft xl:hidden"
-          aria-label="Navigation mobile"
+          aria-label={locale === "fr" ? "Navigation mobile" : "Mobile navigation"}
         >
           {navigation.map((item) => {
             const active = isActive(item.href);

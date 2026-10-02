@@ -80,7 +80,7 @@ export default function Footer({ navigation, site, locale = defaultLocale }: Foo
           </div>
         </div>
         <div className="grid gap-8 sm:grid-cols-3">
-          <nav className="grid gap-3" aria-label="Navigation secondaire">
+          <nav className="grid gap-3" aria-label={locale === "fr" ? "Navigation secondaire" : "Footer navigation"}>
             {navigation.map((item) => (
               <Link
                 key={item.href}
@@ -106,7 +106,7 @@ export default function Footer({ navigation, site, locale = defaultLocale }: Foo
             </Link>
           </div>
           <div className="text-lg leading-8 text-bark/75">
-            <p className="mb-2 font-bold text-bark">Liens</p>
+            <p className="mb-2 font-bold text-bark">{locale === "fr" ? "Liens" : "Links"}</p>
             {site.legalLinks.map((item) => (
               <Link
                 key={item.label}
