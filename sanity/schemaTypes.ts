@@ -404,13 +404,22 @@ const siteSettings = {
   ...singletonPreview("Site settings, contact details and footer")
 };
 
+const aboutSubmenuField = {
+  name: "aboutSubmenu",
+  title: "Foundation submenu / Sous-menu de la Fondation",
+  description: "Links displayed beneath La Fondation / About us, on desktop and mobile. Edit labels and destinations, or drag to reorder.",
+  type: "array",
+  of: [{ type: "link" }]
+};
+
 const navigation = {
   name: "navigation",
   title: "Navigation",
   type: "document",
   fields: [
     { name: "items", title: "Items", type: "array", of: [{ type: "link" }] },
-    englishTranslationField([{ name: "items", title: "Items", type: "array", of: [{ type: "link" }] }])
+    aboutSubmenuField,
+    englishTranslationField([{ name: "items", title: "Items", type: "array", of: [{ type: "link" }] }, aboutSubmenuField])
   ],
   preview: {
     select: { items: "items" },

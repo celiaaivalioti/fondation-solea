@@ -34,6 +34,13 @@ defaultContentEn.navigation = [
   { label: "Apply", href: "/inscription" }
 ];
 
+defaultContentEn.aboutSubmenu = [
+    { label: "Our story", href: "/qui-sommes-nous#notre-histoire" },
+    { label: "What drives us", href: "/qui-sommes-nous#ce-qui-nous-anime" },
+    { label: "Foundation Board", href: "/qui-sommes-nous#conseil-de-fondation" },
+    { label: "Leadership", href: "/qui-sommes-nous#direction" }
+  ];
+
 defaultContentEn.home = {
   ...defaultContentEn.home,
   metadataTitle: "Home",

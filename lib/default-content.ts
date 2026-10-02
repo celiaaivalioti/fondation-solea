@@ -35,6 +35,12 @@ export const defaultContent: CmsContent = {
     { label: "FAQ", href: "/questions-frequentes" },
     { label: "S’inscrire", href: "/inscription" }
   ],
+  aboutSubmenu: [
+    { label: "Notre histoire", href: "/qui-sommes-nous#notre-histoire" },
+    { label: "Ce qui nous anime", href: "/qui-sommes-nous#ce-qui-nous-anime" },
+    { label: "Conseil de Fondation", href: "/qui-sommes-nous#conseil-de-fondation" },
+    { label: "La Direction", href: "/qui-sommes-nous#direction" }
+  ],
   home: {
     metadataTitle: "Accueil",
     hero: {

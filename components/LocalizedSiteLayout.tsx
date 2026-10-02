@@ -11,11 +11,11 @@ export default async function LocalizedSiteLayout({
   children: ReactNode;
   locale: Locale;
 }) {
-  const { navigation, site } = await getCmsContent(locale);
+  const { navigation, aboutSubmenu, site } = await getCmsContent(locale);
 
   return (
     <>
-      <Header navigation={navigation} site={site} locale={locale} />
+      <Header navigation={navigation} aboutSubmenu={aboutSubmenu} site={site} locale={locale} />
       <main>{children}</main>
       <Footer navigation={navigation} site={site} locale={locale} />
     </>

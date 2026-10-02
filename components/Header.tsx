@@ -12,11 +12,12 @@ import CTAButton from "./CTAButton";
 
 type HeaderProps = {
   navigation: NavigationItem[];
+  aboutSubmenu: NavigationItem[];
   site: SiteSettings;
   locale?: Locale;
 };
 
-export default function Header({ navigation, site, locale = defaultLocale }: HeaderProps) {
+export default function Header({ navigation, aboutSubmenu, site, locale = defaultLocale }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -27,19 +28,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
   const isHome = normalizedPathname === normalizedHomeHref;
   const isOverlay = isHome && !isScrolled;
   const aboutHref = localizeHref("/qui-sommes-nous", locale);
-  const aboutSubmenu = locale === "fr"
-    ? [
-        { label: "Notre histoire", href: `${aboutHref}#notre-histoire` },
-        { label: "Ce qui nous anime", href: `${aboutHref}#ce-qui-nous-anime` },
-        { label: "Conseil de Fondation", href: `${aboutHref}#conseil-de-fondation` },
-        { label: "La Direction", href: `${aboutHref}#direction` }
-      ]
-    : [
-        { label: "Our story", href: `${aboutHref}#notre-histoire` },
-        { label: "What drives us", href: `${aboutHref}#ce-qui-nous-anime` },
-        { label: "Foundation Board", href: `${aboutHref}#conseil-de-fondation` },
-        { label: "Leadership", href: `${aboutHref}#direction` }
-      ];
+
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -102,7 +91,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
         >
           {navigation.slice(1).map((item) => {
             const active = isActive(item.href);
-            const hasAboutSubmenu = item.href === aboutHref;
+            const hasAboutSubmenu = item.href === aboutHref && aboutSubmenu.length > 0;
 
             if (hasAboutSubmenu) {
               return (
@@ -155,6 +144,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
                           <Link
                             key={subitem.href}
                             href={subitem.href}
+                        {...newTabProps(subitem.newTab)}
                             prefetch={false}
                             className="block rounded-xl px-4 py-3 text-[15px] font-medium leading-snug text-bark/78 transition hover:bg-linen hover:text-moss focus-visible:bg-linen focus-visible:text-moss"
                             onClick={() => setIsAboutOpen(false)}
@@ -244,7 +234,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
         >
           {navigation.map((item) => {
             const active = isActive(item.href);
-            const hasAboutSubmenu = item.href === aboutHref;
+            const hasAboutSubmenu = item.href === aboutHref && aboutSubmenu.length > 0;
 
             if (hasAboutSubmenu) {
               return (
@@ -267,6 +257,7 @@ export default function Header({ navigation, site, locale = defaultLocale }: Hea
                       <Link
                         key={subitem.href}
                         href={subitem.href}
+                        {...newTabProps(subitem.newTab)}
                         prefetch={false}
                         className="rounded-xl px-4 py-2.5 text-base font-medium text-bark/68 transition hover:bg-linen hover:text-moss"
                         onClick={() => setIsOpen(false)}

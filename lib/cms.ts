@@ -16,7 +16,11 @@ const resourceProjection = `{..., items[]{..., image${imageProjection}, "fileUrl
 const contentQuery = `{
   "site": *[_type == "siteSettings"][0],
   "navigation": *[_type == "navigation"][0].items[],
-  "en": {"navigation": *[_type == "navigation"][0].en.items[]},
+  "aboutSubmenu": *[_type == "navigation"][0].aboutSubmenu[],
+  "en": {
+    "navigation": *[_type == "navigation"][0].en.items[],
+    "aboutSubmenu": *[_type == "navigation"][0].en.aboutSubmenu[]
+  },
   "home": *[_type == "homePage"][0]{
     ...,
     hero{..., image${imageProjection}},
@@ -276,7 +280,11 @@ function localizeLinks<T>(value: T, locale: Locale, key?: string): T {
 
 function resolveContent(fallback: CmsContent, override: unknown, locale: Locale): CmsContent {
   if (locale === defaultLocale) {
-    return localizeLinks(mergeContent(fallback, override), locale);
+    const content = mergeContent(fallback, override);
+    if (isRecord(override) && Array.isArray(override.aboutSubmenu)) {
+      content.aboutSubmenu = override.aboutSubmenu as CmsContent["aboutSubmenu"];
+    }
+    return localizeLinks(content, locale);
   }
 
   const sharedValues = stripFrenchText(override);
@@ -310,6 +318,9 @@ function resolveContent(fallback: CmsContent, override: unknown, locale: Locale)
       ...logo, visible: shared.sponsors.sections[index]?.logos[logoIndex]?.visible
     }))
   }));
+  if (isRecord(englishValues) && Array.isArray(englishValues.aboutSubmenu)) {
+    localized.aboutSubmenu = localizeLinks(englishValues.aboutSubmenu as CmsContent["aboutSubmenu"], locale);
+  }
   localized.business.partners.logos = localizeLinks(shared.business.partners.logos, locale);
   return localized;
 }

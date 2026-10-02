@@ -330,6 +330,7 @@ export type BusinessContent = SectionVisibility & {
 export type CmsContent = {
   site: SiteSettings;
   navigation: NavigationItem[];
+  aboutSubmenu: NavigationItem[];
   home: HomeContent;
   about: AboutContent;
   committee: CommitteeContent;
