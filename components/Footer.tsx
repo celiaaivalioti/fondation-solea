@@ -107,9 +107,6 @@ export default function Footer({ navigation, site, locale = defaultLocale }: Foo
           </div>
           <div className="text-lg leading-8 text-bark/75">
             <p className="mb-2 font-bold text-bark">Liens</p>
-            <Link href={localizeHref("/entreprises", locale)} className="block transition hover:text-bark">
-              {locale === "fr" ? "Entreprises" : "Businesses"}
-            </Link>
             {site.legalLinks.map((item) => (
               <Link
                 key={item.label}
