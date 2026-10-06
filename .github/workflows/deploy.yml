@@ -9,9 +9,10 @@ on:
       target:
         description: Site to deploy
         required: true
-        default: preview
+        default: configured
         type: choice
         options:
+          - configured
           - preview
           - production
 
@@ -25,10 +26,11 @@ jobs:
   deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'preview' }}
+    environment: ${{ github.event_name == 'workflow_dispatch' && inputs.target != 'configured' && inputs.target || vars.INFOMANIAK_DEPLOY_TARGET || 'preview' }}
 
     env:
-      DEPLOY_TARGET: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'preview' }}
+      DEPLOY_TARGET: ${{ github.event_name == 'workflow_dispatch' && inputs.target != 'configured' && inputs.target || vars.INFOMANIAK_DEPLOY_TARGET || 'preview' }}
+      HOSTING_LAYOUT: ${{ vars.INFOMANIAK_HOSTING_LAYOUT || 'separate' }}
       PRODUCTION_SITE_PATH: ${{ vars.INFOMANIAK_SITE_PATH }}
       NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
       NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
@@ -142,7 +144,7 @@ jobs:
           SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          STRIPE_SITE_URL: ${{ vars.STRIPE_SITE_URL || (inputs.target == 'production' && 'https://fondation-solea.ch' || 'https://preview.fondation-solea.ch') }}
+          STRIPE_SITE_URL: ${{ env.DEPLOY_SITE_URL }}
         run: |
           {
             printf 'STRIPE_SECRET_KEY=%s\n' "$STRIPE_SECRET_KEY"

@@ -35,6 +35,7 @@ function loadRuntimeEnvironment(siteDirectory, inherited = process.env) {
       !path.isAbsolute(environment.STRIPE_DONATION_STORE_PATH || "")) {
     throw new Error("Stripe configuration does not match the deployment target");
   }
+  environment.SOLEA_PRIMARY_SITE_ORIGIN = target === "production" ? origin : "";
   return environment;
 }
 

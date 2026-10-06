@@ -182,17 +182,30 @@ Create the live snapshot webhook for **Your account**, with version
 **2026-08-26.dahlia**, URL `https://fondation-solea.ch/api/stripe/webhook/`, and the
 same six events listed above. Verify the foundation account can accept live payments.
 
-Production must run as a separate Infomaniak Node.js app with its own site folder,
-not an alias of preview. Confirm its actual folder in Infomaniak Manager, then add
-that absolute path as the production environment variable `INFOMANIAK_SITE_PATH`.
-The workflow accepts a direct folder under `/srv/customer/sites/` and rejects
-preview's folder for production. If the production app uses another SSH account,
+Confirm the actual production app folder in Infomaniak Manager, then add that
+absolute path as the production environment variable `INFOMANIAK_SITE_PATH`.
+The workflow accepts a direct folder under `/srv/customer/sites/`. If production
+uses another SSH account,
 add its `INFOMANIAK_SSH_HOST`, `INFOMANIAK_SSH_USERNAME`, `INFOMANIAK_SSH_PASSWORD`
 and `INFOMANIAK_SSH_PORT` to the production environment as well.
 
+For a hosting plan with one Node.js app, convert the existing app to production:
+set repository variables `INFOMANIAK_HOSTING_LAYOUT=single` and
+`INFOMANIAK_DEPLOY_TARGET=production`. The confirmed existing folder can remain
+`/srv/customer/sites/preview.fondation-solea.ch`; its name does not control Stripe
+mode. Sandbox deployment to that app is then rejected, including manual runs.
+The former preview and www page URLs redirect to `https://fondation-solea.ch`
+when the app loads production credentials. API routes remain direct for Stripe.
+Sandbox repository keys are retained for local testing or a future separate app.
+
+For two separate Node.js apps, use `INFOMANIAK_HOSTING_LAYOUT=separate` and distinct
+folders; production cannot target preview's folder in this layout. Set repository
+variable `INFOMANIAK_DEPLOY_TARGET` to the desired default deployment target.
+
 In GitHub Actions, run **Deploy to Infomaniak** on `main`, selecting target
-**production**. Pushes to `main` and manual runs with the default target continue
-to deploy preview. Each job uses its selected GitHub environment; preview inherits
+**production** or **configured**. Pushes to `main` and manual runs with target
+**configured** use `INFOMANIAK_DEPLOY_TARGET` (preview when unset).
+Each job uses its selected GitHub environment; preview inherits
 the repository's Sandbox secrets. Both targets run the payment/form tests and build
 before deployment. Missing or mismatched credentials, URLs or folders stop the run.
 
@@ -203,7 +216,14 @@ shared Stripe file. Live and test credentials cannot cross between targets.
 SMTP remains in the existing private `/srv/customer/solea-runtime.env` file.
 The running app's build watcher triggers its own restart; deployment no longer
 kills all Node processes on the hosting account. For a newly created app, start it
-in Infomaniak Manager with Node.js 22 and `npm run start` after uploading the bundle.
+in Infomaniak Manager with a supported Node.js version and `npm run start` after
+uploading the bundle. The current app uses Node.js 24.
+
+In the Infomaniak domain list, the menu beside `fondation-solea.ch` offers
+**Définir comme domaine principal**. Infomaniak warns that this change loses the
+web statistics associated with the former principal domain; obtain the owner's
+confirmation before validating that warning. The existing aliases and application
+folder do not need to be deleted or renamed to activate live donations.
 
 After upload, the workflow sends a signed unknown event to the selected public
 webhook URL. This checks its signing secret and routing without creating a payment

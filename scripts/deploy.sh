@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Push main to GitHub and watch the "Deploy to Infomaniak" workflow until the
-# preview site is updated. Usage: npm run deploy
+# configured site is updated. Usage: npm run deploy
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -45,8 +45,14 @@ if [ -z "$run_id" ]; then
 fi
 
 if gh run watch "$run_id" --exit-status; then
+  deploy_target=$(gh variable get INFOMANIAK_DEPLOY_TARGET --json value --jq '.value' 2>/dev/null || true)
+  if [ "$deploy_target" = "production" ]; then
+    deployed_url="https://fondation-solea.ch"
+  else
+    deployed_url="https://preview.fondation-solea.ch"
+  fi
   echo ""
-  echo "✅ Deployed: https://preview.fondation-solea.ch"
+  echo "✅ Deployed: $deployed_url"
 else
   echo ""
   echo "❌ Deployment failed. Log of the failing step:" >&2

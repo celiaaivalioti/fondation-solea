@@ -4,6 +4,8 @@ import { createRequire } from "node:module";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { NextRequest } from "next/server";
+import { proxy } from "../proxy";
 
 const require = createRequire(import.meta.url);
 const { deploymentSettings } = require("../scripts/check-deployment.cjs");
@@ -31,6 +33,32 @@ test("deployment rejects mixed modes, missing live URL and unconfirmed or shared
   ]) assert.throws(() => deploymentSettings(environment));
 });
 
+test("a single converted app accepts production in its existing folder and rejects Sandbox overwrites", () => {
+  const settings = deploymentSettings({ ...production, HOSTING_LAYOUT: "single", PRODUCTION_SITE_PATH: "/srv/customer/sites/preview.fondation-solea.ch" });
+  assert.equal(settings.DEPLOY_SITE_PATH, "/srv/customer/sites/preview.fondation-solea.ch");
+  assert.throws(() => deploymentSettings({ ...preview, HOSTING_LAYOUT: "single" }));
+  assert.throws(() => deploymentSettings({ ...production, HOSTING_LAYOUT: "invalid" }));
+});
+
+test("production aliases redirect to the fixed live origin; preview mode keeps its own pages", () => {
+  const previous = process.env.SOLEA_PRIMARY_SITE_ORIGIN;
+  try {
+    process.env.SOLEA_PRIMARY_SITE_ORIGIN = "https://fondation-solea.ch";
+    for (const host of ["preview.fondation-solea.ch", "www.fondation-solea.ch"]) {
+      const response = proxy(new NextRequest(`https://${host}/en/nous-soutenir/?example=1`));
+      assert.equal(response.status, 307);
+      assert.equal(response.headers.get("location"), "https://fondation-solea.ch/en/nous-soutenir/?example=1");
+    }
+    assert.equal(proxy(new NextRequest("https://fondation-solea.ch/contact/")).headers.get("location"), null);
+    assert.equal(proxy(new NextRequest("https://unrelated.example/contact/")).headers.get("location"), null);
+    process.env.SOLEA_PRIMARY_SITE_ORIGIN = "";
+    assert.equal(proxy(new NextRequest("https://preview.fondation-solea.ch/contact/")).headers.get("location"), null);
+  } finally {
+    if (previous === undefined) delete process.env.SOLEA_PRIMARY_SITE_ORIGIN;
+    else process.env.SOLEA_PRIMARY_SITE_ORIGIN = previous;
+  }
+});
+
 test("runtime loads each site's own Stripe credentials and fails instead of using a shared legacy file", () => {
   const root = mkdtempSync(path.join(tmpdir(), "solea-runtime-"));
   try {
@@ -48,6 +76,7 @@ test("runtime loads each site's own Stripe credentials and fails instead of usin
       }).map(([key, value]) => `${key}=${value}`).join("\n"));
       const loaded = loadRuntimeEnvironment(site, { STRIPE_SECRET_KEY: "sk_live_inherited" });
       assert.equal(loaded.STRIPE_SECRET_KEY, config.STRIPE_SECRET_KEY);
+      assert.equal(loaded.SOLEA_PRIMARY_SITE_ORIGIN, target === "production" ? "https://fondation-solea.ch" : "");
       assert.equal(loaded.SMTP_PASSWORD, "dummy-mail-password");
       rmSync(envFile);
       assert.throws(() => loadRuntimeEnvironment(site, config));
