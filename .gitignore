@@ -11,5 +11,7 @@ yarn-error.log*
 .vercel
 .claude
 .sanity
+.data
+output/pdf/
 tsconfig.tsbuildinfo
 *.bak

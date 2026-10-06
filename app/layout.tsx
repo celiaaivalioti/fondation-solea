@@ -44,7 +44,10 @@ export default async function RootLayout({
   // Set in the Studio under Site settings; validated to a safe charset
   // there, re-checked here before it reaches the page.
   const gaId = site.googleAnalyticsId?.trim();
-  const analyticsEnabled = Boolean(gaId && /^[A-Za-z0-9-]+$/.test(gaId));
+  // Stripe return URLs contain a private session identifier. Keep that URL
+  // out of analytics, even when the visitor previously consented.
+  const paymentReturnPage = /^\/(?:en\/)?nous-soutenir\/merci\/?$/.test(pathname);
+  const analyticsEnabled = !paymentReturnPage && Boolean(gaId && /^[A-Za-z0-9-]+$/.test(gaId));
 
   return (
     <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>

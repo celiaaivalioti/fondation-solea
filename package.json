@@ -11,19 +11,23 @@
     "start": "next start -p ${PORT:-3000}",
     "deploy": "bash scripts/deploy.sh",
     "serve:static": "npx serve out",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:donations": "node --import tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@next/third-parties": "^16.3.5",
+    "@pdf-lib/fontkit": "^1.1.1",
     "@sanity/client": "^7.25.0",
     "@sanity/image-url": "^2.1.1",
     "lucide-react": "^1.14.0",
     "next": "^16.3.5",
     "nodemailer": "^9.1.0",
+    "pdf-lib": "^1.17.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "sanity": "6.14.1",
     "sharp": "^0.35.4",
+    "stripe": "^23.0.0",
     "styled-components": "^6.4.3"
   },
   "devDependencies": {
@@ -36,6 +40,7 @@
     "eslint-config-next": "latest",
     "postcss": "latest",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.23.15",
     "typescript": "latest"
   },
   "overrides": {

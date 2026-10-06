@@ -57,7 +57,9 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
       />
       </VisibleSection>
 
-      <VisibleSection visible={isSectionVisible(support, "donation")}><DonationSelector locale={locale} /></VisibleSection>
+      <VisibleSection visible={isSectionVisible(support, "donation")}>
+        <DonationSelector locale={locale} testMode={/^(?:sk|rk)_test_/.test(process.env.STRIPE_SECRET_KEY ?? "")} />
+      </VisibleSection>
 
       <VisibleSection visible={isSectionVisible(support, "cause")}>
 

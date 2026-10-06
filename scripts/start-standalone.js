@@ -17,21 +17,23 @@ const readBuildId = () => {
   }
 };
 
-// Runtime secrets (SMTP credentials for the forms) live outside the site
+// Runtime secrets (SMTP for the forms and Stripe for donations) live outside the site
 // directory so rsync --delete never removes them. The deploy workflow
-// writes this file from GitHub secrets; the Infomaniak panel has no
+// writes these files from GitHub secrets; the Infomaniak panel has no
 // environment-variable settings for Node sites.
 const runtimeEnv = {};
-const envFilePath = path.join(__dirname, "..", "..", "solea-runtime.env");
-try {
-  for (const line of fs.readFileSync(envFilePath, "utf8").split("\n")) {
-    const match = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
-    if (match) {
-      runtimeEnv[match[1]] = match[2];
+for (const filename of ["solea-runtime.env", "solea-stripe.env"]) {
+  const envFilePath = path.join(__dirname, "..", "..", filename);
+  try {
+    for (const line of fs.readFileSync(envFilePath, "utf8").split("\n")) {
+      const match = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+      if (match) {
+        runtimeEnv[match[1]] = match[2];
+      }
     }
+  } catch {
+    // No env file (e.g. local run): use the process environment instead.
   }
-} catch {
-  // No env file (e.g. local run): the server starts without it.
 }
 
 const initialBuildId = readBuildId();
