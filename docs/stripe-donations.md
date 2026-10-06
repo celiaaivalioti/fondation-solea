@@ -85,8 +85,9 @@ body. It acknowledges relevant events only after saving their normalized records
 and completing the required attestation delivery. It returns HTTP 500 on
 processing failure so Stripe can retry.
 
-Production records live at `/srv/customer/solea-donations`, outside the rsynced
-site directory. They contain Stripe identifiers, timestamps, test/live mode,
+Preview records live at `/srv/customer/solea-donations`; live records use
+`/srv/customer/solea-donations-production`. Both are outside the rsynced site
+directory. They contain Stripe identifiers, timestamps, test/live mode,
 status, currency and total centimes; no names, email addresses or card details.
 Files are private (0600) and the directory is created with 0700 permissions.
 Atomic file publication deduplicates both concurrent retries and distinct event
@@ -172,11 +173,44 @@ They do not replace an end-to-end sandbox payment with the foundation's account.
 
 ## Activate live donations
 
-After sandbox verification, use the activated foundation account's live key and
-create a separate **live** webhook destination with the same URL, API version and
-events. Replace both GitHub secrets with the live credentials and redeploy. Set
-`STRIPE_SITE_URL` and the live webhook URL to the production hostname if it differs.
-Never mix sandbox keys, live keys and destination signing secrets.
+Keep the repository Stripe secrets in Sandbox mode. Create the GitHub environment
+`production` and add its own `STRIPE_SECRET_KEY` (live `sk_live_…`) and
+`STRIPE_WEBHOOK_SECRET` (the separate live destination's signing secret). Add the
+environment variable `STRIPE_SITE_URL=https://fondation-solea.ch`.
+
+Create the live snapshot webhook for **Your account**, with version
+**2026-08-26.dahlia**, URL `https://fondation-solea.ch/api/stripe/webhook/`, and the
+same six events listed above. Verify the foundation account can accept live payments.
+
+Production must run as a separate Infomaniak Node.js app with its own site folder,
+not an alias of preview. Confirm its actual folder in Infomaniak Manager, then add
+that absolute path as the production environment variable `INFOMANIAK_SITE_PATH`.
+The workflow accepts a direct folder under `/srv/customer/sites/` and rejects
+preview's folder for production. If the production app uses another SSH account,
+add its `INFOMANIAK_SSH_HOST`, `INFOMANIAK_SSH_USERNAME`, `INFOMANIAK_SSH_PASSWORD`
+and `INFOMANIAK_SSH_PORT` to the production environment as well.
+
+In GitHub Actions, run **Deploy to Infomaniak** on `main`, selecting target
+**production**. Pushes to `main` and manual runs with the default target continue
+to deploy preview. Each job uses its selected GitHub environment; preview inherits
+the repository's Sandbox secrets. Both targets run the payment/form tests and build
+before deployment. Missing or mismatched credentials, URLs or folders stop the run.
+
+The bundles declare their target in `.solea-deployment.json`. The startup wrapper
+loads `/srv/customer/solea-stripe-preview.env` or
+`/srv/customer/solea-stripe-production.env`; it never falls back to the former
+shared Stripe file. Live and test credentials cannot cross between targets.
+SMTP remains in the existing private `/srv/customer/solea-runtime.env` file.
+The running app's build watcher triggers its own restart; deployment no longer
+kills all Node processes on the hosting account. For a newly created app, start it
+in Infomaniak Manager with Node.js 22 and `npm run start` after uploading the bundle.
+
+After upload, the workflow sends a signed unknown event to the selected public
+webhook URL. This checks its signing secret and routing without creating a payment
+record or sending an email. It is not an end-to-end payment or inbox delivery test.
+After activation, make a small real donation and verify the successful webhook,
+donor email and attached PDF without TEST markings. Check a monthly donation too.
+Never mix Sandbox keys, live keys and destination signing secrets.
 
 References: [Stripe Checkout](https://docs.stripe.com/checkout/quickstart),
 [webhooks](https://docs.stripe.com/webhooks), and

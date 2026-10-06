@@ -7,6 +7,7 @@
 const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
+const { loadRuntimeEnvironment } = require("./runtime-environment.cjs");
 
 const buildIdPath = path.join(__dirname, ".next", "BUILD_ID");
 const readBuildId = () => {
@@ -21,20 +22,8 @@ const readBuildId = () => {
 // directory so rsync --delete never removes them. The deploy workflow
 // writes these files from GitHub secrets; the Infomaniak panel has no
 // environment-variable settings for Node sites.
-const runtimeEnv = {};
-for (const filename of ["solea-runtime.env", "solea-stripe.env"]) {
-  const envFilePath = path.join(__dirname, "..", "..", filename);
-  try {
-    for (const line of fs.readFileSync(envFilePath, "utf8").split("\n")) {
-      const match = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
-      if (match) {
-        runtimeEnv[match[1]] = match[2];
-      }
-    }
-  } catch {
-    // No env file (e.g. local run): use the process environment instead.
-  }
-}
+// Each bundle declares its target; live keys can never be loaded by preview.
+const runtimeEnv = loadRuntimeEnvironment(__dirname);
 
 const initialBuildId = readBuildId();
 const child = spawn(process.execPath, [path.join(__dirname, "server.js")], {

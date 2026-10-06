@@ -5,6 +5,15 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      target:
+        description: Site to deploy
+        required: true
+        default: preview
+        type: choice
+        options:
+          - preview
+          - production
 
 # Never cancel a deploy mid-flight: a new push queues behind it instead,
 # so the server is never left half-updated.
@@ -16,8 +25,11 @@ jobs:
   deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'preview' }}
 
     env:
+      DEPLOY_TARGET: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'preview' }}
+      PRODUCTION_SITE_PATH: ${{ vars.INFOMANIAK_SITE_PATH }}
       NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
       NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
       NEXT_PUBLIC_SANITY_API_VERSION: ${{ secrets.NEXT_PUBLIC_SANITY_API_VERSION }}
@@ -34,6 +46,14 @@ jobs:
 
       - name: Use lockfile-compatible npm
         run: npm install --global npm@11.8.0
+
+      - name: Validate site and Stripe mode
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          STRIPE_SITE_URL: ${{ vars.STRIPE_SITE_URL }}
+        run: |
+          node scripts/check-deployment.cjs
 
       - name: Install dependencies
         run: npm ci
@@ -54,7 +74,8 @@ jobs:
         run: |
           cp -r .next/static .next/standalone/.next/static
           cp -r public .next/standalone/public
-          cp scripts/start-standalone.js .next/standalone/start-standalone.js
+          cp scripts/start-standalone.js scripts/runtime-environment.cjs .next/standalone/
+          node -e "require('fs').writeFileSync('.next/standalone/.solea-deployment.json', JSON.stringify({target:process.env.DEPLOY_TARGET}))"
           # Give the bundle a start script so the Infomaniak start command
           # can stay "npm run start". The wrapper self-restarts on new builds.
           node -e "const fs=require('fs');const p='.next/standalone/package.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));j.scripts={...(j.scripts||{}),start:'node start-standalone.js'};fs.writeFileSync(p,JSON.stringify(j,null,2));"
@@ -67,6 +88,16 @@ jobs:
       # (rsync --delete never touches it); start-standalone.js loads it.
       # This runs BEFORE the upload: the new build triggers the app's
       # self-restart, and the credentials must already be in place then.
+      - name: Verify destination folder exists
+        env:
+          SSHPASS: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
+          SSH_HOST: ${{ secrets.INFOMANIAK_SSH_HOST }}
+          SSH_USER: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
+          SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
+        run: |
+          RSH="sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p $SSH_PORT"
+          rsync -d --list-only -e "$RSH" "$SSH_USER@$SSH_HOST:$DEPLOY_SITE_PATH/" > /dev/null
+
       - name: Write runtime env file
         env:
           SSHPASS: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
@@ -100,7 +131,7 @@ jobs:
             printf 'SMTP_FROM_NAME=%s\n' "$SMTP_FROM_NAME_VALUE"
             printf 'CONTACT_FORM_TO=%s\n' "$CONTACT_FORM_TO_VALUE"
           } | sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
-            "umask 077; cat > /srv/customer/solea-runtime.env"
+            "umask 077; cat > /srv/customer/solea-runtime.env.pending && mv /srv/customer/solea-runtime.env.pending /srv/customer/solea-runtime.env"
           echo "Runtime env file written."
 
       - name: Write Stripe runtime env file
@@ -111,15 +142,15 @@ jobs:
           SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          STRIPE_SITE_URL: ${{ vars.STRIPE_SITE_URL || 'https://preview.fondation-solea.ch' }}
+          STRIPE_SITE_URL: ${{ vars.STRIPE_SITE_URL || (inputs.target == 'production' && 'https://fondation-solea.ch' || 'https://preview.fondation-solea.ch') }}
         run: |
           {
             printf 'STRIPE_SECRET_KEY=%s\n' "$STRIPE_SECRET_KEY"
             printf 'STRIPE_WEBHOOK_SECRET=%s\n' "$STRIPE_WEBHOOK_SECRET"
             printf 'STRIPE_SITE_URL=%s\n' "$STRIPE_SITE_URL"
-            printf 'STRIPE_DONATION_STORE_PATH=/srv/customer/solea-donations\n'
+            printf 'STRIPE_DONATION_STORE_PATH=%s\n' "$DEPLOY_DONATION_STORE_PATH"
           } | sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
-            "umask 077; cat > /srv/customer/solea-stripe.env"
+            "umask 077; cat > /srv/customer/solea-stripe-$DEPLOY_TARGET.env.pending && mv /srv/customer/solea-stripe-$DEPLOY_TARGET.env.pending /srv/customer/solea-stripe-$DEPLOY_TARGET.env"
           echo "Stripe runtime env file written."
 
       # The server never builds anything: its SSH sessions are capped at
@@ -133,21 +164,11 @@ jobs:
           SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
         run: |
           RSH="sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p $SSH_PORT"
-          DEST="$SSH_USER@$SSH_HOST:/srv/customer/sites/preview.fondation-solea.ch"
+          DEST="$SSH_USER@$SSH_HOST:$DEPLOY_SITE_PATH"
           rsync -az --delete -e "$RSH" .next/standalone/ "$DEST/"
           echo "Upload done."
 
-      - name: Restart Node app
+      - name: Verify deployed webhook configuration
         env:
-          SSHPASS: ${{ secrets.INFOMANIAK_SSH_PASSWORD }}
-          SSH_HOST: ${{ secrets.INFOMANIAK_SSH_HOST }}
-          SSH_USER: ${{ secrets.INFOMANIAK_SSH_USERNAME }}
-          SSH_PORT: ${{ secrets.INFOMANIAK_SSH_PORT }}
-        run: |
-          # Best effort: Infomaniak supervises the app process and restarts
-          # it when it exits. If the app runs outside the SSH container this
-          # is a no-op — restart from the Manager in that case.
-          # The kill can take down the SSH session container with it, making
-          # ssh report an error even though the restart worked — tolerate it.
-          sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
-            "pkill -f '[s]erver\.js' > /dev/null 2>&1; pkill -f '[n]ext start' > /dev/null 2>&1; echo restart-signal-sent" || true
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+        run: node scripts/check-deployed-webhook.cjs
