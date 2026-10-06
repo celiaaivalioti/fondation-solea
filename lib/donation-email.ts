@@ -21,12 +21,10 @@ async function sent(file: string) {
   catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") return false; throw error; }
 }
 
-export async function sendDonationAttestation(event: Stripe.Event, record: DonationRecord): Promise<"sent" | "already_sent" | "test_skipped"> {
+export async function sendDonationAttestation(event: Stripe.Event, record: DonationRecord): Promise<"sent" | "already_sent"> {
   if (record.status !== "paid") throw new Error("Attestation requires a paid record");
-  // Sandbox messages go only to an explicitly configured test mailbox.
-  const testRecipient = process.env.STRIPE_DONATION_TEST_EMAIL;
-  if (!record.livemode && !testRecipient) return "test_skipped";
-  if (!record.livemode && testRecipient && !isDonationEmail(testRecipient)) throw new Error("Invalid donation test mailbox");
+  // Both sandbox and live receipts go to the donor collected by Stripe.
+  // Sandbox emails and PDFs remain visibly marked as tests.
   if (!/^(?:cs|in)_[A-Za-z0-9_]+$/.test(record.resourceId)) throw new Error("Invalid donation resource ID");
   const directory = path.join(donationStorePath(), "attestations");
   await mkdir(directory, { recursive: true, mode: 0o700 });
@@ -62,7 +60,7 @@ export async function sendDonationAttestation(event: Stripe.Event, record: Donat
     try {
       const info = await transport.sendMail({
         from: { name: "Fondation Solea", address: from },
-        to: record.livemode ? data.email : testRecipient!,
+        to: data.email,
         replyTo: "contact@fondation-solea.ch", messageId,
         subject: `${data.test ? "[TEST] " : ""}${french ? "Votre attestation de don - Fondation Solea" : "Your donation certificate - Fondation Solea"}`,
         text: data.test ? `TEST - Aucun paiement réel. Document sans valeur fiscale.\n\n${text}` : text,

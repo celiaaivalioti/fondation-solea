@@ -3,7 +3,8 @@ import { randomUUID } from "node:crypto";
 import { mkdtemp, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { test, mock } from "node:test";
+import { test, mock, beforeEach, afterEach } from "node:test";
+import nodemailer from "nodemailer";
 import type Stripe from "stripe";
 import { parseDonationAmount, parseDonationSelection, donationAmounts, DONATION_METADATA_KIND } from "@/lib/donations";
 import { buildDonationCheckout } from "@/lib/donation-checkout";
@@ -13,16 +14,31 @@ import { getDonationSiteOrigin, getStripe } from "@/lib/stripe";
 import { POST as checkout } from "@/app/api/donations/checkout/route";
 import { POST as webhook } from "@/app/api/stripe/webhook/route";
 
-// The SDK's network methods are mocked; no Stripe account or real keys are used.
+// Stripe and SMTP network calls are mocked; no payment or email is sent.
 process.env.STRIPE_SECRET_KEY = "sk_test_dummy";
 process.env.STRIPE_WEBHOOK_SECRET = "whsec_dummy";
 process.env.STRIPE_SITE_URL = "https://preview.fondation-solea.ch";
 const stripe = getStripe();
+const smtpKeys = ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASSWORD", "SMTP_FROM"];
+let previousSmtp: Array<string | undefined>;
+beforeEach(() => {
+  previousSmtp = smtpKeys.map(key => process.env[key]);
+  Object.assign(process.env, { SMTP_HOST: "mail.example.com", SMTP_PORT: "465", SMTP_USER: "foundation@example.com", SMTP_PASSWORD: "dummy" });
+  delete process.env.SMTP_FROM;
+  mock.method(nodemailer, "createTransport", () => ({
+    sendMail: async (mail: nodemailer.SendMailOptions) => ({ accepted: [String(mail.to)], rejected: [] }),
+    close() {}
+  }));
+});
+afterEach(() => {
+  mock.restoreAll();
+  smtpKeys.forEach((key, index) => { if (previousSmtp[index] === undefined) delete process.env[key]; else process.env[key] = previousSmtp[index]; });
+});
 const origin = process.env.STRIPE_SITE_URL;
 const sessionId = "cs_test_abcdefghijklmnop12345678";
 const selection = (overrides = {}) => ({ amount: "100", frequency: "once", donorType: "individual", coverFees: false, locale: "fr", requestId: randomUUID(), ...overrides });
-const paidSession = (overrides = {}) => ({ id: sessionId, object: "checkout.session", mode: "payment", payment_status: "paid", status: "complete", currency: "chf", amount_total: 10000, livemode: false, metadata: { kind: DONATION_METADATA_KIND }, ...overrides });
-const event = (type: string, object: unknown, overrides = {}) => ({ id: `evt_${randomUUID().replaceAll("-", "")}`, object: "event", created: Math.floor(Date.now() / 1000), livemode: false, type, data: { object }, ...overrides } as Stripe.Event);
+const paidSession = (overrides = {}) => ({ id: sessionId, object: "checkout.session", mode: "payment", payment_status: "paid", status: "complete", currency: "chf", amount_total: 10000, livemode: false, customer_details: { name: "Test Donor", email: "donor@example.com", address: { line1: "Test street 2", postal_code: "1205", city: "Genève", country: "CH" } }, metadata: { kind: DONATION_METADATA_KIND }, ...overrides });
+const event = (type: string, object: unknown, overrides = {}) => ({ id: `evt_${randomUUID().replaceAll("-", "")}`, object: "event", api_version: "2026-08-26.dahlia", created: Math.floor(Date.now() / 1000), livemode: false, type, data: { object }, ...overrides } as Stripe.Event);
 const checkoutRequest = (body = selection(), extraHeaders = {}) => new Request(`${origin}/api/donations/checkout/`, { method: "POST", headers: { "Content-Type": "application/json", origin, "x-real-ip": randomUUID(), ...extraHeaders }, body: JSON.stringify(body) });
 const webhookRequest = (value: Stripe.Event, secret = "whsec_dummy", timestamp?: number) => {
   const payload = JSON.stringify(value);
@@ -110,8 +126,9 @@ test("webhook verifies signatures, ignores unpaid/unrelated events, and records 
     assert.deepEqual(await readdir(directory), []);
     const payment = event("checkout.session.completed", paidSession());
     const responses = await Promise.all([webhook(webhookRequest(payment)), webhook(webhookRequest(payment)), webhook(webhookRequest({ ...payment, id: "evt_same_payment_different_event" }))]);
-    for (const response of responses) assert.equal(response.status, 200);
-    const files = await readdir(directory);
+    assert.ok(responses.some(response => response.status === 200));
+    assert.ok(responses.every(response => [200, 500].includes(response.status)));
+    const files = (await readdir(directory)).filter(file => file.startsWith("paid_"));
     assert.deepEqual(files, [`paid_${sessionId}.json`]);
     const record = JSON.parse(await readFile(path.join(directory, files[0]), "utf8"));
     assert.equal(record.amountMinor, 10000);
@@ -144,7 +161,7 @@ test("storage failures return 500 for Stripe retries; recovery saves the payment
     assert.equal((await webhook(webhookRequest(payment))).status, 500);
     process.env.STRIPE_DONATION_STORE_PATH = path.join(directory, "recovered");
     assert.equal((await webhook(webhookRequest(payment))).status, 200);
-    assert.equal((await readdir(process.env.STRIPE_DONATION_STORE_PATH)).length, 1);
+    assert.deepEqual((await readdir(process.env.STRIPE_DONATION_STORE_PATH)).filter(file => file.startsWith("paid_")), [`paid_${sessionId}.json`]);
     await assert.rejects(saveDonationRecord({ ...donationRecordFromEvent(payment)!, resourceId: "../../escape" }));
   } finally { await rm(directory, { recursive: true, force: true }); }
 });

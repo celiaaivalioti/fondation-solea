@@ -21,7 +21,7 @@ const envKeys = ["STRIPE_DONATION_STORE_PATH", "STRIPE_DONATION_TEST_EMAIL", "SM
 let previous: Array<string | undefined>;
 const details = { individual_name: "Élodie Müller", business_name: "Atelier Espérance SA", name: "Billing name", email: "donor@example.com", address: { line1: "Rue de l’Aubépine 2", line2: null, postal_code: "1205", city: "Genève", state: null, country: "CH" } };
 const payment = (overrides = {}) => ({ id: "cs_test_certificate", mode: "payment", currency: "chf", payment_status: "paid", amount_total: 10270, customer_details: details, metadata: { kind: "solea_donation", donor_type: "individual", locale: "fr" }, ...overrides });
-const event = (type = "checkout.session.completed", object: unknown = payment(), overrides = {}) => ({ id: "evt_certificate", object: "event", created: 1791288000, livemode: false, type, data: { object }, ...overrides } as Stripe.Event);
+const event = (type = "checkout.session.completed", object: unknown = payment(), overrides = {}) => ({ id: "evt_certificate", object: "event", api_version: "2026-08-26.dahlia", created: 1791288000, livemode: false, type, data: { object }, ...overrides } as Stripe.Event);
 const request = (value: Stripe.Event) => {
   const payload = JSON.stringify(value);
   return new Request("https://preview.fondation-solea.ch/api/stripe/webhook/", { method: "POST", headers: { "stripe-signature": stripe.webhooks.generateTestHeaderString({ payload, secret: "whsec_dummy" }) }, body: payload });
@@ -62,15 +62,12 @@ test("certificate uses collected individual/company identity and actual paid tot
   assert.ok(Math.abs(pdf.getPage(0).getWidth() - 595.28) < 0.1);
 });
 
-test("sandbox never emails donors; PDF sent only to configured test mailbox and deduplicated across events", async () => {
+test("sandbox emails donor with test PDF even without test mailbox, and deduplicates across events", async () => {
   const value = event();
   delete process.env.STRIPE_DONATION_TEST_EMAIL;
   assert.equal((await webhook(request(value))).status, 200);
-  assert.equal(messages.length, 0);
-  process.env.STRIPE_DONATION_TEST_EMAIL = "tester@example.com";
-  assert.equal((await webhook(request(value))).status, 200);
   assert.equal(messages.length, 1);
-  assert.equal(messages[0].to, "tester@example.com");
+  assert.equal(messages[0].to, details.email);
   assert.match(messages[0].subject!, /^\[TEST\]/);
   assert.match(String(messages[0].text), /sans valeur fiscale/);
   assert.equal(messages[0].attachments?.[0].contentType, "application/pdf");
@@ -84,6 +81,13 @@ test("sandbox never emails donors; PDF sent only to configured test mailbox and 
   const marker = await readFile(path.join(directory, "attestations", sentFiles[0]), "utf8");
   assert.ok(!marker.includes(details.email) && !marker.includes(details.individual_name));
   assert.equal((await stat(path.join(directory, "attestations", sentFiles[0]))).mode & 0o777, 0o600);
+  // The legacy setting must never redirect a donor's attestation anymore.
+  process.env.STRIPE_DONATION_TEST_EMAIL = "tester@example.com";
+  const second = event(undefined, payment({ id: "cs_test_second_donor" }));
+  assert.equal((await webhook(request(second))).status, 200);
+  assert.equal(messages.length, 2);
+  assert.equal(messages[1].to, details.email);
+  assert.equal(messages[1].attachments?.[0].contentType, "application/pdf");
 });
 
 test("live certificates go to donor, with stable message ID; simultaneous webhooks cannot send twice", async () => {
@@ -111,9 +115,13 @@ test("monthly certificates use invoice billing snapshot and paid date, with one 
   assert.equal((await webhook(request(value))).status, 200);
   assert.equal((await webhook(request(value))).status, 200);
   assert.equal(messages.length, 1);
+  assert.equal(messages[0].to, details.email);
+  assert.equal(messages[0].attachments?.[0].contentType, "application/pdf");
   assert.match(String(messages[0].text), /issued in French/);
   assert.equal((await webhook(request(event("invoice.paid", { ...invoice, id: "in_certificate_renewal" })))).status, 200);
   assert.equal(messages.length, 2);
+  assert.equal(messages[1].to, details.email);
+  assert.equal(messages[1].attachments?.[0].contentType, "application/pdf");
   assert.notEqual(messages[0].messageId, messages[1].messageId);
   assert.equal((await webhook(request(event(undefined, payment({ mode: "subscription" }))))).status, 200);
   assert.equal((await webhook(request(event("invoice.payment_failed", { ...invoice, status: "open", amount_paid: 0 })))).status, 200);
@@ -127,7 +135,7 @@ test("SMTP rejection returns 500 and retry sends even though payment already per
   assert.equal((await webhook(request(value))).status, 500);
   assert.ok((await readdir(directory)).includes("paid_cs_test_certificate.json"));
   assert.deepEqual(await readdir(path.join(directory, "attestations")), []);
-  send = async mail => { messages.push(mail); return { accepted: ["tester@example.com"], rejected: [] }; };
+  send = async mail => { messages.push(mail); return { accepted: [String(mail.to)], rejected: [] }; };
   assert.equal((await webhook(request(value))).status, 200);
   assert.equal(messages.length, 1);
 });
@@ -138,6 +146,11 @@ test("missing SMTP or donor details fail before send and can recover on replay",
   assert.equal((await webhook(request(value))).status, 500);
   assert.equal(messages.length, 0);
   process.env.SMTP_PASSWORD = "dummy";
+  for (const email of ["", "donor@example.com,other@example.com"]) {
+    const invalidRecipient = event(undefined, payment({ customer_details: { ...details, email } }));
+    assert.equal((await webhook(request(invalidRecipient))).status, 500);
+    assert.equal(messages.length, 0);
+  }
   const incomplete = event(undefined, payment({ customer_details: { ...details, address: null } }));
   assert.equal((await webhook(request(incomplete))).status, 500);
   assert.equal(messages.length, 0);
@@ -160,7 +173,7 @@ test("connection failures before SMTP DATA are safe to retry", async () => {
   send = async () => { throw Object.assign(new Error("Connection timeout"), { code: "ETIMEDOUT", command: "CONN" }); };
   assert.equal((await webhook(request(value))).status, 500);
   assert.deepEqual(await readdir(path.join(directory, "attestations")), []);
-  send = async mail => { messages.push(mail); return { accepted: ["tester@example.com"], rejected: [] }; };
+  send = async mail => { messages.push(mail); return { accepted: [String(mail.to)], rejected: [] }; };
   assert.equal((await webhook(request(value))).status, 200);
   assert.equal(messages.length, 1);
 });

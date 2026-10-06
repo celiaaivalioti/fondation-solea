@@ -18,8 +18,8 @@ It is a contribution towards costs, not a guarantee that it covers every fee.
 
    The trailing slash matters: Next.js redirects non-trailing-slash URLs, and
    Stripe should receive the endpoint's response directly.
-3. Set the destination API version to **2026-09-30.endive**, matching the Stripe
-   SDK pinned in `lib/stripe.ts`, and subscribe to:
+3. Select **2026-08-26.dahlia** (the foundation Sandbox's current version) for
+   snapshot events and subscribe to:
    - `checkout.session.completed`
    - `checkout.session.async_payment_succeeded`
    - `checkout.session.async_payment_failed`
@@ -38,10 +38,14 @@ It is a contribution towards costs, not a guarantee that it covers every fee.
    as appropriate. Stripe receipts are separate from the foundation's PDF donation
    attestation, which this application sends through its existing Infomaniak SMTP
    configuration after a confirmed payment.
-8. Add the GitHub Actions **repository secret or variable** `STRIPE_DONATION_TEST_EMAIL`
-   with the mailbox that should receive sandbox attestations. Empty means no
-   sandbox emails; sandbox events never email the donor address from Checkout.
-   If both are configured, the secret takes precedence.
+8. Sandbox and live attestations are sent to the donor email collected in
+   Checkout. For tests, enter a mailbox you control. Sandbox emails have a
+   **[TEST]** subject and the PDF clearly states it has no fiscal value.
+   The former `STRIPE_DONATION_TEST_EMAIL` setting is no longer used.
+
+The SDK's outgoing API requests remain pinned in `lib/stripe.ts`; the webhook's
+snapshot version determines the received payload independently. Verify the
+one-time and monthly flows again before changing that snapshot version.
 
 For a different hostname, set the GitHub Actions **repository variable**
 `STRIPE_SITE_URL` to its HTTPS origin. The default is the preview hostname above.
@@ -62,8 +66,8 @@ from Stripe and confirm the cancellation event is recorded. Monthly donors are
 directed to contact Solea to change or stop their donation; staff manage this
 from Stripe. There is no self-service customer portal in this implementation.
 
-With `STRIPE_DONATION_TEST_EMAIL` configured, also check that the mailbox receives
-one email with a readable, personalized PDF marked **TEST - AUCUNE VALEUR FISCALE**.
+Check that the email entered in Checkout receives one email with a readable,
+personalized PDF marked **TEST - AUCUNE VALEUR FISCALE**.
 Resend the event: no second email should arrive. Check the first monthly payment
 and a renewal: each invoice should produce one certificate. Failed, pending and
 zero-value payments produce no certificate. An accepted SMTP message still needs
@@ -78,8 +82,8 @@ does not load analytics with the private Checkout session identifier in its URL.
 
 The webhook verifies the Stripe signature over the raw, size-limited request
 body. It acknowledges relevant events only after saving their normalized records
-and completing the required attestation delivery (or skipping unconfigured sandbox
-email). It returns HTTP 500 on processing failure so Stripe can retry.
+and completing the required attestation delivery. It returns HTTP 500 on
+processing failure so Stripe can retry.
 
 Production records live at `/srv/customer/solea-donations`, outside the rsynced
 site directory. They contain Stripe identifiers, timestamps, test/live mode,
@@ -109,7 +113,8 @@ uses “Bonjour” rather than inferring a donor's gender.
 The existing `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` and optional
 `SMTP_FROM` configuration is reused. No new email provider or API secret is needed.
 The sender name is Fondation Solea and replies go to `contact@fondation-solea.ch`.
-Live events email the donor; sandbox events can only email `STRIPE_DONATION_TEST_EMAIL`.
+Both live and sandbox events email the donor. Sandbox emails and PDFs are
+clearly marked as tests and do not certify a real donation.
 Neither the PDF nor donor name/address/email is saved to disk or logged by the app.
 They are processed in memory and transmitted to the email provider. Persistent
 delivery markers under `attestations/` contain a reference, amount, message ID,
@@ -160,7 +165,8 @@ npm run build -- --webpack
 Automated tests use dummy credentials and mock Stripe's network methods; they
 check validation, recurring fees, idempotency, genuine signature verification,
 duplicate deliveries, storage recovery, rate limiting, confirmation states, PDF
-generation, sandbox recipient isolation, email retries and uncertain SMTP outcomes.
+generation, donor delivery with PDF attachments in both modes, email retries
+and uncertain SMTP outcomes.
 They do not replace an end-to-end sandbox payment with the foundation's account.
 
 ## Activate live donations

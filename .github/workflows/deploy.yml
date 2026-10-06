@@ -112,14 +112,12 @@ jobs:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
           STRIPE_SITE_URL: ${{ vars.STRIPE_SITE_URL || 'https://preview.fondation-solea.ch' }}
-          STRIPE_DONATION_TEST_EMAIL: ${{ secrets.STRIPE_DONATION_TEST_EMAIL || vars.STRIPE_DONATION_TEST_EMAIL }}
         run: |
           {
             printf 'STRIPE_SECRET_KEY=%s\n' "$STRIPE_SECRET_KEY"
             printf 'STRIPE_WEBHOOK_SECRET=%s\n' "$STRIPE_WEBHOOK_SECRET"
             printf 'STRIPE_SITE_URL=%s\n' "$STRIPE_SITE_URL"
             printf 'STRIPE_DONATION_STORE_PATH=/srv/customer/solea-donations\n'
-            printf 'STRIPE_DONATION_TEST_EMAIL=%s\n' "$STRIPE_DONATION_TEST_EMAIL"
           } | sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
             "umask 077; cat > /srv/customer/solea-stripe.env"
           echo "Stripe runtime env file written."
