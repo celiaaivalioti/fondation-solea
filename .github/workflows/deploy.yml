@@ -41,7 +41,7 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Test donation checkout and webhooks
+      - name: Test payments and form emails
         run: npm run test:donations
 
       - name: Build app

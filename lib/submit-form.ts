@@ -1,7 +1,7 @@
-export type FormStatus = "idle" | "sending" | "sent" | "error";
+export type FormStatus = "idle" | "sending" | "sent" | "confirmed" | "sent_without_confirmation" | "error";
 
 // Serializes the form and posts it to the forms API; drives the caller's
-// status through sending -> sent/error. openedAt (ms epoch from when the
+// status through sending -> success/error, including acknowledgement failures. openedAt (ms epoch from when the
 // form was first shown) feeds the server's minimum-fill-time bot check.
 export async function submitForm(
   kind: "contact" | "inscription",
@@ -33,7 +33,16 @@ export async function submitForm(
       })
     });
 
-    setStatus(response.ok ? "sent" : "error");
+    if (!response.ok) {
+      setStatus("error");
+      return;
+    }
+    const result = await response.json();
+    setStatus(
+      result.confirmation === "sent"
+        ? "confirmed"
+        : result.confirmation === "failed" ? "sent_without_confirmation" : "sent"
+    );
   } catch {
     setStatus("error");
   }

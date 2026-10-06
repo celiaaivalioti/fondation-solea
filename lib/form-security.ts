@@ -117,7 +117,7 @@ export function normalizeFormValue(name: string, value: unknown): string | undef
     throw new FormRequestError("invalid fields", 400);
   }
 
-  if (name === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
+  if (name === "email" && !/^[^\s<>@,;]+@[^\s<>@,;]+\.[^\s<>@,;]+$/.test(normalized)) {
     throw new FormRequestError("invalid fields", 400);
   }
 

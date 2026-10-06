@@ -53,7 +53,7 @@ export default function RegistrationForm({
   const [inTreatment, setInTreatment] = useState("");
   const [needsAssistance, setNeedsAssistance] = useState("");
 
-  if (status === "sent") {
+  if (status === "sent" || status === "confirmed" || status === "sent_without_confirmation") {
     return (
       <div
         className="rounded-[1.5rem] bg-paper p-10 shadow-soft"
@@ -71,6 +71,16 @@ export default function RegistrationForm({
         <p className="mt-4 leading-[1.65] text-bark/72">
           {copy.sentText}
         </p>
+        {status === "confirmed" && (
+          <p className="mt-4 leading-[1.65] text-bark/72">
+            {locale === "fr" ? "Un e-mail confirmant la réception de votre demande vous a été envoyé. Pensez à vérifier vos courriers indésirables." : "An email acknowledging receipt of your application has been sent to you. Please check your spam folder."}
+          </p>
+        )}
+        {status === "sent_without_confirmation" && (
+          <p className="mt-4 leading-[1.65] text-bark/72">
+            {locale === "fr" ? "Votre demande a bien été transmise, mais nous n’avons pas pu vous envoyer l’e-mail de confirmation. Il n’est pas nécessaire de renvoyer le formulaire." : "Your application was submitted, but we could not send your confirmation email. You do not need to submit the form again."}
+          </p>
+        )}
         <button
           type="button"
           onClick={() => {

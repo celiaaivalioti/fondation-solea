@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { randomUUID } from "node:crypto";
+import { formConfirmation } from "@/lib/form-confirmation";
 import { getCmsContent } from "@/lib/cms";
 import { buildContactFields, buildRegistrationFields } from "@/lib/form-config";
 import {
@@ -165,7 +167,13 @@ export async function POST(request: Request) {
     host: smtpHost,
     port: Number(process.env.SMTP_PORT ?? 465),
     secure: Number(process.env.SMTP_PORT ?? 465) === 465,
-    auth: { user: smtpUser, pass: smtpPassword }
+    requireTLS: Number(process.env.SMTP_PORT ?? 465) !== 465,
+    auth: { user: smtpUser, pass: smtpPassword },
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000,
+    disableFileAccess: true,
+    disableUrlAccess: true
   });
 
   const lines = form.fields
@@ -173,7 +181,7 @@ export async function POST(request: Request) {
     .map(([name, label]) => `${label} : ${values[name]}`);
 
   try {
-    await transporter.sendMail({
+    const notification = await transporter.sendMail({
       from: `"${smtpFromName}" <${smtpFrom}>`,
       to: recipient,
       replyTo: values.email,
@@ -182,10 +190,34 @@ export async function POST(request: Request) {
       disableFileAccess: true,
       disableUrlAccess: true
     });
-  } catch (error) {
-    console.error("Form email failed to send:", error);
+    if (!notification.accepted?.length || notification.rejected?.length) throw new Error("Notification rejected");
+  } catch {
+    // SMTP errors can contain addresses or submitted content; log no raw error.
+    console.error("Form notification failed", randomUUID());
+    transporter.close();
     return json({ error: "send failed" }, 500);
   }
 
-  return json({ ok: true });
+  let confirmation: "sent" | "failed" | "not_requested" = "not_requested";
+  if (values.email) {
+    try {
+      const acknowledgement = await transporter.sendMail({
+        from: { name: "Fondation Solea", address: smtpFrom! },
+        to: values.email,
+        replyTo: "contact@fondation-solea.ch",
+        ...formConfirmation(payload.kind, locale),
+        disableFileAccess: true,
+        disableUrlAccess: true
+      });
+      if (!acknowledgement.accepted?.length || acknowledgement.rejected?.length) throw new Error("Acknowledgement rejected");
+      confirmation = "sent";
+    } catch {
+      confirmation = "failed";
+      console.error("Form acknowledgement failed", randomUUID());
+    }
+  }
+  transporter.close();
+  // The foundation already received the submission. Never ask visitors to
+  // resubmit (and duplicate it) merely because their acknowledgement failed.
+  return json({ ok: true, confirmation });
 }

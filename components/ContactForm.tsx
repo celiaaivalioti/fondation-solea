@@ -42,7 +42,7 @@ export default function ContactForm({
     openedAt.current = Date.now();
   }, []);
 
-  if (status === "sent") {
+  if (status === "sent" || status === "confirmed" || status === "sent_without_confirmation") {
     return (
       <div
         className="rounded-[1.5rem] bg-paper p-10 shadow-soft"
@@ -60,6 +60,16 @@ export default function ContactForm({
         <p className="mt-4 leading-[1.65] text-bark/72">
           {copy.sentText}
         </p>
+        {status === "confirmed" && (
+          <p className="mt-4 leading-[1.65] text-bark/72">
+            {locale === "fr" ? "Un e-mail de confirmation vous a été envoyé. Pensez à vérifier vos courriers indésirables." : "A confirmation email has been sent to you. Please check your spam folder."}
+          </p>
+        )}
+        {status === "sent_without_confirmation" && (
+          <p className="mt-4 leading-[1.65] text-bark/72">
+            {locale === "fr" ? "Votre message a bien été transmis, mais nous n’avons pas pu vous envoyer l’e-mail de confirmation. Il n’est pas nécessaire de renvoyer le formulaire." : "Your message was submitted, but we could not send your confirmation email. You do not need to submit the form again."}
+          </p>
+        )}
         <button
           type="button"
           onClick={() => setStatus("idle")}
