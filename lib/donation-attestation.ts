@@ -132,6 +132,28 @@ export async function buildDonationAttestation(data: DonationAttestation): Promi
     }
     y -= gap;
   }
+  function donationAmountParagraph() {
+    const size = 9.5, leading = size * 1.4;
+    const words = [
+      ...`en date du ${attestationDate(data.paidAt)} la somme de`.split(" ").map(text => ({ text, font: regular })),
+      // Keep the entire amount and currency together when wrapping a line.
+      { text: `${attestationAmount(data.amountMinor)} CHF`, font: bold },
+      ..."à titre de prestations bénévoles au sens de l’article 37 de la loi sur l’imposition des personnes physiques (LIPP).".split(" ").map(text => ({ text, font: regular }))
+    ];
+    const spaceWidth = regular.widthOfTextAtSize(" ", size);
+    let x = left;
+    for (const word of words) {
+      const wordWidth = word.font.widthOfTextAtSize(word.text, size);
+      if (x + (x > left ? spaceWidth : 0) + wordWidth > width - left) {
+        x = left; y -= leading;
+      }
+      if (y < 99) { page = pdf.addPage([width, height]); chrome(); y = height - 110; }
+      if (x > left) x += spaceWidth;
+      draw(word.text, x, y, size, word.font);
+      x += wordWidth;
+    }
+    y -= leading + 8;
+  }
   const title = "Attestation de dons";
   draw(title, left, y, 19, bold);
   y -= 28;
@@ -144,7 +166,7 @@ export async function buildDonationAttestation(data: DonationAttestation): Promi
   paragraph(`${data.name} (ci-après « le donateur »)`, { font: bold, gap: 1 });
   data.address.forEach(line => paragraph(line, { gap: 0 }));
   y -= 10;
-  paragraph(`en date du ${attestationDate(data.paidAt)} la somme de ${attestationAmount(data.amountMinor)} CHF à titre de prestations bénévoles au sens de l’article 37 de la loi sur l’imposition des personnes physiques (LIPP).`);
+  donationAmountParagraph();
   paragraph(attestationCopy.definitive);
   paragraph(attestationCopy.tax);
   paragraph(attestationCopy.team);
