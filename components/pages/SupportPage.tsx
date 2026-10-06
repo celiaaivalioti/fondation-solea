@@ -6,11 +6,13 @@ import { ArrowUpRight, Heart, House, Sprout } from "lucide-react";
 import { newTabProps } from "@/lib/links";
 import { notFound } from "next/navigation";
 import CheckList from "@/components/CheckList";
+import CTAButton from "@/components/CTAButton";
 import DonationSelector from "@/components/DonationSelector";
 import Hero from "@/components/Hero";
 import Section from "@/components/Section";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getCmsContent } from "@/lib/cms";
+import { isCtaVisible } from "@/lib/cta";
 import { type Locale, defaultLocale } from "@/lib/locales";
 import { createPageMetadata } from "@/lib/page-metadata";
 
@@ -37,6 +39,13 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
     notFound();
   }
 
+  const heroButtons = [
+    { cta: support.hero.primary, variant: "primary" },
+    { cta: support.hero.secondary, variant: "secondary" },
+    { cta: support.hero.tertiary, variant: "ghost" }
+  ] as const;
+  const visibleHeroButtons = heroButtons.filter(({ cta }) => isCtaVisible(cta));
+
   return (
     <>
       <VisibleSection visible={isSectionVisible(support, "hero")}>
@@ -48,11 +57,22 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
         imageAlt={support.hero.image.alt}
         imageClassName={support.hero.image.className}
         action={
-          <p className="mt-10 text-lg font-semibold leading-relaxed text-moss sm:text-xl">
-            {locale === "fr"
-              ? "En Suisse, votre don est déductible des impôts."
-              : "In Switzerland, your donation is tax-deductible."}
-          </p>
+          <>
+            {visibleHeroButtons.length > 0 && (
+              <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+                {visibleHeroButtons.map(({ cta, variant }) => (
+                  <CTAButton key={variant} href={cta?.href} variant={variant} newTab={cta?.newTab}>
+                    {cta?.label}
+                  </CTAButton>
+                ))}
+              </div>
+            )}
+            <p className="mt-10 text-lg font-semibold leading-relaxed text-moss sm:text-xl">
+              {locale === "fr"
+                ? "En Suisse, votre don est déductible des impôts."
+                : "In Switzerland, your donation is tax-deductible."}
+            </p>
+          </>
         }
       />
       </VisibleSection>
