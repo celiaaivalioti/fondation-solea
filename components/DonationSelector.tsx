@@ -100,7 +100,7 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
   return (
     <section
       id="donation"
-      className="bg-[rgb(var(--color-accent)/1)] px-5 py-16 text-bark sm:px-8 lg:py-24"
+      className="scroll-mt-24 bg-[rgb(var(--color-accent)/1)] px-5 py-16 text-bark sm:px-8 lg:py-24"
       aria-labelledby="donation-selector-title"
     >
       <div className="mx-auto max-w-[1400px]">
