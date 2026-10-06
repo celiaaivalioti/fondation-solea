@@ -108,7 +108,8 @@ Checkout language. It uses the collected individual or company name, billing
 address, actual amount received in CHF **including the optional fee contribution**,
 and payment date in the Europe/Zurich time zone. No annual aggregation is produced.
 The foundation's legal wording is reproduced as supplied. The generated greeting
-uses “Bonjour” rather than inferring a donor's gender.
+uses “Bonjour” rather than inferring a donor's gender. The supplied handwritten
+signature appears to the right of Samy Zayani's signatory block.
 
 The existing `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` and optional
 `SMTP_FROM` configuration is reused. No new email provider or API secret is needed.

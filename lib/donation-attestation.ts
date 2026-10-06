@@ -74,16 +74,17 @@ export const attestationCopy = {
 
 let assetPromise: Promise<Buffer[]> | undefined;
 function assets() {
-  return assetPromise ??= Promise.all(["NotoSans-Regular.ttf", "NotoSans-Bold.ttf", "solea-logo.jpeg"].map(file => readFile(path.join(process.cwd(), "assets", "donations", file)))).catch(error => { assetPromise = undefined; throw error; });
+  return assetPromise ??= Promise.all(["NotoSans-Regular.ttf", "NotoSans-Bold.ttf", "solea-logo.jpeg", "samy-zayani-signature.png"].map(file => readFile(path.join(process.cwd(), "assets", "donations", file)))).catch(error => { assetPromise = undefined; throw error; });
 }
 
 export async function buildDonationAttestation(data: DonationAttestation): Promise<Buffer> {
-  const [regularBytes, boldBytes, logoBytes] = await assets();
+  const [regularBytes, boldBytes, logoBytes, signatureBytes] = await assets();
   const pdf = await PDFDocument.create();
   pdf.registerFontkit(fontkit);
   const regular = await pdf.embedFont(regularBytes, { subset: true });
   const bold = await pdf.embedFont(boldBytes, { subset: true });
   const logo = await pdf.embedJpg(logoBytes);
+  const signature = await pdf.embedPng(signatureBytes);
   pdf.setTitle(`${data.test ? "TEST - " : ""}Attestation de dons - ${data.reference}`);
   pdf.setAuthor("Fondation Solea");
   pdf.setCreationDate(new Date(data.issuedAt * 1000));
@@ -150,6 +151,16 @@ export async function buildDonationAttestation(data: DonationAttestation): Promi
   // Keep the issue date, signatory and electronic-document note together.
   if (y < 210) { page = pdf.addPage([width, height]); chrome(); y = height - 110; }
   paragraph(`Fait à Genève, le ${attestationDate(data.issuedAt)}`, { gap: 18 });
+  // Place the supplied handwritten signature beside the three-line signatory
+  // block, keeping its proportions and leaving the electronic note clear.
+  const signatoryY = y;
+  const signatureHeight = 52;
+  page.drawImage(signature, {
+    x: left + regular.widthOfTextAtSize("Fondation Solea", 9.5) + 14,
+    y: signatoryY + 14 - signatureHeight,
+    width: signatureHeight * signature.width / signature.height,
+    height: signatureHeight
+  });
   paragraph("Samy Zayani", { font: bold, gap: 0 });
   paragraph("Cofondateur", { gap: 0 });
   paragraph("Fondation Solea", { gap: 12 });
