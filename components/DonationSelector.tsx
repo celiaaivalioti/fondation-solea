@@ -317,7 +317,7 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
         </form>
         <aside
           aria-labelledby="bank-transfer-title"
-          className="mx-auto mt-16 max-w-3xl rounded-[1.5rem] border-2 border-[rgb(var(--color-surface)/.6)] p-6 sm:mt-24 sm:p-10"
+          className="mx-auto mt-16 max-w-3xl select-text rounded-[1.5rem] border-2 border-[rgb(var(--color-surface)/.6)] p-6 selection:bg-bark selection:text-paper sm:mt-24 sm:p-10"
         >
           <h3 id="bank-transfer-title" className="text-xl font-semibold leading-relaxed text-bark">
             {isFrench
