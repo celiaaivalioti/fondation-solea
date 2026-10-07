@@ -315,6 +315,26 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
             {isFrench ? "Paiement sécurisé sur Stripe. Vous pourrez vérifier votre don avant de le confirmer." : "Secure payment on Stripe. You can review your donation before confirming."}
           </p>
         </form>
+        <aside
+          aria-labelledby="bank-transfer-title"
+          className="mx-auto mt-16 max-w-3xl rounded-[1.5rem] bg-[rgb(var(--color-surface)/.6)] p-6 sm:mt-24 sm:p-10"
+        >
+          <h3 id="bank-transfer-title" className="text-xl font-semibold leading-relaxed text-bark">
+            {isFrench
+              ? "Vous pouvez également faire votre don par virement bancaire :"
+              : "You can also make your donation by bank transfer:"}
+          </h3>
+          <p className="mt-6 text-lg font-semibold leading-relaxed text-bark sm:text-xl">
+            {isFrench ? "N° IBAN :" : "IBAN:"}{" "}
+            <span className="inline-block max-w-full break-words tabular-nums">CH26 0078 8000 0513 4556 0</span>
+          </p>
+          <div className="mt-6 space-y-2 leading-relaxed text-bark/80">
+            <p>Fondation Solea, Rue de l&apos;Aubépine 2, 1205 Genève</p>
+            <p>{isFrench ? "N° BIC/SWIFT :" : "BIC/SWIFT:"} BCGECHGGXXX</p>
+            <p>Clearing/CB : 788</p>
+            <p>Banque Cantonale de Genève</p>
+          </div>
+        </aside>
       </div>
     </section>
   );
