@@ -1,6 +1,11 @@
 name: Check SMTP sender authorization
 on:
   workflow_dispatch:
+    inputs:
+      send_test_emails:
+        description: Send two labelled test emails to the foundation contact inbox
+        type: boolean
+        default: false
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -15,6 +20,14 @@ jobs:
       - run: npm ci
       - name: Check sender authorization without sending email
         run: node scripts/check-smtp-sender.cjs
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      - name: Send explicitly requested test emails
+        if: inputs.send_test_emails
+        run: node scripts/send-smtp-test.cjs
         env:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
