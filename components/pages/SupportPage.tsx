@@ -58,7 +58,7 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
         imageClassName={support.hero.image.className}
         action={
           <>
-            <p className="mt-10 text-lg font-semibold leading-relaxed text-moss sm:text-xl">
+            <p className="mt-4 text-lg font-semibold leading-relaxed text-moss sm:text-xl">
               {locale === "fr"
                 ? "En Suisse, votre don est déductible des impôts."
                 : "In Switzerland, your donation is tax-deductible."}
