@@ -58,8 +58,13 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
         imageClassName={support.hero.image.className}
         action={
           <>
+            <p className="mt-10 text-lg font-semibold leading-relaxed text-moss sm:text-xl">
+              {locale === "fr"
+                ? "En Suisse, votre don est déductible des impôts."
+                : "In Switzerland, your donation is tax-deductible."}
+            </p>
             {visibleHeroButtons.length > 0 && (
-              <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+              <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
                 {visibleHeroButtons.map(({ cta, variant }) => (
                   <CTAButton key={variant} href={cta?.href} variant={variant} newTab={cta?.newTab}>
                     {cta?.label}
@@ -67,11 +72,6 @@ export default async function SupportPage({ locale = defaultLocale }: { locale?:
                 ))}
               </div>
             )}
-            <p className="mt-10 text-lg font-semibold leading-relaxed text-moss sm:text-xl">
-              {locale === "fr"
-                ? "En Suisse, votre don est déductible des impôts."
-                : "In Switzerland, your donation is tax-deductible."}
-            </p>
           </>
         }
       />
