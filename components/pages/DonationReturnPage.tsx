@@ -13,7 +13,7 @@ export default async function DonationReturnPage({ locale, searchParams }: { loc
   const copy = {
     paid: {
       title: fr ? "Merci pour votre générosité." : "Thank you for your generosity.",
-      text: fr ? "Votre don a bien été reçu. Votre soutien aide Solea à offrir une parenthèse de ressourcement aux personnes touchées par le cancer." : "Your donation has been received. Your support helps Solea offer a restorative break to people affected by cancer."
+      text: fr ? "Votre don a bien été reçu. La Fondation Solea vous remercie chaleureusement pour votre soutien en faveur des personnes touchées par le cancer." : "Your donation has been received. Your support helps Solea offer a restorative break to people affected by cancer."
     },
     pending: {
       title: fr ? "Votre paiement est en cours." : "Your payment is being processed.",
