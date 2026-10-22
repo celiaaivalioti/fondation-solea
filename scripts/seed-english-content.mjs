@@ -17,9 +17,10 @@ const documents = [
     donationLabel: defaultContentEn.site.donationLabel,
     legalLinks: defaultContentEn.site.legalLinks
   }],
-  ["navigation", "navigation", { items: defaultContentEn.navigation }],
+  ["navigation", "navigation", { items: defaultContentEn.navigation, aboutSubmenu: defaultContentEn.aboutSubmenu }],
   ["homePage", "homePage", defaultContentEn.home],
   ["aboutPage", "aboutPage", defaultContentEn.about],
+  ["committeePage", "committeePage", defaultContentEn.committee],
   ["retreatPage", "retreatPage", defaultContentEn.retreat],
   ["seminarsPage", "seminarsPage", defaultContentEn.seminars],
   ["supportPage", "supportPage", defaultContentEn.support],

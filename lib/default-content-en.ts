@@ -38,7 +38,7 @@ defaultContentEn.aboutSubmenu = [
     { label: "Our story", href: "/qui-sommes-nous#notre-histoire" },
     { label: "What drives us", href: "/qui-sommes-nous#ce-qui-nous-anime" },
     { label: "Foundation Board", href: "/qui-sommes-nous#conseil-de-fondation" },
-    { label: "Leadership", href: "/qui-sommes-nous#direction" }
+    { label: "Management", href: "/qui-sommes-nous#direction" }
   ];
 
 defaultContentEn.home = {
@@ -369,7 +369,7 @@ defaultContentEn.committee = {
       ...defaultContentEn.committee.members[4],
       role: "Internist, specialist in therapeutic patient education",
       image: { ...defaultContentEn.committee.members[4].image, alt: "Portrait of Dr Olivia Braillard" },
-      quote: "Solea embodies the meeting of conventional and complementary medicine, serving an in-depth integrative approach.",
+      quote: "State-of-the-art conventional medicine has a profound impact on the disease itself. The SOLEA Foundation helps people affected by cancer to (re)build their life journey while living with the disease. These two approaches are complementary and essential.",
       paragraphs: [
         "A specialist in general internal medicine, Dr Olivia Braillard has worked since 2010 in the HUG Primary Care Department, where she is now an attending physician and head of the General Internal Medicine Outpatient Consultation Unit.",
         "Her career has progressively moved towards a more holistic approach to the person, notably through therapeutic patient education and reflection on the place of lived experience and narrative in the care relationship. She contributes in particular to the work of the HUG Therapeutic Patient Education Centre.",
