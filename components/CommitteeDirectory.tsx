@@ -10,9 +10,10 @@ type CommitteeDirectoryProps = {
   bioLabel: string;
   closeLabel: string;
   emphasizeBiography?: boolean;
+  showQuotes?: boolean;
 };
 
-export default function CommitteeDirectory({ members, bioLabel, closeLabel, emphasizeBiography = true }: CommitteeDirectoryProps) {
+export default function CommitteeDirectory({ members, bioLabel, closeLabel, emphasizeBiography = true, showQuotes = true }: CommitteeDirectoryProps) {
   const [selectedMember, setSelectedMember] = useState<PersonCard | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -85,13 +86,13 @@ export default function CommitteeDirectory({ members, bioLabel, closeLabel, emph
             </div>
 
             <div className="flex flex-1 flex-col pt-5">
-              {member.quote && (
+              {showQuotes && member.quote && (
                 <blockquote className="font-display text-[1.16rem] font-light leading-[1.48] text-bark">
                   “{member.quote}”
                 </blockquote>
               )}
 
-              <div className={member.quote ? "mt-7" : undefined}>
+              <div className={showQuotes && member.quote ? "mt-7" : undefined}>
                 <h3 className="text-lg font-semibold leading-snug text-bark">{member.name}</h3>
                 <p className="mt-2 text-sm leading-6 text-bark/60">{member.role}</p>
               </div>
@@ -177,7 +178,7 @@ export default function CommitteeDirectory({ members, bioLabel, closeLabel, emph
                     </p>
                   ))}
                 </div>
-                {selectedMember.quote && (
+                {showQuotes && selectedMember.quote && (
                   <blockquote className="mt-8 border-l-2 border-moss/35 pl-5 font-display text-[1.25rem] font-light leading-[1.55] text-bark">
                     “{selectedMember.quote}”
                   </blockquote>
