@@ -349,7 +349,7 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
                   onClick={copyIban}
                   aria-label={isFrench ? "Copier l’IBAN" : "Copy IBAN"}
                   title={isFrench ? "Copier l’IBAN" : "Copy IBAN"}
-                  className="inline-flex h-8 w-7 shrink-0 items-center justify-center rounded-full text-bark/70 transition-colors hover:bg-[rgb(var(--color-surface)/.8)] hover:text-bark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bark"
+                  className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-bark/70 transition-colors hover:bg-[rgb(var(--color-surface)/.8)] hover:text-bark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bark"
                 >
                   {ibanCopyStatus === "copied" ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
                 </button>
