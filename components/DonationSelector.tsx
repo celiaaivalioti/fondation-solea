@@ -337,7 +337,7 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
               ? "Vous pouvez également faire votre don par virement bancaire :"
               : "You can also make your donation by bank transfer:"}
           </h3>
-          <div className="mt-6 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <div className="mt-6 flex flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-4">
             <div className="min-w-0">
               <div className="flex items-center gap-1">
                 <p className="min-w-0 text-lg font-semibold leading-relaxed text-bark sm:text-xl">
@@ -362,13 +362,17 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
                     : ""}
               </p>
               <div className="mt-6 space-y-2 leading-relaxed text-bark/80">
-                <p>Fondation Solea, Rue de l&apos;Aubépine 2, 1205 Genève</p>
-                <p>{isFrench ? "N° BIC/SWIFT :" : "BIC/SWIFT:"} BCGECHGGXXX</p>
+                <p>
+                  Fondation Solea<br />
+                  Rue de l&apos;Aubépine 2<br />
+                  1205 Genève
+                </p>
+                <p className="!mt-6">{isFrench ? "N° BIC/SWIFT :" : "BIC/SWIFT:"} BCGECHGGXXX</p>
                 <p>Clearing/CB : 788</p>
                 <p>Banque Cantonale de Genève</p>
               </div>
             </div>
-            <div className="w-44 shrink-0 self-center rounded-2xl bg-[rgb(var(--color-surface)/.8)] p-3">
+            <div className="w-56 max-w-full shrink-0 self-center rounded-2xl bg-[rgb(var(--color-surface)/.8)] p-3 md:self-start">
               <Image
                 src="/images/donation-bank-qr.png"
                 alt={isFrench ? "QR-code de paiement pour faire un don à la Fondation Solea" : "Payment QR code to donate to Fondation Solea"}
@@ -377,7 +381,7 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
                 unoptimized
                 className="h-auto w-full mix-blend-multiply"
               />
-              <p className="mt-3 text-center text-sm leading-relaxed text-bark/80">
+              <p className="text-center text-sm leading-snug text-bark/80">
                 {isFrench
                   ? "Scannez ce QR code avec votre application bancaire."
                   : "Scan this QR code with your banking app."}
