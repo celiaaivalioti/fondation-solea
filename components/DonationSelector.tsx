@@ -377,6 +377,11 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
                 unoptimized
                 className="h-auto w-full mix-blend-multiply"
               />
+              <p className="mt-3 text-center text-sm leading-relaxed text-bark/80">
+                {isFrench
+                  ? "Scannez ce QR code avec votre application bancaire."
+                  : "Scan this QR code with your banking app."}
+              </p>
             </div>
           </div>
         </aside>
