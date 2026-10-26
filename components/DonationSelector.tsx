@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
+import Image from "next/image";
 import CTAButton from "@/components/CTAButton";
 import { localizeHref } from "@/lib/locales";
 import { Check, Users } from "lucide-react";
@@ -324,15 +325,29 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
               ? "Vous pouvez également faire votre don par virement bancaire :"
               : "You can also make your donation by bank transfer:"}
           </h3>
-          <p className="mt-6 text-lg font-semibold leading-relaxed text-bark sm:text-xl">
-            {isFrench ? "N° IBAN :" : "IBAN:"}{" "}
-            <span className="inline-block max-w-full break-words tabular-nums">CH26 0078 8000 0513 4556 0</span>
-          </p>
-          <div className="mt-6 space-y-2 leading-relaxed text-bark/80">
-            <p>Fondation Solea, Rue de l&apos;Aubépine 2, 1205 Genève</p>
-            <p>{isFrench ? "N° BIC/SWIFT :" : "BIC/SWIFT:"} BCGECHGGXXX</p>
-            <p>Clearing/CB : 788</p>
-            <p>Banque Cantonale de Genève</p>
+          <div className="mt-6 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+            <div className="min-w-0">
+              <p className="text-lg font-semibold leading-relaxed text-bark sm:text-xl">
+                {isFrench ? "N° IBAN :" : "IBAN:"}{" "}
+                <span className="inline-block max-w-full break-words tabular-nums">CH26 0078 8000 0513 4556 0</span>
+              </p>
+              <div className="mt-6 space-y-2 leading-relaxed text-bark/80">
+                <p>Fondation Solea, Rue de l&apos;Aubépine 2, 1205 Genève</p>
+                <p>{isFrench ? "N° BIC/SWIFT :" : "BIC/SWIFT:"} BCGECHGGXXX</p>
+                <p>Clearing/CB : 788</p>
+                <p>Banque Cantonale de Genève</p>
+              </div>
+            </div>
+            <div className="w-44 shrink-0 self-center rounded-2xl bg-[rgb(var(--color-surface)/.8)] p-3">
+              <Image
+                src="/images/donation-bank-qr.png"
+                alt={isFrench ? "QR-code de paiement pour faire un don à la Fondation Solea" : "Payment QR code to donate to Fondation Solea"}
+                width={617}
+                height={617}
+                unoptimized
+                className="h-auto w-full mix-blend-multiply"
+              />
+            </div>
           </div>
         </aside>
       </div>
