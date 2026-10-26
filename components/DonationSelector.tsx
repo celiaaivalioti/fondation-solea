@@ -339,7 +339,7 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
           </h3>
           <div className="mt-6 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div className="min-w-0">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <p className="min-w-0 text-lg font-semibold leading-relaxed text-bark sm:text-xl">
                   {isFrench ? "N° IBAN :" : "IBAN:"}{" "}
                   <span className="inline-block max-w-full break-words tabular-nums">{bankIban}</span>
@@ -349,9 +349,9 @@ export default function DonationSelector({ locale, testMode = false }: { locale:
                   onClick={copyIban}
                   aria-label={isFrench ? "Copier l’IBAN" : "Copy IBAN"}
                   title={isFrench ? "Copier l’IBAN" : "Copy IBAN"}
-                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-bark/70 transition-colors hover:bg-[rgb(var(--color-surface)/.8)] hover:text-bark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bark"
+                  className="inline-flex h-8 w-7 shrink-0 items-center justify-center rounded-full text-bark/70 transition-colors hover:bg-[rgb(var(--color-surface)/.8)] hover:text-bark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bark"
                 >
-                  {ibanCopyStatus === "copied" ? <Check size={20} aria-hidden="true" /> : <Copy size={20} aria-hidden="true" />}
+                  {ibanCopyStatus === "copied" ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
                 </button>
               </div>
               <p role="status" className={ibanCopyStatus === "error" ? "mt-2 text-sm text-bark" : "sr-only"}>
